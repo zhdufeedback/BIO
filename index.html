@@ -22,119 +22,149 @@
             min-height: 100vh;
         }
 
-        /* Заставка */
-        .entry-screen {
+        /* Матричная заставка */
+        .matrix-screen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100vh;
-            background: #0a0a0a;
+            background: #000;
             z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 0.8s ease;
+            overflow: hidden;
         }
 
-        .entry-content {
-            text-align: center;
-            max-width: 600px;
-            padding: 20px;
-        }
-
-        .glitch-text {
-            font-size: 4rem;
-            font-weight: 800;
-            color: #f5f5f5;
-            letter-spacing: 2px;
-            position: relative;
-            margin-bottom: 40px;
-        }
-
-        .glitch-text::before,
-        .glitch-text::after {
-            content: 'PARADOX';
+        .matrix-canvas {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
+            filter: contrast(1.2) brightness(0.8);
         }
 
-        .glitch-text::before {
-            animation: glitch-1 2s infinite linear alternate-reverse;
-            color: #666;
-            z-index: -1;
+        .matrix-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1;
         }
 
-        .glitch-text::after {
-            animation: glitch-2 3s infinite linear alternate-reverse;
-            color: #999;
-            z-index: -2;
+        .matrix-title {
+            font-size: 5rem;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            position: relative;
+            animation: titleGlow 3s ease-in-out infinite;
         }
 
-        @keyframes glitch-1 {
-            0% { transform: translate(0); }
-            20% { transform: translate(-2px, 2px); }
-            40% { transform: translate(-2px, -2px); }
-            60% { transform: translate(2px, 2px); }
-            80% { transform: translate(2px, -2px); }
-            100% { transform: translate(0); }
+        @keyframes titleGlow {
+            0%, 100% { text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
+            50% { text-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 30px rgba(255, 255, 255, 0.4); }
         }
 
-        @keyframes glitch-2 {
-            0% { transform: translate(0); }
-            10% { transform: translate(2px, -2px); }
-            30% { transform: translate(-2px, 2px); }
-            50% { transform: translate(2px, 2px); }
-            70% { transform: translate(-2px, -2px); }
-            90% { transform: translate(2px, -2px); }
-            100% { transform: translate(0); }
-        }
-
-        .subtitle {
+        .matrix-user-info {
             font-size: 1.2rem;
             color: #aaa;
-            margin-bottom: 60px;
+            margin-bottom: 10px;
             letter-spacing: 1px;
+            text-align: center;
+            min-height: 30px;
         }
 
-        .enter-btn {
-            padding: 15px 50px;
+        .user-location {
+            color: #fff;
+            font-weight: 500;
+            animation: locationPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes locationPulse {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+
+        .matrix-subtitle {
+            font-size: 1.1rem;
+            color: #888;
+            margin-bottom: 40px;
+            letter-spacing: 2px;
+            text-align: center;
+        }
+
+        .matrix-enter-btn {
+            padding: 15px 60px;
             background: transparent;
-            border: 2px solid #f5f5f5;
-            color: #f5f5f5;
+            border: 2px solid #fff;
+            color: #fff;
             font-size: 1.1rem;
             font-weight: 500;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
             cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            text-transform: uppercase;
         }
 
-        .enter-btn:hover {
-            background: #f5f5f5;
-            color: #0a0a0a;
+        .matrix-enter-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(245, 245, 245, 0.1);
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
         }
 
-        .enter-btn::before {
+        .matrix-enter-btn::before {
             content: '';
             position: absolute;
             top: 0;
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(245, 245, 245, 0.1), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
             transition: 0.5s;
         }
 
-        .enter-btn:hover::before {
+        .matrix-enter-btn:hover::before {
             left: 100%;
+        }
+
+        .matrix-terminal {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #666;
+            font-size: 0.9rem;
+            text-align: center;
+            letter-spacing: 1px;
+            line-height: 1.5;
+        }
+
+        .loading-dots {
+            display: inline-block;
+            animation: dots 1.5s steps(5, end) infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60% { content: '...'; }
+            80%, 100% { content: ''; }
+        }
+
+        .loading-dots::after {
+            content: '';
+            animation: dots 1.5s steps(5, end) infinite;
         }
 
         /* Основной контент */
@@ -295,6 +325,17 @@
             box-shadow: 0 5px 15px rgba(245, 245, 245, 0.1);
         }
 
+        /* Логотип NameMC */
+        .namemc-logo {
+            font-family: 'Arial Black', sans-serif;
+            font-weight: 900;
+            font-size: 1.3rem;
+            color: #fff;
+            background: linear-gradient(135deg, #555, #888);
+            border-radius: 3px;
+            padding: 2px 5px;
+        }
+
         /* Секции */
         .content-section {
             padding: 100px 20px;
@@ -320,12 +361,36 @@
             letter-spacing: 1px;
         }
 
+        /* Новая сетка - Проекты слева, Информация по центру, Музыка по центру снизу */
         .section-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: 1fr 1fr;
             gap: 30px;
             max-width: 1200px;
             margin: 0 auto;
+        }
+
+        /* Карточка проектов - слева */
+        .projects-column {
+            grid-column: 1;
+        }
+
+        /* Карточка информации - по центру */
+        .info-column {
+            grid-column: 2;
+        }
+
+        /* Карточка статистики - занимает всю ширину под информацией */
+        .stats-full-width {
+            grid-column: 1 / -1;
+            margin-top: 30px;
+        }
+
+        /* Карточка музыки - по центру под статистикой */
+        .music-center {
+            grid-column: 1 / -1;
+            max-width: 600px;
+            margin: 30px auto 0;
         }
 
         /* Карточки */
@@ -401,6 +466,11 @@
             border-radius: 10px;
             padding: 25px;
             transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .project-card:last-child {
+            margin-bottom: 0;
         }
 
         .project-card:hover {
@@ -449,7 +519,7 @@
             color: #aaa;
         }
 
-        /* Статистика */
+        /* Статистика с градиентными шкалами */
         .stat-card {
             background: rgba(245, 245, 245, 0.02);
             border: 1px solid #222;
@@ -486,23 +556,87 @@
         }
 
         .stat-bar {
-            height: 6px;
+            height: 8px;
             background: #222;
-            border-radius: 3px;
+            border-radius: 4px;
             overflow: hidden;
         }
 
+        /* Градиентные шкалы */
         .stat-fill {
             height: 100%;
-            background: #f5f5f5;
-            border-radius: 3px;
+            border-radius: 4px;
             transition: width 1s ease;
+            position: relative;
         }
 
-        /* Музыка */
-        .music-placeholder {
+        .stat-fill.minecraft {
+            background: linear-gradient(90deg, #555, #888, #aaa);
+        }
+
+        .stat-fill.cs2 {
+            background: linear-gradient(90deg, #666, #999, #ccc);
+        }
+
+        .stat-fill.fortnite {
+            background: linear-gradient(90deg, #777, #aaa, #ddd);
+        }
+
+        .stat-fill.rust {
+            background: linear-gradient(90deg, #888, #bbb, #eee);
+        }
+
+        .stat-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.2) 50%, 
+                transparent 100%);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .activity-box {
             text-align: center;
-            padding: 40px 20px;
+            padding: 25px;
+            border: 1px solid #222;
+            border-radius: 10px;
+            background: rgba(245, 245, 245, 0.02);
+            margin-top: 30px;
+        }
+
+        .activity-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #f5f5f5;
+            margin-bottom: 10px;
+        }
+
+        .activity-text {
+            color: #aaa;
+            font-size: 0.95rem;
+        }
+
+        /* Музыка по центру */
+        .music-card {
+            background: rgba(245, 245, 245, 0.02);
+            border: 1px solid #222;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .music-placeholder {
+            padding: 30px 20px;
             color: #888;
         }
 
@@ -516,7 +650,8 @@
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
-            margin-top: 20px;
+            justify-content: center;
+            margin-top: 25px;
         }
 
         .artist-tag {
@@ -592,6 +727,15 @@
             .social-links {
                 justify-content: center;
             }
+
+            .section-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .projects-column,
+            .info-column {
+                grid-column: 1;
+            }
         }
 
         @media (max-width: 768px) {
@@ -599,8 +743,8 @@
                 font-size: 3rem;
             }
 
-            .glitch-text {
-                font-size: 2.5rem;
+            .matrix-title {
+                font-size: 3rem;
             }
 
             .section-title {
@@ -613,8 +757,8 @@
                 font-size: 2.5rem;
             }
 
-            .glitch-text {
-                font-size: 2rem;
+            .matrix-title {
+                font-size: 2.5rem;
             }
 
             .avatar-container {
@@ -625,14 +769,23 @@
     </style>
 </head>
 <body>
-    <!-- Заставка -->
-    <div class="entry-screen" id="entryScreen">
-        <div class="entry-content">
-            <h1 class="glitch-text">PARADOX</h1>
-            <p class="subtitle">нажми чтобы войти</p>
-            <button class="enter-btn" id="enterBtn">
-                ВОЙТИ
+    <!-- Матричная заставка -->
+    <div class="matrix-screen" id="matrixScreen">
+        <canvas class="matrix-canvas" id="matrixCanvas"></canvas>
+        <div class="matrix-overlay">
+            <h1 class="matrix-title">PARADOX</h1>
+            <div class="matrix-user-info">
+                > ПОЛЬЗОВАТЕЛЬ ИЗ: <span id="userLocation" class="user-location">ОПРЕДЕЛЯЕМ МЕСТОПОЛОЖЕНИЕ<span class="loading-dots"></span></span>
+            </div>
+            <p class="matrix-subtitle">НАЖМИ, ЧТОБЫ ВОЙТИ В СИСТЕМУ</p>
+            <button class="matrix-enter-btn" id="matrixEnterBtn">
+                ВХОД
             </button>
+            <div class="matrix-terminal">
+                > SYSTEM: PARADOX_OS v2.0<br>
+                > STATUS: OFFLINE<br>
+                > USER_LOCATION: <span id="terminalLocation">SCANNING...</span>
+            </div>
         </div>
     </div>
 
@@ -688,55 +841,29 @@
                             <i class="fab fa-youtube"></i>
                         </a>
                         <a href="https://ru.namemc.com/profile/LuckyParadox.1" target="_blank" class="social-link">
-                            <i class="fas fa-gamepad"></i>
+                            <span class="namemc-logo">N</span>
                         </a>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Информация -->
+        <!-- Контент секция -->
         <section class="content-section">
             <div class="section-bg"></div>
+            <h2 class="section-title fade-in">СИСТЕМНАЯ ИНФОРМАЦИЯ</h2>
+            
             <div class="section-grid">
-                <div class="info-card fade-in">
-                    <div class="card-header">
-                        <div class="card-icon">
-                            <i class="fas fa-user"></i>
+                <!-- Проекты слева -->
+                <div class="projects-column">
+                    <div class="info-card fade-in">
+                        <div class="card-header">
+                            <div class="card-icon">
+                                <i class="fas fa-rocket"></i>
+                            </div>
+                            <h3 class="card-title">Проекты</h3>
                         </div>
-                        <h3 class="card-title">Информация</h3>
-                    </div>
-                    <ul class="info-list">
-                        <li>
-                            <i class="fas fa-user"></i>
-                            <span><strong>Возраст:</strong> 15 лет</span>
-                        </li>
-                        <li>
-                            <i class="fas fa-gamepad"></i>
-                            <span><strong>Игры:</strong> Minecraft, CS2</span>
-                        </li>
-                        <li>
-                            <i class="fas fa-music"></i>
-                            <span><strong>Музыка:</strong> ooes, FEDUK, blago white</span>
-                        </li>
-                    </ul>
-
-                    <div class="quote-box">
-                        <p class="quote-text">"Искал медь — сгорел медведь."</p>
-                        <p class="quote-author">— Великий ww123rov</p>
-                    </div>
-                </div>
-
-                <!-- Проекты -->
-                <div class="info-card fade-in">
-                    <div class="card-header">
-                        <div class="card-icon">
-                            <i class="fas fa-rocket"></i>
-                        </div>
-                        <h3 class="card-title">Проекты</h3>
-                    </div>
-                    
-                    <div style="display: grid; gap: 25px;">
+                        
                         <div class="project-card">
                             <div class="project-icon">
                                 <i class="fab fa-telegram"></i>
@@ -763,100 +890,132 @@
                     </div>
                 </div>
 
-                <!-- Статистика -->
-                <div class="info-card fade-in">
-                    <div class="card-header">
-                        <div class="card-icon">
-                            <i class="fas fa-chart-bar"></i>
+                <!-- Информация по центру -->
+                <div class="info-column">
+                    <div class="info-card fade-in">
+                        <div class="card-header">
+                            <div class="card-icon">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <h3 class="card-title">Информация</h3>
                         </div>
-                        <h3 class="card-title">Статистика</h3>
-                    </div>
-                    
-                    <div style="margin-bottom: 30px;">
-                        <h4 style="color: #aaa; font-size: 0.95rem; margin-bottom: 20px;">В какие игры я больше всего играю</h4>
-                        <div class="stat-item-full">
-                            <div class="stat-header">
-                                <div class="stat-name">
-                                    <i class="fas fa-cube"></i>
-                                    <span>Minecraft</span>
-                                </div>
-                                <div class="stat-value">60%</div>
-                            </div>
-                            <div class="stat-bar">
-                                <div class="stat-fill" data-width="60"></div>
-                            </div>
-                        </div>
-                        
-                        <div class="stat-item-full">
-                            <div class="stat-header">
-                                <div class="stat-name">
-                                    <i class="fas fa-crosshairs"></i>
-                                    <span>Counter-Strike 2</span>
-                                </div>
-                                <div class="stat-value">30%</div>
-                            </div>
-                            <div class="stat-bar">
-                                <div class="stat-fill" data-width="30"></div>
-                            </div>
-                        </div>
-                        
-                        <div class="stat-item-full">
-                            <div class="stat-header">
-                                <div class="stat-name">
-                                    <i class="fas fa-bolt"></i>
-                                    <span>Fortnite</span>
-                                </div>
-                                <div class="stat-value">8%</div>
-                            </div>
-                            <div class="stat-bar">
-                                <div class="stat-fill" data-width="8"></div>
-                            </div>
-                        </div>
-                        
-                        <div class="stat-item-full">
-                            <div class="stat-header">
-                                <div class="stat-name">
-                                    <i class="fas fa-skull"></i>
-                                    <span>Rust</span>
-                                </div>
-                                <div class="stat-value">2%</div>
-                            </div>
-                            <div class="stat-bar">
-                                <div class="stat-fill" data-width="2"></div>
-                            </div>
-                        </div>
-                    </div>
+                        <ul class="info-list">
+                            <li>
+                                <i class="fas fa-user"></i>
+                                <span><strong>Возраст:</strong> 15 лет</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-gamepad"></i>
+                                <span><strong>Игры:</strong> Minecraft, CS2</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-music"></i>
+                                <span><strong>Музыка:</strong> ooes, FEDUK, blago white</span>
+                            </li>
+                        </ul>
 
-                    <div>
-                        <h4 style="color: #aaa; font-size: 0.95rem; margin-bottom: 15px;">Активность</h4>
-                        <div style="text-align: center; padding: 25px; border: 1px solid #222; border-radius: 10px; background: rgba(245, 245, 245, 0.02);">
-                            <div style="font-size: 2.5rem; font-weight: 700; color: #f5f5f5; margin-bottom: 10px;">100+</div>
-                            <div style="color: #aaa; font-size: 0.95rem;">сломанных режимов сна</div>
+                        <div class="quote-box">
+                            <p class="quote-text">"Искал медь — сгорел медведь."</p>
+                            <p class="quote-author">— Великий ww123rov</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Музыка -->
-                <div class="info-card fade-in">
-                    <div class="card-header">
-                        <div class="card-icon">
-                            <i class="fas fa-music"></i>
+                <!-- Статистика -->
+                <div class="stats-full-width">
+                    <div class="stat-card fade-in">
+                        <div class="card-header">
+                            <div class="card-icon">
+                                <i class="fas fa-chart-bar"></i>
+                            </div>
+                            <h3 class="card-title">Статистика</h3>
                         </div>
-                        <h3 class="card-title">Музыка</h3>
-                    </div>
-                    
-                    <div class="music-placeholder">
-                        <i class="fas fa-volume-mute"></i>
-                        <p style="color: #888; margin-bottom: 10px;">Не слушает музыку</p>
-                    </div>
+                        
+                        <div style="margin-bottom: 30px;">
+                            <h4 style="color: #aaa; font-size: 0.95rem; margin-bottom: 20px;">В какие игры я больше всего играю</h4>
+                            <div class="stat-item-full">
+                                <div class="stat-header">
+                                    <div class="stat-name">
+                                        <i class="fas fa-cube"></i>
+                                        <span>Minecraft</span>
+                                    </div>
+                                    <div class="stat-value">60%</div>
+                                </div>
+                                <div class="stat-bar">
+                                    <div class="stat-fill minecraft" data-width="60"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="stat-item-full">
+                                <div class="stat-header">
+                                    <div class="stat-name">
+                                        <i class="fas fa-crosshairs"></i>
+                                        <span>Counter-Strike 2</span>
+                                    </div>
+                                    <div class="stat-value">30%</div>
+                                </div>
+                                <div class="stat-bar">
+                                    <div class="stat-fill cs2" data-width="30"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="stat-item-full">
+                                <div class="stat-header">
+                                    <div class="stat-name">
+                                        <i class="fas fa-bolt"></i>
+                                        <span>Fortnite</span>
+                                    </div>
+                                    <div class="stat-value">8%</div>
+                                </div>
+                                <div class="stat-bar">
+                                    <div class="stat-fill fortnite" data-width="8"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="stat-item-full">
+                                <div class="stat-header">
+                                    <div class="stat-name">
+                                        <i class="fas fa-skull"></i>
+                                        <span>Rust</span>
+                                    </div>
+                                    <div class="stat-value">2%</div>
+                                </div>
+                                <div class="stat-bar">
+                                    <div class="stat-fill rust" data-width="2"></div>
+                                </div>
+                            </div>
+                        </div>
 
-                    <div>
-                        <h4 style="color: #aaa; font-size: 0.95rem; margin-bottom: 15px;">Любимые исполнители:</h4>
-                        <div class="artist-tags">
-                            <span class="artist-tag">ooes</span>
-                            <span class="artist-tag">FEDUK</span>
-                            <span class="artist-tag">blago white</span>
-                            <span class="artist-tag">Sadsvit</span>
+                        <div class="activity-box">
+                            <div class="activity-number">100+</div>
+                            <div class="activity-text">сломанных режимов сна</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Музыка по центру -->
+                <div class="music-center">
+                    <div class="music-card fade-in">
+                        <div class="card-header" style="justify-content: center; border-bottom: none; margin-bottom: 10px;">
+                            <div class="card-icon">
+                                <i class="fas fa-music"></i>
+                            </div>
+                            <h3 class="card-title">Музыка</h3>
+                        </div>
+                        
+                        <div class="music-placeholder">
+                            <i class="fas fa-volume-mute"></i>
+                            <p style="color: #888; margin-bottom: 10px;">Не слушает музыку</p>
+                        </div>
+
+                        <div>
+                            <h4 style="color: #aaa; font-size: 0.95rem; margin-bottom: 15px; text-align: center;">Любимые исполнители:</h4>
+                            <div class="artist-tags">
+                                <span class="artist-tag">ooes</span>
+                                <span class="artist-tag">FEDUK</span>
+                                <span class="artist-tag">blago white</span>
+                                <span class="artist-tag">Sadsvit</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -873,17 +1032,164 @@
     </div>
 
     <script>
-        // Заставка
-        const entryScreen = document.getElementById('entryScreen');
-        const mainContent = document.getElementById('mainContent');
-        const enterBtn = document.getElementById('enterBtn');
+        // Matrix эффект
+        function createMatrixEffect() {
+            const canvas = document.getElementById('matrixCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            const letters = "01";
+            const fontSize = 16;
+            const columns = canvas.width / fontSize;
+            const drops = [];
+            
+            for(let i = 0; i < columns; i++) {
+                drops[i] = Math.random() * canvas.height;
+            }
+            
+            function draw() {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                // Серые тона для матрицы
+                ctx.fillStyle = '#666';
+                ctx.font = `${fontSize}px monospace`;
+                
+                for(let i = 0; i < drops.length; i++) {
+                    const text = letters.charAt(Math.floor(Math.random() * letters.length));
+                    
+                    // Градиент от серого к белому
+                    const gradient = ctx.createLinearGradient(0, drops[i] * fontSize, 0, drops[i] * fontSize + fontSize);
+                    gradient.addColorStop(0, '#888');
+                    gradient.addColorStop(0.5, '#aaa');
+                    gradient.addColorStop(1, '#ccc');
+                    ctx.fillStyle = gradient;
+                    
+                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                    
+                    if(drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+                    drops[i]++;
+                }
+            }
+            
+            const matrixInterval = setInterval(draw, 35);
+            
+            window.addEventListener('resize', () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+            
+            return matrixInterval;
+        }
 
-        enterBtn.addEventListener('click', () => {
+        // Определение страны пользователя
+        async function getUserCountry() {
+            const userLocation = document.getElementById('userLocation');
+            const terminalLocation = document.getElementById('terminalLocation');
+            
+            try {
+                // Пробуем получить страну через Geolocation API
+                if (navigator.geolocation) {
+                    return new Promise((resolve) => {
+                        navigator.geolocation.getCurrentPosition(
+                            async (position) => {
+                                try {
+                                    const response = await fetch(
+                                        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${position.coords.latitude}&lon=${position.coords.longitude}`
+                                    );
+                                    const data = await response.json();
+                                    const country = data.address.country || 'Неизвестная страна';
+                                    resolve(country);
+                                } catch (error) {
+                                    // Если не получилось через координаты, пробуем через IP
+                                    resolve(await getCountryByIP());
+                                }
+                            },
+                            async () => {
+                                // Если пользователь отказался от геолокации
+                                resolve(await getCountryByIP());
+                            }
+                        );
+                    });
+                } else {
+                    // Если браузер не поддерживает геолокацию
+                    return await getCountryByIP();
+                }
+            } catch (error) {
+                return 'Неизвестная страна';
+            }
+        }
+
+        // Получение страны по IP
+        async function getCountryByIP() {
+            try {
+                const response = await fetch('https://ipapi.co/json/');
+                const data = await response.json();
+                return data.country_name || data.country || 'Неизвестная страна';
+            } catch (error) {
+                try {
+                    const response = await fetch('https://ipinfo.io/json');
+                    const data = await response.json();
+                    return data.country || 'Неизвестная страна';
+                } catch (error) {
+                    return 'Неизвестная страна';
+                }
+            }
+        }
+
+        // Заставка
+        const matrixScreen = document.getElementById('matrixScreen');
+        const mainContent = document.getElementById('mainContent');
+        const matrixEnterBtn = document.getElementById('matrixEnterBtn');
+        
+        // Запускаем матричный эффект
+        let matrixInterval;
+        
+        // Инициализация при загрузке
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Запускаем матрицу
+            matrixInterval = createMatrixEffect();
+            
+            // Определяем страну
+            userLocation.innerHTML = 'ОПРЕДЕЛЯЕМ МЕСТОПОЖЕНИЕ<span class="loading-dots"></span>';
+            terminalLocation.textContent = 'SCANNING...';
+            
+            const country = await getUserCountry();
+            
+            // Отображаем страну
+            userLocation.innerHTML = `<span class="user-location">${country.toUpperCase()}</span>`;
+            terminalLocation.textContent = country.toUpperCase();
+            
+            // Анимация для кнопки
+            matrixEnterBtn.addEventListener('mousedown', () => {
+                matrixEnterBtn.style.transform = 'scale(0.95)';
+            });
+            matrixEnterBtn.addEventListener('mouseup', () => {
+                matrixEnterBtn.style.transform = '';
+            });
+            matrixEnterBtn.addEventListener('mouseleave', () => {
+                matrixEnterBtn.style.transform = '';
+            });
+            
+            // Включаем кнопку после определения страны
+            matrixEnterBtn.disabled = false;
+        });
+
+        // Обработка входа
+        matrixEnterBtn.addEventListener('click', () => {
+            // Останавливаем матричный эффект
+            clearInterval(matrixInterval);
+            
             // Анимация исчезновения заставки
-            entryScreen.style.opacity = '0';
+            matrixScreen.style.opacity = '0';
+            matrixScreen.style.transition = 'opacity 1s ease';
             
             setTimeout(() => {
-                entryScreen.style.display = 'none';
+                matrixScreen.style.display = 'none';
                 mainContent.classList.add('show');
                 
                 // Включаем прокрутку
@@ -892,7 +1198,7 @@
                 // Запускаем анимации
                 initAnimations();
                 updateTime();
-            }, 800);
+            }, 1000);
         });
 
         // Время
@@ -939,40 +1245,6 @@
                 observer.observe(el);
             });
         }
-
-        // Плавная прокрутка для ссылок
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const targetId = this.getAttribute('href');
-                if (targetId === '#') return;
-                
-                const targetElement = document.querySelector(targetId);
-                if (targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 80,
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
-
-        // Инициализация при загрузке
-        document.addEventListener('DOMContentLoaded', () => {
-            // Отключаем прокрутку на заставке
-            document.body.style.overflow = 'hidden';
-            
-            // Добавляем эффект нажатия на кнопку
-            enterBtn.addEventListener('mousedown', () => {
-                enterBtn.style.transform = 'scale(0.95)';
-            });
-            enterBtn.addEventListener('mouseup', () => {
-                enterBtn.style.transform = '';
-            });
-            enterBtn.addEventListener('mouseleave', () => {
-                enterBtn.style.transform = '';
-            });
-        });
     </script>
 </body>
 </html>
