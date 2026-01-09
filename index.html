@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>// PARADOX SYSTEM //</title>
+    <title>PARADOX</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -15,140 +15,111 @@
         }
 
         body {
-            font-family: 'JetBrains Mono', monospace;
-            background: #000;
-            color: #00ff41;
-            overflow: hidden;
-            cursor: none;
-        }
-
-        /* Кастомный курсор */
-        .cursor {
-            width: 20px;
-            height: 20px;
-            border: 2px solid #00ff41;
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 9999;
-            mix-blend-mode: difference;
-            transition: transform 0.1s;
-        }
-
-        .cursor-dot {
-            width: 4px;
-            height: 4px;
-            background: #00ff41;
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 9999;
-            mix-blend-mode: difference;
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #f5f5f5;
+            overflow-x: hidden;
+            min-height: 100vh;
         }
 
         /* Заставка */
-        .terminal-screen {
+        .entry-screen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100vh;
-            background: #000;
-            z-index: 9998;
+            background: #0a0a0a;
+            z-index: 9999;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            transition: opacity 0.8s ease;
+        }
+
+        .entry-content {
+            text-align: center;
+            max-width: 600px;
             padding: 20px;
         }
 
-        .terminal-header {
-            text-align: center;
+        .glitch-text {
+            font-size: 4rem;
+            font-weight: 800;
+            color: #f5f5f5;
+            letter-spacing: 2px;
+            position: relative;
             margin-bottom: 40px;
-            animation: glitch 5s infinite;
         }
 
-        @keyframes glitch {
-            0%, 100% { transform: translateX(0); }
-            5% { transform: translateX(-2px); }
-            10% { transform: translateX(2px); }
-            15% { transform: translateX(-1px); }
-            20% { transform: translateX(1px); }
-            25% { transform: translateX(0); }
-        }
-
-        .matrix-text {
-            font-size: 3rem;
-            color: #00ff41;
-            text-shadow: 0 0 10px #00ff41;
-            letter-spacing: 5px;
-            animation: typing 3s steps(30), blink 0.5s step-end infinite alternate;
-            white-space: nowrap;
-            overflow: hidden;
-            border-right: 3px solid #00ff41;
-        }
-
-        @keyframes typing {
-            from { width: 0 }
-            to { width: 100% }
-        }
-
-        @keyframes blink {
-            50% { border-color: transparent }
-        }
-
-        .scan-line {
+        .glitch-text::before,
+        .glitch-text::after {
+            content: 'PARADOX';
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
-            height: 2px;
-            background: rgba(0, 255, 65, 0.5);
-            box-shadow: 0 0 10px #00ff41;
-            animation: scan 3s linear infinite;
-            z-index: 9997;
+            height: 100%;
         }
 
-        @keyframes scan {
-            0% { top: 0; }
-            100% { top: 100%; }
+        .glitch-text::before {
+            animation: glitch-1 2s infinite linear alternate-reverse;
+            color: #666;
+            z-index: -1;
         }
 
-        .terminal-input {
-            background: transparent;
-            border: none;
-            color: #00ff41;
-            font-family: 'JetBrains Mono', monospace;
+        .glitch-text::after {
+            animation: glitch-2 3s infinite linear alternate-reverse;
+            color: #999;
+            z-index: -2;
+        }
+
+        @keyframes glitch-1 {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+
+        @keyframes glitch-2 {
+            0% { transform: translate(0); }
+            10% { transform: translate(2px, -2px); }
+            30% { transform: translate(-2px, 2px); }
+            50% { transform: translate(2px, 2px); }
+            70% { transform: translate(-2px, -2px); }
+            90% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+
+        .subtitle {
             font-size: 1.2rem;
-            text-align: center;
-            outline: none;
-            width: 200px;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+            color: #aaa;
+            margin-bottom: 60px;
+            letter-spacing: 1px;
         }
 
         .enter-btn {
-            margin-top: 30px;
-            padding: 10px 30px;
+            padding: 15px 50px;
             background: transparent;
-            border: 1px solid #00ff41;
-            color: #00ff41;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 1rem;
+            border: 2px solid #f5f5f5;
+            color: #f5f5f5;
+            font-size: 1.1rem;
+            font-weight: 500;
+            letter-spacing: 1px;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
         }
 
         .enter-btn:hover {
-            background: #00ff41;
-            color: #000;
-            box-shadow: 0 0 20px #00ff41;
+            background: #f5f5f5;
+            color: #0a0a0a;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(245, 245, 245, 0.1);
         }
 
         .enter-btn::before {
@@ -158,7 +129,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.2), transparent);
+            background: linear-gradient(90deg, transparent, rgba(245, 245, 245, 0.1), transparent);
             transition: 0.5s;
         }
 
@@ -166,790 +137,767 @@
             left: 100%;
         }
 
-        /* Основной контент (скрыт пока) */
+        /* Основной контент */
         .main-content {
-            display: none;
-            min-height: 100vh;
-            position: relative;
-            overflow-y: auto;
+            opacity: 0;
+            transition: opacity 1s ease;
         }
 
-        /* Matrix эффект фона */
-        .matrix-bg {
-            position: fixed;
+        .main-content.show {
+            opacity: 1;
+        }
+
+        /* Герой секция */
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding: 20px;
+        }
+
+        .hero-bg {
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none;
+            background: linear-gradient(45deg, #1a1a1a, #0a0a0a);
             z-index: -1;
-            opacity: 0.1;
         }
 
-        /* Контейнер */
-        .cyber-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            position: relative;
-        }
-
-        /* Хедер */
-        .cyber-header {
-            border: 1px solid #00ff41;
-            padding: 20px;
-            margin-bottom: 40px;
-            position: relative;
-            background: rgba(0, 0, 0, 0.8);
-            box-shadow: 0 0 30px rgba(0, 255, 65, 0.3);
-        }
-
-        .header-grid {
+        .hero-grid {
             display: grid;
             grid-template-columns: auto 1fr;
-            gap: 30px;
+            gap: 60px;
             align-items: center;
+            max-width: 1200px;
+            width: 100%;
         }
 
-        .avatar-glitch {
-            width: 150px;
-            height: 150px;
-            border: 2px solid #00ff41;
-            border-radius: 50%;
-            overflow: hidden;
+        .avatar-container {
             position: relative;
-            animation: glitch-avatar 10s infinite;
+            width: 280px;
+            height: 280px;
         }
 
-        @keyframes glitch-avatar {
-            0%, 100% { filter: none; }
-            95% { filter: none; }
-            96% { filter: sepia(1); }
-            97% { filter: invert(1); }
-            98% { filter: hue-rotate(90deg); }
-            99% { filter: blur(1px); }
-        }
-
-        .avatar-glitch img {
+        .avatar-frame {
             width: 100%;
             height: 100%;
+            border-radius: 50%;
+            border: 3px solid #f5f5f5;
+            padding: 10px;
+            position: relative;
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .avatar-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
             object-fit: cover;
+            border: 2px solid #333;
         }
 
-        .name-title h1 {
-            font-size: 3.5rem;
-            color: #00ff41;
-            text-shadow: 0 0 15px #00ff41;
+        .status-dot {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #666;
+            border: 3px solid #0a0a0a;
+            z-index: 2;
+        }
+
+        .hero-info {
+            max-width: 600px;
+        }
+
+        .hero-title {
+            font-size: 4.5rem;
+            font-weight: 800;
+            color: #f5f5f5;
             margin-bottom: 10px;
-            letter-spacing: 3px;
+            letter-spacing: 2px;
         }
 
-        .name-title p {
-            font-size: 1.2rem;
-            color: #00ff88;
-            opacity: 0.8;
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: #aaa;
+            margin-bottom: 30px;
+            font-weight: 300;
         }
 
-        .status-line {
+        .hero-stats {
             display: flex;
             gap: 20px;
-            margin-top: 20px;
+            margin-bottom: 40px;
             flex-wrap: wrap;
         }
 
-        .status-item {
+        .stat-item {
+            padding: 10px 20px;
+            background: rgba(245, 245, 245, 0.05);
+            border: 1px solid #333;
+            border-radius: 5px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             font-size: 0.9rem;
-            padding: 5px 15px;
-            background: rgba(0, 255, 65, 0.1);
-            border: 1px solid #00ff41;
+            color: #ccc;
         }
 
-        /* Сетка контента */
-        .cyber-grid {
+        .stat-item i {
+            color: #888;
+        }
+
+        .hero-description {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #bbb;
+            margin-bottom: 40px;
+            max-width: 500px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .social-link {
+            width: 50px;
+            height: 50px;
+            border: 1px solid #333;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #aaa;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        .social-link:hover {
+            border-color: #f5f5f5;
+            color: #f5f5f5;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(245, 245, 245, 0.1);
+        }
+
+        /* Секции */
+        .content-section {
+            padding: 100px 20px;
+            position: relative;
+        }
+
+        .section-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #111;
+            z-index: -1;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #f5f5f5;
+            margin-bottom: 50px;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+
+        .section-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 30px;
-            margin-bottom: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         /* Карточки */
-        .cyber-card {
-            border: 1px solid #00ff41;
-            padding: 25px;
-            background: rgba(0, 0, 0, 0.8);
-            position: relative;
-            transition: all 0.3s;
-            min-height: 200px;
+        .info-card {
+            background: rgba(245, 245, 245, 0.02);
+            border: 1px solid #222;
+            border-radius: 10px;
+            padding: 30px;
+            transition: all 0.3s ease;
+            height: 100%;
         }
 
-        .cyber-card:hover {
-            box-shadow: 0 0 30px rgba(0, 255, 65, 0.5);
-            transform: translateY(-5px);
-        }
-
-        .cyber-card::before {
-            content: '';
-            position: absolute;
-            top: -1px;
-            left: -1px;
-            right: -1px;
-            bottom: -1px;
-            background: linear-gradient(45deg, #00ff41, transparent, #00ff41);
-            z-index: -1;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .cyber-card:hover::before {
-            opacity: 1;
+        .info-card:hover {
+            transform: translateY(-10px);
+            border-color: #444;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
         }
 
         .card-header {
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #00ff41;
-        }
-
-        .card-header i {
-            font-size: 1.5rem;
-            color: #00ff41;
-        }
-
-        .card-header h3 {
-            font-size: 1.3rem;
-            color: #00ff41;
-        }
-
-        /* Список */
-        .cyber-list {
-            list-style: none;
-        }
-
-        .cyber-list li {
-            padding: 10px 0;
-            border-bottom: 1px dashed rgba(0, 255, 65, 0.3);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .cyber-list li:last-child {
-            border-bottom: none;
-        }
-
-        .cyber-list i {
-            color: #00ff41;
-            width: 20px;
-        }
-
-        /* Социальные ссылки */
-        .social-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 15px;
-            margin-top: 20px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #222;
         }
 
-        .social-link {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 15px;
-            border: 1px solid #00ff41;
-            background: rgba(0, 255, 65, 0.05);
-            transition: all 0.3s;
-            text-decoration: none;
-            color: #00ff41;
-        }
-
-        .social-link:hover {
-            background: rgba(0, 255, 65, 0.2);
-            transform: translateX(5px);
-        }
-
-        .social-icon {
-            width: 40px;
-            height: 40px;
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            border: 1px solid #333;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 1px solid #00ff41;
-            font-size: 1.2rem;
+            color: #aaa;
+            font-size: 1.5rem;
         }
 
-        .social-info {
-            flex: 1;
-        }
-
-        .social-info div:first-child {
+        .card-title {
+            font-size: 1.3rem;
             font-weight: 600;
-            margin-bottom: 5px;
+            color: #f5f5f5;
         }
 
-        .social-info div:last-child {
+        /* Информация */
+        .info-list {
+            list-style: none;
+        }
+
+        .info-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid #222;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #bbb;
+        }
+
+        .info-list li:last-child {
+            border-bottom: none;
+        }
+
+        .info-list i {
+            color: #888;
+            width: 20px;
+        }
+
+        /* Проекты */
+        .project-card {
+            background: rgba(245, 245, 245, 0.02);
+            border: 1px solid #222;
+            border-radius: 10px;
+            padding: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .project-card:hover {
+            border-color: #444;
+        }
+
+        .project-icon {
+            width: 60px;
+            height: 60px;
+            border: 1px solid #333;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            color: #aaa;
+        }
+
+        .project-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #f5f5f5;
+            margin-bottom: 10px;
+        }
+
+        .project-desc {
+            font-size: 0.95rem;
+            color: #aaa;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .project-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .project-tag {
+            padding: 5px 12px;
+            background: rgba(245, 245, 245, 0.05);
+            border: 1px solid #333;
+            border-radius: 20px;
             font-size: 0.8rem;
-            opacity: 0.7;
+            color: #aaa;
         }
 
         /* Статистика */
-        .stat-bar {
-            margin: 15px 0;
+        .stat-card {
+            background: rgba(245, 245, 245, 0.02);
+            border: 1px solid #222;
+            border-radius: 10px;
+            padding: 30px;
         }
 
-        .stat-info {
+        .stat-item-full {
+            margin-bottom: 25px;
+        }
+
+        .stat-header {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 5px;
-            font-size: 0.9rem;
+            align-items: center;
+            margin-bottom: 10px;
         }
 
-        .stat-progress {
-            height: 8px;
-            background: rgba(0, 255, 65, 0.1);
-            border: 1px solid #00ff41;
-            position: relative;
+        .stat-name {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #bbb;
+            font-size: 0.95rem;
+        }
+
+        .stat-name i {
+            color: #888;
+        }
+
+        .stat-value {
+            color: #f5f5f5;
+            font-weight: 600;
+        }
+
+        .stat-bar {
+            height: 6px;
+            background: #222;
+            border-radius: 3px;
             overflow: hidden;
         }
 
         .stat-fill {
             height: 100%;
-            background: #00ff41;
-            position: relative;
-            transition: width 1s ease-in-out;
+            background: #f5f5f5;
+            border-radius: 3px;
+            transition: width 1s ease;
         }
 
-        .stat-fill::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(90deg, 
-                transparent 0%, 
-                rgba(255, 255, 255, 0.3) 50%, 
-                transparent 100%);
-            animation: shimmer 2s infinite;
+        /* Музыка */
+        .music-placeholder {
+            text-align: center;
+            padding: 40px 20px;
+            color: #888;
         }
 
-        @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
+        .music-placeholder i {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .artist-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .artist-tag {
+            padding: 8px 16px;
+            background: rgba(245, 245, 245, 0.05);
+            border: 1px solid #333;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: #aaa;
         }
 
         /* Цитата */
         .quote-box {
-            border-left: 3px solid #00ff41;
+            border-left: 3px solid #444;
             padding-left: 20px;
-            margin: 20px 0;
+            margin: 30px 0;
+        }
+
+        .quote-text {
             font-style: italic;
-            opacity: 0.9;
+            color: #bbb;
+            line-height: 1.6;
+            margin-bottom: 10px;
         }
 
         .quote-author {
-            text-align: right;
-            margin-top: 10px;
+            color: #888;
             font-size: 0.9rem;
-            opacity: 0.7;
+            text-align: right;
         }
 
         /* Футер */
-        .cyber-footer {
+        .footer {
+            padding: 60px 20px;
             text-align: center;
-            padding: 30px;
-            border-top: 1px solid #00ff41;
-            margin-top: 40px;
-            opacity: 0.7;
+            border-top: 1px solid #222;
+            color: #666;
             font-size: 0.9rem;
         }
 
+        .footer p {
+            margin-bottom: 10px;
+        }
+
+        /* Анимации появления */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         /* Адаптив */
-        @media (max-width: 768px) {
-            .header-grid {
+        @media (max-width: 1024px) {
+            .hero-grid {
                 grid-template-columns: 1fr;
                 text-align: center;
+                gap: 40px;
             }
-            
-            .avatar-glitch {
+
+            .avatar-container {
                 margin: 0 auto;
             }
-            
-            .name-title h1 {
+
+            .hero-stats {
+                justify-content: center;
+            }
+
+            .social-links {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 3rem;
+            }
+
+            .glitch-text {
                 font-size: 2.5rem;
             }
-            
-            .matrix-text {
+
+            .section-title {
                 font-size: 2rem;
             }
         }
 
-        /* Анимация появления контента */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
 
-        .fade-in {
-            animation: fadeIn 0.5s ease forwards;
+            .glitch-text {
+                font-size: 2rem;
+            }
+
+            .avatar-container {
+                width: 200px;
+                height: 200px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Кастомный курсор -->
-    <div class="cursor"></div>
-    <div class="cursor-dot"></div>
-
-    <!-- Заставка с терминалом -->
-    <div class="terminal-screen" id="terminal">
-        <div class="scan-line"></div>
-        <div class="terminal-header">
-            <div class="matrix-text">// SYSTEM BOOT...</div>
-            <div style="margin-top: 20px; font-size: 1.2rem; opacity: 0.8;">
-                <div>> INITIALIZING PARADOX_PROFILE.EXE</div>
-                <div>> LOADING USER_DATA...</div>
-                <div>> CRYPTO_KEY: LUCKY_PARADOX_2024</div>
-            </div>
-        </div>
-        
-        <div style="margin: 40px 0; text-align: center;">
-            <div style="font-size: 1.5rem; margin-bottom: 20px; opacity: 0.9;">
-                ACCESS TO SYSTEM REQUIRED
-            </div>
-            <div style="margin-bottom: 20px; opacity: 0.7;">
-                > ENTER COMMAND: <span class="terminal-input" id="command-input">ACCESS_PARADOX</span>
-            </div>
-        </div>
-        
-        <button class="enter-btn" id="enter-btn">
-            <span>> _ EXECUTE</span>
-        </button>
-        
-        <div style="margin-top: 50px; font-size: 0.9rem; opacity: 0.5; text-align: center;">
-            <div>SYSTEM: PARADOX_OS v2.0</div>
-            <div>STATUS: OFFLINE // 13.03.2011</div>
-            <div>LOCATION: KAZAKHSTAN_GMT+5</div>
+    <!-- Заставка -->
+    <div class="entry-screen" id="entryScreen">
+        <div class="entry-content">
+            <h1 class="glitch-text">PARADOX</h1>
+            <p class="subtitle">нажми чтобы войти</p>
+            <button class="enter-btn" id="enterBtn">
+                ВОЙТИ
+            </button>
         </div>
     </div>
 
     <!-- Основной контент -->
-    <div class="main-content" id="main-content">
-        <div class="matrix-bg" id="matrix-bg"></div>
-        
-        <div class="cyber-container">
-            <!-- Хедер -->
-            <header class="cyber-header fade-in">
-                <div class="header-grid">
-                    <div class="avatar-glitch">
-                        <img src="logo.png" alt="PARADOX" id="dynamic-avatar">
-                        <div class="status-item" style="position: absolute; bottom: 10px; right: 10px; background: rgba(107, 114, 128, 0.8);">
+    <div class="main-content" id="mainContent">
+        <!-- Герой секция -->
+        <section class="hero-section">
+            <div class="hero-bg"></div>
+            <div class="hero-grid fade-in">
+                <div class="avatar-container">
+                    <div class="avatar-frame">
+                        <img src="logo.png" alt="PARADOX" class="avatar-img">
+                    </div>
+                    <div class="status-dot"></div>
+                </div>
+
+                <div class="hero-info">
+                    <h1 class="hero-title">PARADOX</h1>
+                    <p class="hero-subtitle">нищий плеер</p>
+                    
+                    <div class="hero-stats">
+                        <div class="stat-item">
                             <i class="fas fa-circle"></i>
-                            <span>OFFLINE</span>
+                            <span>Оффлайн</span>
                         </div>
+                        <div class="stat-item">
+                            <i class="fas fa-microchip"></i>
+                            <span>Ryzen 5 3600 | 16 GB RAM</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Казахстан</span>
+                        </div>
+                        <div class="stat-item" id="currentTime">
+                            <i class="fas fa-clock"></i>
+                            <span>--:--:--</span>
+                        </div>
+                    </div>
+
+                    <p class="hero-description">
+                        Обычный типок, который страдает фигнёй в интернете. Страшный майнкрафтер/хойщик. 
+                        Люблю музыку, программирование и игры.
+                    </p>
+
+                    <div class="social-links">
+                        <a href="https://discord.com/users/1312012805913837608" target="_blank" class="social-link">
+                            <i class="fab fa-discord"></i>
+                        </a>
+                        <a href="https://t.me/xyecocebanniy" target="_blank" class="social-link">
+                            <i class="fab fa-telegram"></i>
+                        </a>
+                        <a href="https://www.youtube.com/@zhdufeedback" target="_blank" class="social-link">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                        <a href="https://ru.namemc.com/profile/LuckyParadox.1" target="_blank" class="social-link">
+                            <i class="fas fa-gamepad"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Информация -->
+        <section class="content-section">
+            <div class="section-bg"></div>
+            <div class="section-grid">
+                <div class="info-card fade-in">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <h3 class="card-title">Информация</h3>
+                    </div>
+                    <ul class="info-list">
+                        <li>
+                            <i class="fas fa-user"></i>
+                            <span><strong>Возраст:</strong> 15 лет</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-gamepad"></i>
+                            <span><strong>Игры:</strong> Minecraft, CS2</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-music"></i>
+                            <span><strong>Музыка:</strong> ooes, FEDUK, blago white</span>
+                        </li>
+                    </ul>
+
+                    <div class="quote-box">
+                        <p class="quote-text">"Искал медь — сгорел медведь."</p>
+                        <p class="quote-author">— Великий ww123rov</p>
+                    </div>
+                </div>
+
+                <!-- Проекты -->
+                <div class="info-card fade-in">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <h3 class="card-title">Проекты</h3>
                     </div>
                     
-                    <div class="name-title">
-                        <h1>PARADOX</h1>
-                        <p>// SYSTEM_USER // "НИЩИЙ ПЛЕЕР"</p>
-                        
-                        <div class="status-line">
-                            <div class="status-item">
-                                <i class="fas fa-microchip"></i>
-                                <span>RYZEN 5 3600 | 16GB RAM</span>
+                    <div style="display: grid; gap: 25px;">
+                        <div class="project-card">
+                            <div class="project-icon">
+                                <i class="fab fa-telegram"></i>
                             </div>
-                            <div class="status-item">
-                                <i class="fas fa-calendar-alt"></i>
-                                <span>13.03.2011</span>
+                            <h4 class="project-title">Шиза дротика</h4>
+                            <p class="project-desc">Telegram • Личный тгк дарта/ww</p>
+                            <div class="project-tags">
+                                <span class="project-tag">Активен</span>
+                                <span class="project-tag">Сутинёр</span>
                             </div>
-                            <div class="status-item">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <span>KAZAKHSTAN</span>
+                        </div>
+
+                        <div class="project-card">
+                            <div class="project-icon">
+                                <i class="fab fa-discord"></i>
                             </div>
-                            <div class="status-item" id="live-time">
-                                <i class="fas fa-clock"></i>
-                                <span>--:--:--</span>
+                            <h4 class="project-title">Nexgen RECODE</h4>
+                            <p class="project-desc">Discord • Minecraft Cheat Client</p>
+                            <div class="project-tags">
+                                <span class="project-tag">Разработка</span>
+                                <span class="project-tag">Java</span>
                             </div>
                         </div>
                     </div>
                 </div>
-            </header>
 
-            <!-- Основная сетка -->
-            <div class="cyber-grid">
-                <!-- Левая колонка -->
-                <div>
-                    <!-- Информация -->
-                    <div class="cyber-card fade-in" style="animation-delay: 0.1s">
-                        <div class="card-header">
-                            <i class="fas fa-terminal"></i>
-                            <h3>// SYSTEM_INFO</h3>
+                <!-- Статистика -->
+                <div class="info-card fade-in">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-chart-bar"></i>
                         </div>
-                        <ul class="cyber-list">
-                            <li>
-                                <i class="fas fa-user"></i>
-                                <span>USER_AGE: <strong>15 лет</strong></span>
-                            </li>
-                            <li>
-                                <i class="fas fa-gamepad"></i>
-                                <span>ACTIVE_GAMES: <strong>Minecraft, CS2</strong></span>
-                            </li>
-                            <li>
-                                <i class="fas fa-music"></i>
-                                <span>AUDIO_PREF: <strong>ooes, FEDUK, blago white</strong></span>
-                            </li>
-                            <li>
-                                <i class="fas fa-code"></i>
-                                <span>SKILLS: <strong>Java, HTML/CSS, Python</strong></span>
-                            </li>
-                        </ul>
+                        <h3 class="card-title">Статистика</h3>
+                    </div>
+                    
+                    <div style="margin-bottom: 30px;">
+                        <h4 style="color: #aaa; font-size: 0.95rem; margin-bottom: 20px;">В какие игры я больше всего играю</h4>
+                        <div class="stat-item-full">
+                            <div class="stat-header">
+                                <div class="stat-name">
+                                    <i class="fas fa-cube"></i>
+                                    <span>Minecraft</span>
+                                </div>
+                                <div class="stat-value">60%</div>
+                            </div>
+                            <div class="stat-bar">
+                                <div class="stat-fill" data-width="60"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-item-full">
+                            <div class="stat-header">
+                                <div class="stat-name">
+                                    <i class="fas fa-crosshairs"></i>
+                                    <span>Counter-Strike 2</span>
+                                </div>
+                                <div class="stat-value">30%</div>
+                            </div>
+                            <div class="stat-bar">
+                                <div class="stat-fill" data-width="30"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-item-full">
+                            <div class="stat-header">
+                                <div class="stat-name">
+                                    <i class="fas fa-bolt"></i>
+                                    <span>Fortnite</span>
+                                </div>
+                                <div class="stat-value">8%</div>
+                            </div>
+                            <div class="stat-bar">
+                                <div class="stat-fill" data-width="8"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-item-full">
+                            <div class="stat-header">
+                                <div class="stat-name">
+                                    <i class="fas fa-skull"></i>
+                                    <span>Rust</span>
+                                </div>
+                                <div class="stat-value">2%</div>
+                            </div>
+                            <div class="stat-bar">
+                                <div class="stat-fill" data-width="2"></div>
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- Социальные сети -->
-                    <div class="cyber-card fade-in" style="animation-delay: 0.2s">
-                        <div class="card-header">
-                            <i class="fas fa-network-wired"></i>
-                            <h3>// NETWORK_NODES</h3>
-                        </div>
-                        <div class="social-grid">
-                            <a href="https://discord.com/users/1312012805913837608" target="_blank" class="social-link">
-                                <div class="social-icon">
-                                    <i class="fab fa-discord"></i>
-                                </div>
-                                <div class="social-info">
-                                    <div>DISCORD_NODE</div>
-                                    <div>@luckyparadoxx</div>
-                                </div>
-                            </a>
-                            
-                            <a href="https://t.me/xyecocebanniy" target="_blank" class="social-link">
-                                <div class="social-icon">
-                                    <i class="fab fa-telegram"></i>
-                                </div>
-                                <div class="social-info">
-                                    <div>TELEGRAM_CHANNEL</div>
-                                    <div>@xyecocebanniy</div>
-                                </div>
-                            </a>
-                            
-                            <a href="https://www.youtube.com/@zhdufeedback" target="_blank" class="social-link">
-                                <div class="social-icon">
-                                    <i class="fab fa-youtube"></i>
-                                </div>
-                                <div class="social-info">
-                                    <div>YOUTUBE_FEED</div>
-                                    <div>@zhdufeedback</div>
-                                </div>
-                            </a>
-                            
-                            <a href="https://ru.namemc.com/profile/LuckyParadox.1" target="_blank" class="social-link">
-                                <div class="social-icon">
-                                    <i class="fas fa-gamepad"></i>
-                                </div>
-                                <div class="social-info">
-                                    <div>MINECRAFT_ID</div>
-                                    <div>LuckyParadox</div>
-                                </div>
-                            </a>
+                    <div>
+                        <h4 style="color: #aaa; font-size: 0.95rem; margin-bottom: 15px;">Активность</h4>
+                        <div style="text-align: center; padding: 25px; border: 1px solid #222; border-radius: 10px; background: rgba(245, 245, 245, 0.02);">
+                            <div style="font-size: 2.5rem; font-weight: 700; color: #f5f5f5; margin-bottom: 10px;">100+</div>
+                            <div style="color: #aaa; font-size: 0.95rem;">сломанных режимов сна</div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Центральная колонка -->
-                <div>
-                    <!-- Проекты -->
-                    <div class="cyber-card fade-in" style="animation-delay: 0.3s">
-                        <div class="card-header">
-                            <i class="fas fa-rocket"></i>
-                            <h3>// ACTIVE_PROJECTS</h3>
-                        </div>
-                        
-                        <div style="margin-bottom: 25px;">
-                            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px;">
-                                <div style="width: 50px; height: 50px; border: 1px solid #00ff41; display: flex; align-items: center; justify-content: center;">
-                                    <i class="fab fa-telegram" style="font-size: 1.5rem;"></i>
-                                </div>
-                                <div>
-                                    <div style="font-weight: 600; font-size: 1.1rem;">ШИЗА ДРОТИКА</div>
-                                    <div style="font-size: 0.9rem; opacity: 0.7;">Telegram • Личный тгк дарта/ww</div>
-                                </div>
-                            </div>
-                            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                                <span style="padding: 3px 10px; border: 1px solid #00ff41; font-size: 0.8rem; background: rgba(0, 255, 65, 0.1);">АКТИВЕН</span>
-                                <span style="padding: 3px 10px; border: 1px solid #00ff41; font-size: 0.8rem; background: rgba(0, 255, 65, 0.1);">СУТИНЁР</span>
-                            </div>
-                        </div>
-                        
-                        <div>
-                            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px;">
-                                <div style="width: 50px; height: 50px; border: 1px solid #00ff41; display: flex; align-items: center; justify-content: center;">
-                                    <i class="fab fa-discord" style="font-size: 1.5rem;"></i>
-                                </div>
-                                <div>
-                                    <div style="font-weight: 600; font-size: 1.1rem;">NEXGEN RECODE</div>
-                                    <div style="font-size: 0.9rem; opacity: 0.7;">Discord • Minecraft Cheat Client</div>
-                                </div>
-                            </div>
-                            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                                <span style="padding: 3px 10px; border: 1px solid #00ff41; font-size: 0.8rem; background: rgba(0, 255, 65, 0.1);">В РАЗРАБОТКЕ</span>
-                                <span style="padding: 3px 10px; border: 1px solid #00ff41; font-size: 0.8rem; background: rgba(0, 255, 65, 0.1);">JAVA</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- О себе -->
-                    <div class="cyber-card fade-in" style="animation-delay: 0.4s">
-                        <div class="card-header">
-                            <i class="fas fa-user-secret"></i>
-                            <h3>// USER_PROFILE</h3>
-                        </div>
-                        <p style="line-height: 1.6; margin-bottom: 20px;">
-                            Обычный типок, который страдает фигнёй в интернете. Страшный майнкрафтер/хойщик. 
-                            Люблю музыку, программирование и игры. Всегда открыт для интересных проектов и коллабораций.
-                        </p>
-                        
-                        <div class="quote-box">
-                            "Искал медь — сгорел медведь."
-                            <div class="quote-author">— Великий ww123rov</div>
-                        </div>
-                        
-                        <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px;">
-                            <span style="padding: 5px 15px; border: 1px solid #00ff41; font-size: 0.9rem; background: rgba(0, 255, 65, 0.1);">GAMER</span>
-                            <span style="padding: 5px 15px; border: 1px solid #00ff41; font-size: 0.9rem; background: rgba(0, 255, 65, 0.1);">DEVELOPER</span>
-                            <span style="padding: 5px 15px; border: 1px solid #00ff41; font-size: 0.9rem; background: rgba(0, 255, 65, 0.1);">MUSIC_LOVER</span>
-                            <span style="padding: 5px 15px; border: 1px solid #00ff41; font-size: 0.9rem; background: rgba(0, 255, 65, 0.1);">MINECRAFT</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Правая колонка -->
-                <div>
-                    <!-- Статистика игр -->
-                    <div class="cyber-card fade-in" style="animation-delay: 0.5s">
-                        <div class="card-header">
-                            <i class="fas fa-chart-line"></i>
-                            <h3>// GAME_STATS</h3>
-                        </div>
-                        <div style="margin-bottom: 25px;">
-                            <div style="font-size: 0.95rem; margin-bottom: 15px; opacity: 0.9;">
-                                ВРЕМЯ В ИГРАХ (ОТНОСИТЕЛЬНОЕ)
-                            </div>
-                            
-                            <div class="stat-bar">
-                                <div class="stat-info">
-                                    <span><i class="fas fa-cube"></i> MINECRAFT</span>
-                                    <span>60%</span>
-                                </div>
-                                <div class="stat-progress">
-                                    <div class="stat-fill" data-width="60"></div>
-                                </div>
-                            </div>
-                            
-                            <div class="stat-bar">
-                                <div class="stat-info">
-                                    <span><i class="fas fa-crosshairs"></i> CS2</span>
-                                    <span>30%</span>
-                                </div>
-                                <div class="stat-progress">
-                                    <div class="stat-fill" data-width="30"></div>
-                                </div>
-                            </div>
-                            
-                            <div class="stat-bar">
-                                <div class="stat-info">
-                                    <span><i class="fas fa-bolt"></i> FORTNITE</span>
-                                    <span>8%</span>
-                                </div>
-                                <div class="stat-progress">
-                                    <div class="stat-fill" data-width="8"></div>
-                                </div>
-                            </div>
-                            
-                            <div class="stat-bar">
-                                <div class="stat-info">
-                                    <span><i class="fas fa-skull"></i> RUST</span>
-                                    <span>2%</span>
-                                </div>
-                                <div class="stat-progress">
-                                    <div class="stat-fill" data-width="2"></div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div>
-                            <div style="font-size: 0.95rem; margin-bottom: 15px; opacity: 0.9;">
-                                СИСТЕМНАЯ АКТИВНОСТЬ
-                            </div>
-                            <div style="text-align: center; padding: 20px; border: 1px solid #00ff41; background: rgba(0, 255, 65, 0.05);">
-                                <div style="font-size: 2.5rem; font-weight: bold; margin-bottom: 10px;">100+</div>
-                                <div style="font-size: 0.9rem; opacity: 0.8;">СЛОМАННЫХ РЕЖИМОВ СНА</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Музыка -->
-                    <div class="cyber-card fade-in" style="animation-delay: 0.6s">
-                        <div class="card-header">
+                <!-- Музыка -->
+                <div class="info-card fade-in">
+                    <div class="card-header">
+                        <div class="card-icon">
                             <i class="fas fa-music"></i>
-                            <h3>// AUDIO_SYSTEM</h3>
                         </div>
-                        <div style="text-align: center; padding: 30px 20px;">
-                            <i class="fas fa-volume-mute" style="font-size: 3rem; opacity: 0.5; margin-bottom: 20px;"></i>
-                            <div style="font-size: 1.1rem; margin-bottom: 10px;">АУДИО СИСТЕМА ОФФЛАЙН</div>
-                            <div style="font-size: 0.9rem; opacity: 0.7;">NO ACTIVE STREAM DETECTED</div>
-                        </div>
-                        
-                        <div style="margin-top: 25px;">
-                            <div style="font-size: 0.95rem; margin-bottom: 15px; opacity: 0.9;">
-                                ПРЕДПОЧТИТЕЛЬНЫЕ ИСПОЛНИТЕЛИ
-                            </div>
-                            <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-                                <span style="padding: 8px 15px; border: 1px solid #00ff41; font-size: 0.9rem; background: rgba(0, 255, 65, 0.1);">OOES</span>
-                                <span style="padding: 8px 15px; border: 1px solid #00ff41; font-size: 0.9rem; background: rgba(0, 255, 65, 0.1);">FEDUK</span>
-                                <span style="padding: 8px 15px; border: 1px solid #00ff41; font-size: 0.9rem; background: rgba(0, 255, 65, 0.1);">BLAGO WHITE</span>
-                                <span style="padding: 8px 15px; border: 1px solid #00ff41; font-size: 0.9rem; background: rgba(0, 255, 65, 0.1);">SADSVIT</span>
-                            </div>
+                        <h3 class="card-title">Музыка</h3>
+                    </div>
+                    
+                    <div class="music-placeholder">
+                        <i class="fas fa-volume-mute"></i>
+                        <p style="color: #888; margin-bottom: 10px;">Не слушает музыку</p>
+                    </div>
+
+                    <div>
+                        <h4 style="color: #aaa; font-size: 0.95rem; margin-bottom: 15px;">Любимые исполнители:</h4>
+                        <div class="artist-tags">
+                            <span class="artist-tag">ooes</span>
+                            <span class="artist-tag">FEDUK</span>
+                            <span class="artist-tag">blago white</span>
+                            <span class="artist-tag">Sadsvit</span>
                         </div>
                     </div>
                 </div>
             </div>
+        </section>
 
-            <!-- Футер -->
-            <footer class="cyber-footer fade-in" style="animation-delay: 0.7s">
-                <div>// SYSTEM_PARADOX v2.0 // LAST_UPDATE: 2024</div>
-                <div style="margin-top: 10px; opacity: 0.5;">
-                    <i class="fas fa-code"></i> CUSTOM_PROFILE_SYSTEM | 
-                    <i class="fas fa-heart" style="color: #ff0066;"></i> DESIGNED_WITH_GLITCH |
-                    <i class="fas fa-coffee"></i> POWERED_BY_SLEEP_DEPRIVATION
-                </div>
-            </footer>
-        </div>
+        <!-- Футер -->
+        <footer class="footer fade-in">
+            <p>PARADOX © 2024</p>
+            <p style="opacity: 0.6; margin-top: 10px;">
+                Сделано с <i class="fas fa-heart" style="color: #666;"></i> в бело-серых тонах
+            </p>
+        </footer>
     </div>
 
     <script>
-        // Кастомный курсор
-        const cursor = document.querySelector('.cursor');
-        const cursorDot = document.querySelector('.cursor-dot');
-        
-        document.addEventListener('mousemove', (e) => {
-            cursor.style.left = e.clientX + 'px';
-            cursor.style.top = e.clientY + 'px';
-            cursorDot.style.left = e.clientX + 'px';
-            cursorDot.style.top = e.clientY + 'px';
-        });
-        
-        document.addEventListener('mousedown', () => {
-            cursor.style.transform = 'scale(0.8)';
-        });
-        
-        document.addEventListener('mouseup', () => {
-            cursor.style.transform = 'scale(1)';
-        });
-
-        // Matrix эффект фона
-        function createMatrixEffect() {
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            const matrixBg = document.getElementById('matrix-bg');
-            
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            matrixBg.appendChild(canvas);
-            
-            const letters = "01";
-            const fontSize = 14;
-            const columns = canvas.width / fontSize;
-            const drops = [];
-            
-            for(let i = 0; i < columns; i++) {
-                drops[i] = 1;
-            }
-            
-            function draw() {
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.04)';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                
-                ctx.fillStyle = '#00ff41';
-                ctx.font = fontSize + 'px "JetBrains Mono"';
-                
-                for(let i = 0; i < drops.length; i++) {
-                    const text = letters.charAt(Math.floor(Math.random() * letters.length));
-                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                    
-                    if(drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                        drops[i] = 0;
-                    }
-                    drops[i]++;
-                }
-            }
-            
-            setInterval(draw, 35);
-            
-            window.addEventListener('resize', () => {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-            });
-        }
-
         // Заставка
-        const terminal = document.getElementById('terminal');
-        const mainContent = document.getElementById('main-content');
-        const enterBtn = document.getElementById('enter-btn');
-        
+        const entryScreen = document.getElementById('entryScreen');
+        const mainContent = document.getElementById('mainContent');
+        const enterBtn = document.getElementById('enterBtn');
+
         enterBtn.addEventListener('click', () => {
-            // Эффект печати
-            const input = document.getElementById('command-input');
-            input.textContent = '';
-            const text = 'ACCESS_GRANTED...';
-            let i = 0;
+            // Анимация исчезновения заставки
+            entryScreen.style.opacity = '0';
             
-            const typeWriter = () => {
-                if (i < text.length) {
-                    input.textContent += text.charAt(i);
-                    i++;
-                    setTimeout(typeWriter, 50);
-                } else {
-                    // Переход к основному контенту
-                    terminal.style.opacity = '0';
-                    terminal.style.transition = 'opacity 1s';
-                    
-                    setTimeout(() => {
-                        terminal.style.display = 'none';
-                        mainContent.style.display = 'block';
-                        createMatrixEffect();
-                        initAnimations();
-                        updateTime();
-                    }, 1000);
-                }
-            };
-            
-            typeWriter();
-            
-            // Звуковой эффект (опционально)
-            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
-            
-            oscillator.frequency.setValueAtTime(200, audioContext.currentTime);
-            oscillator.frequency.exponentialRampToValueAtTime(800, audioContext.currentTime + 0.5);
-            
-            gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
-            
-            oscillator.start();
-            oscillator.stop(audioContext.currentTime + 0.5);
+            setTimeout(() => {
+                entryScreen.style.display = 'none';
+                mainContent.classList.add('show');
+                
+                // Включаем прокрутку
+                document.body.style.overflow = 'auto';
+                
+                // Запускаем анимации
+                initAnimations();
+                updateTime();
+            }, 800);
         });
 
         // Время
         function updateTime() {
-            const timeElement = document.getElementById('live-time').querySelector('span');
+            const timeElement = document.getElementById('currentTime').querySelector('span');
             const update = () => {
                 const now = new Date();
                 const timeString = now.toLocaleTimeString("ru-RU", { 
@@ -965,58 +913,64 @@
             setInterval(update, 1000);
         }
 
-        // Анимации
+        // Анимации появления
         function initAnimations() {
-            // Анимация прогресс-баров
+            // Прогресс-бары
             document.querySelectorAll('.stat-fill').forEach(bar => {
                 const width = bar.getAttribute('data-width');
-                bar.style.width = '0%';
                 setTimeout(() => {
                     bar.style.width = width + '%';
                 }, 500);
             });
             
-            // Glitch эффект для аватара
-            const avatar = document.getElementById('dynamic-avatar');
-            setInterval(() => {
-                if (Math.random() > 0.9) {
-                    avatar.style.filter = 'invert(1)';
-                    setTimeout(() => {
-                        avatar.style.filter = 'none';
-                    }, 100);
-                }
-            }, 3000);
-            
-            // Эффект мигания текста
-            setInterval(() => {
-                const glitchElements = document.querySelectorAll('.cyber-card h3');
-                glitchElements.forEach(el => {
-                    if (Math.random() > 0.95) {
-                        const originalText = el.textContent;
-                        el.textContent = originalText.split('').map(c => 
-                            Math.random() > 0.5 ? c : '0'
-                        ).join('');
-                        setTimeout(() => {
-                            el.textContent = originalText;
-                        }, 100);
+            // Анимация появления элементов при скролле
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
                     }
                 });
-            }, 2000);
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+            
+            document.querySelectorAll('.fade-in').forEach(el => {
+                observer.observe(el);
+            });
         }
+
+        // Плавная прокрутка для ссылок
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
 
         // Инициализация при загрузке
         document.addEventListener('DOMContentLoaded', () => {
-            // Добавляем эффект нажатия на все кнопки
-            document.querySelectorAll('.enter-btn, .social-link').forEach(btn => {
-                btn.addEventListener('mousedown', () => {
-                    btn.style.transform = 'scale(0.95)';
-                });
-                btn.addEventListener('mouseup', () => {
-                    btn.style.transform = '';
-                });
-                btn.addEventListener('mouseleave', () => {
-                    btn.style.transform = '';
-                });
+            // Отключаем прокрутку на заставке
+            document.body.style.overflow = 'hidden';
+            
+            // Добавляем эффект нажатия на кнопку
+            enterBtn.addEventListener('mousedown', () => {
+                enterBtn.style.transform = 'scale(0.95)';
+            });
+            enterBtn.addEventListener('mouseup', () => {
+                enterBtn.style.transform = '';
+            });
+            enterBtn.addEventListener('mouseleave', () => {
+                enterBtn.style.transform = '';
             });
         });
     </script>
