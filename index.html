@@ -154,18 +154,8 @@
             border-radius: 50%;
             border: 4px solid var(--bg-primary);
             z-index: 2;
-            animation: pulse 2s ease-in-out infinite;
-            background: #22c55e;
-            box-shadow: 0 0 20px rgba(34, 197, 94, 0.5);
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.1);
-            }
+            background: #6b7280;
+            box-shadow: 0 0 15px rgba(107, 114, 128, 0.3);
         }
 
         .floating-3d {
@@ -404,8 +394,8 @@
 
                         <div class="flex flex-wrap gap-3 justify-center md:justify-start mb-6">
                             <span class="px-5 py-2.5 rounded-full btn-glass text-sm flex items-center gap-2">
-                                <i class="fas fa-circle text-green-500"></i>
-                                Онлайн
+                                <i class="fas fa-circle text-gray-500"></i>
+                                Оффлайн
                             </span>
                             <span class="px-5 py-2.5 rounded-full btn-glass text-sm flex items-center gap-2">
                                 <i class="fas fa-calendar-alt icon-gray"></i>
@@ -452,8 +442,8 @@
                                 <span class="text-gray-300">Minecraft, CS2</span>
                             </div>
                             <div class="flex items-center gap-3 p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors">
-                                <i class="fas fa-code icon-gray w-5"></i>
-                                <span class="text-gray-300">Java, HTML/CSS, Python</span>
+                                <i class="fas fa-gamepad icon-gray w-5"></i>
+                                <span class="text-gray-300">Fortnite, Rust</span>
                             </div>
                             <div class="flex items-center gap-3 p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors">
                                 <i class="fas fa-music icon-gray w-5"></i>
@@ -539,22 +529,21 @@
                                 </div>
                             </a>
 
-                            <a href="https://discord.gg/m8RRBSen5j" target="_blank" class="project-card block glass-card p-5">
+                            <div class="glass-card p-5 project-card">
                                 <div class="flex items-start gap-4">
                                     <div class="w-14 h-14 rounded-xl bg-gray-800/30 flex items-center justify-center flex-shrink-0 border border-gray-700/30">
                                         <i class="fab fa-discord text-gray-300 text-xl"></i>
                                     </div>
                                     <div class="flex-1 min-w-0">
-                                        <h4 class="font-semibold text-lg mb-2">Nexgen Recode</h4>
-                                        <p class="text-sm text-accent mb-3">Discord • Minecraft Client</p>
+                                        <h4 class="font-semibold text-lg mb-2">Nexgen RECODE</h4>
+                                        <p class="text-sm text-accent mb-3">Discord • Minecraft Cheat Client</p>
                                         <div class="flex items-center gap-2 text-xs">
                                             <span class="px-2 py-1 rounded-full bg-gray-700/30 text-gray-300">Разработка</span>
                                             <span class="px-2 py-1 rounded-full bg-gray-700/30 text-gray-300">Java</span>
                                         </div>
                                     </div>
-                                    <i class="fas fa-external-link-alt text-accent mt-2"></i>
                                 </div>
-                            </a>
+                            </div>
 
                             <div class="glass-card p-5">
                                 <div class="flex items-start gap-4">
@@ -608,57 +597,57 @@
                         </h3>
                         <div class="space-y-6">
                             <div>
-                                <h4 class="text-sm font-medium mb-4">Языки программирования</h4>
+                                <h4 class="text-sm font-medium mb-4">В какие игры я больше всего играю</h4>
                                 <div class="space-y-4">
                                     <div>
-                                        <div class="flex justify-between text-sm mb-2">
-                                            <span class="font-medium flex items-center gap-2">
-                                                <i class="fab fa-java text-gray-400"></i>
-                                                Java
-                                            </span>
-                                            <span class="counter text-accent">68%</span>
+                                        <div class="flex items-center justify-between text-sm mb-2">
+                                            <div class="flex items-center gap-2">
+                                                <i class="fas fa-cube text-green-400"></i>
+                                                <span class="font-medium">Minecraft</span>
+                                            </div>
+                                            <span class="counter text-accent">60%</span>
                                         </div>
                                         <div class="progress-bar">
-                                            <div class="progress-fill" style="width: 68%; background: linear-gradient(90deg, #666666, #999999);"></div>
+                                            <div class="progress-fill" style="width: 60%; background: linear-gradient(90deg, #22c55e, #16a34a);"></div>
                                         </div>
                                     </div>
 
                                     <div>
-                                        <div class="flex justify-between text-sm mb-2">
-                                            <span class="font-medium flex items-center gap-2">
-                                                <i class="fab fa-html5 text-gray-400"></i>
-                                                HTML/CSS
-                                            </span>
-                                            <span class="counter text-accent">15%</span>
+                                        <div class="flex items-center justify-between text-sm mb-2">
+                                            <div class="flex items-center gap-2">
+                                                <i class="fas fa-crosshairs text-orange-400"></i>
+                                                <span class="font-medium">Counter-Strike 2</span>
+                                            </div>
+                                            <span class="counter text-accent">30%</span>
                                         </div>
                                         <div class="progress-bar">
-                                            <div class="progress-fill" style="width: 15%; background: linear-gradient(90deg, #888888, #aaaaaa);"></div>
+                                            <div class="progress-fill" style="width: 30%; background: linear-gradient(90deg, #f97316, #ea580c);"></div>
                                         </div>
                                     </div>
 
                                     <div>
-                                        <div class="flex justify-between text-sm mb-2">
-                                            <span class="font-medium flex items-center gap-2">
-                                                <i class="fab fa-python text-gray-400"></i>
-                                                Python
-                                            </span>
-                                            <span class="counter text-accent">10%</span>
+                                        <div class="flex items-center justify-between text-sm mb-2">
+                                            <div class="flex items-center gap-2">
+                                                <i class="fas fa-bolt text-purple-400"></i>
+                                                <span class="font-medium">Fortnite</span>
+                                            </div>
+                                            <span class="counter text-accent">8%</span>
                                         </div>
                                         <div class="progress-bar">
-                                            <div class="progress-fill" style="width: 10%; background: linear-gradient(90deg, #777777, #999999);"></div>
+                                            <div class="progress-fill" style="width: 8%; background: linear-gradient(90deg, #a855f7, #9333ea);"></div>
                                         </div>
                                     </div>
 
                                     <div>
-                                        <div class="flex justify-between text-sm mb-2">
-                                            <span class="font-medium flex items-center gap-2">
-                                                <i class="fab fa-js text-gray-400"></i>
-                                                JavaScript
-                                            </span>
-                                            <span class="counter text-accent">7%</span>
+                                        <div class="flex items-center justify-between text-sm mb-2">
+                                            <div class="flex items-center gap-2">
+                                                <i class="fas fa-skull text-red-400"></i>
+                                                <span class="font-medium">Rust</span>
+                                            </div>
+                                            <span class="counter text-accent">2%</span>
                                         </div>
                                         <div class="progress-bar">
-                                            <div class="progress-fill" style="width: 7%; background: linear-gradient(90deg, #999999, #bbbbbb);"></div>
+                                            <div class="progress-fill" style="width: 2%; background: linear-gradient(90deg, #ef4444, #dc2626);"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -666,23 +655,11 @@
 
                             <div>
                                 <h4 class="text-sm font-medium mb-3">Активность</h4>
-                                <div class="grid grid-cols-3 gap-2">
+                                <div class="grid grid-cols-1 gap-2">
                                     <div class="lang-stat-bar" style="background: linear-gradient(135deg, #444444, #666666);">
                                         <div class="text-center">
-                                            <div class="text-xl font-bold">10+</div>
-                                            <div class="text-xs opacity-80">Проектов</div>
-                                        </div>
-                                    </div>
-                                    <div class="lang-stat-bar" style="background: linear-gradient(135deg, #555555, #777777);">
-                                        <div class="text-center">
-                                            <div class="text-xl font-bold">3+</div>
-                                            <div class="text-xs opacity-80">Года кода</div>
-                                        </div>
-                                    </div>
-                                    <div class="lang-stat-bar" style="background: linear-gradient(135deg, #666666, #888888);">
-                                        <div class="text-center">
-                                            <div class="text-xl font-bold">∞</div>
-                                            <div class="text-xs opacity-80">В майне</div>
+                                            <div class="text-2xl font-bold">100+</div>
+                                            <div class="text-sm opacity-80">сломанных режимов сна</div>
                                         </div>
                                     </div>
                                 </div>
