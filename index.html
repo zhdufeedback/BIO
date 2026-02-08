@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PARADOX</title>
+    <title>PARADOX | КОСМИЧЕСКИЙ ПОРТАЛ</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -15,15 +15,16 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background: #0a0a0a;
-            color: #f5f5f5;
+            font-family: 'Exo 2', sans-serif;
+            background: #000814;
+            color: #e0f7ff;
             overflow-x: hidden;
             min-height: 100vh;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="none" stroke="%2300e5ff" stroke-width="2"/><circle cx="12" cy="12" r="2" fill="%2300e5ff"/></svg>') 12 12, auto;
         }
 
-        /* Матричная заставка */
-        .matrix-screen {
+        /* Космическая заставка */
+        .cosmic-screen {
             position: fixed;
             top: 0;
             left: 0;
@@ -34,16 +35,15 @@
             overflow: hidden;
         }
 
-        .matrix-canvas {
+        .cosmic-canvas {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            filter: contrast(1.2) brightness(0.8);
         }
 
-        .matrix-overlay {
+        .cosmic-overlay {
             position: absolute;
             top: 0;
             left: 0;
@@ -53,179 +53,170 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            background: rgba(0, 0, 0, 0.7);
+            background: radial-gradient(ellipse at center, rgba(0, 40, 83, 0.4) 0%, rgba(0, 0, 0, 0.9) 70%);
             z-index: 1;
         }
 
-        .matrix-title {
-            font-size: 5rem;
-            font-weight: 800;
-            color: #fff;
-            letter-spacing: 5px;
+        .cosmic-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 5.5rem;
+            font-weight: 900;
+            color: #00e5ff;
+            letter-spacing: 8px;
             text-transform: uppercase;
-            margin-bottom: 15px;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-            position: relative;
-            animation: titleGlow 3s ease-in-out infinite;
+            margin-bottom: 20px;
+            text-shadow: 
+                0 0 10px #00e5ff,
+                0 0 20px #00e5ff,
+                0 0 30px #0099ff,
+                0 0 40px #0099ff;
+            animation: cosmicPulse 3s ease-in-out infinite;
         }
 
-        @keyframes titleGlow {
-            0%, 100% { text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
-            50% { text-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 30px rgba(255, 255, 255, 0.4); }
-        }
-
-        .matrix-user-info {
-            font-size: 1.2rem;
-            color: #aaa;
-            margin-bottom: 5px;
-            letter-spacing: 1px;
-            text-align: center;
-            min-height: 25px;
-        }
-
-        .user-location {
-            color: #fff;
-            font-weight: 500;
-            animation: locationPulse 2s ease-in-out infinite;
-        }
-
-        @keyframes locationPulse {
-            0%, 100% { opacity: 0.8; }
-            50% { opacity: 1; }
-        }
-
-        .matrix-visitors {
-            font-size: 1rem;
-            color: #888;
-            margin-bottom: 5px;
-            letter-spacing: 1px;
-            text-align: center;
-            min-height: 25px;
-        }
-
-        .visitors-count {
-            color: #4ade80;
-            font-weight: 600;
-            font-family: 'Courier New', monospace;
-            animation: countPulse 3s ease-in-out infinite;
-        }
-
-        @keyframes countPulse {
+        @keyframes cosmicPulse {
             0%, 100% { 
-                color: #4ade80;
-                text-shadow: 0 0 5px rgba(74, 222, 128, 0.3);
+                text-shadow: 
+                    0 0 10px #00e5ff,
+                    0 0 20px #00e5ff,
+                    0 0 30px #0099ff,
+                    0 0 40px #0099ff;
             }
             50% { 
-                color: #22c55e;
-                text-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
+                text-shadow: 
+                    0 0 20px #00e5ff,
+                    0 0 40px #00e5ff,
+                    0 0 60px #0099ff,
+                    0 0 80px #0099ff;
             }
         }
 
-        .visitors-text {
-            color: #94a3b8;
-            font-size: 0.95rem;
-            animation: fadeInOut 2s ease-in-out infinite;
-        }
-
-        @keyframes fadeInOut {
-            0%, 100% { opacity: 0.8; }
-            50% { opacity: 1; }
-        }
-
-        .visitors-new {
-            color: #fbbf24;
-            font-weight: 600;
-            margin-left: 5px;
-            animation: newVisitorPulse 1s ease-in-out infinite;
-        }
-
-        @keyframes newVisitorPulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        .matrix-subtitle {
-            font-size: 1.1rem;
-            color: #888;
-            margin-bottom: 30px;
+        .terminal-text {
+            font-family: 'Courier New', monospace;
+            font-size: 1.3rem;
+            color: #80ffdb;
+            margin-bottom: 10px;
             letter-spacing: 2px;
             text-align: center;
+            min-height: 30px;
+            position: relative;
         }
 
-        .matrix-enter-btn {
-            padding: 15px 60px;
-            background: transparent;
-            border: 2px solid #fff;
-            color: #fff;
-            font-size: 1.1rem;
-            font-weight: 500;
-            letter-spacing: 2px;
+        .terminal-text::before {
+            content: '>';
+            position: absolute;
+            left: -30px;
+            color: #00e5ff;
+        }
+
+        .planet-orbit {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            border: 1px solid rgba(0, 229, 255, 0.1);
+            border-radius: 50%;
+            animation: rotateOrbit 40s linear infinite;
+        }
+
+        .planet {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: #ff4d8d;
+            border-radius: 50%;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 20px #ff4d8d;
+        }
+
+        @keyframes rotateOrbit {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .cosmic-enter-btn {
+            padding: 18px 70px;
+            background: linear-gradient(90deg, #0066cc 0%, #00e5ff 100%);
+            border: none;
+            border-radius: 50px;
+            color: #000;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            letter-spacing: 3px;
             cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
             text-transform: uppercase;
-            margin-top: 10px;
+            margin-top: 40px;
+            box-shadow: 0 0 30px rgba(0, 229, 255, 0.5);
         }
 
-        .matrix-enter-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateY(-2px);
-            box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+        .cosmic-enter-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 50px rgba(0, 229, 255, 0.8);
+            background: linear-gradient(90deg, #00e5ff 0%, #0066cc 100%);
         }
 
-        .matrix-enter-btn::before {
+        .cosmic-enter-btn::after {
             content: '';
             position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+            transform: rotate(45deg);
             transition: 0.5s;
         }
 
-        .matrix-enter-btn:hover::before {
+        .cosmic-enter-btn:hover::after {
             left: 100%;
         }
 
-        .matrix-terminal {
+        .comet {
             position: absolute;
-            bottom: 50px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: #666;
-            font-size: 0.9rem;
-            text-align: center;
-            letter-spacing: 1px;
-            line-height: 1.5;
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00e5ff);
+            transform: rotate(-45deg);
+            animation: cometFly 10s linear infinite;
         }
 
-        .loading-dots {
-            display: inline-block;
-            animation: dots 1.5s steps(5, end) infinite;
-        }
-
-        @keyframes dots {
-            0%, 20% { content: '.'; }
-            40% { content: '..'; }
-            60% { content: '...'; }
-            80%, 100% { content: ''; }
-        }
-
-        .loading-dots::after {
-            content: '';
-            animation: dots 1.5s steps(5, end) infinite;
+        @keyframes cometFly {
+            0% {
+                top: -100px;
+                right: -100px;
+                opacity: 1;
+            }
+            100% {
+                top: 100vh;
+                right: 100vw;
+                opacity: 0;
+            }
         }
 
         /* Основной контент */
         .main-content {
             opacity: 0;
             transition: opacity 1s ease;
+            background: radial-gradient(ellipse at top, #001428 0%, #000814 70%);
         }
 
         .main-content.show {
             opacity: 1;
+        }
+
+        /* Звёздный фон */
+        .stars-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
         }
 
         /* Герой секция */
@@ -239,44 +230,70 @@
             padding: 20px;
         }
 
-        .hero-bg {
+        .nebula {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, #1a1a1a, #0a0a0a);
-            z-index: -1;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(0, 102, 204, 0.1) 0%, transparent 70%);
+            filter: blur(100px);
+            opacity: 0.5;
+            top: -300px;
+            right: -300px;
         }
 
         .hero-grid {
             display: grid;
             grid-template-columns: auto 1fr;
-            gap: 60px;
+            gap: 80px;
             align-items: center;
-            max-width: 1200px;
+            max-width: 1300px;
             width: 100%;
+            position: relative;
+            z-index: 1;
         }
 
         .avatar-container {
             position: relative;
-            width: 280px;
-            height: 280px;
+            width: 320px;
+            height: 320px;
+        }
+
+        .avatar-ring {
+            position: absolute;
+            width: 340px;
+            height: 340px;
+            border: 2px solid rgba(0, 229, 255, 0.3);
+            border-radius: 50%;
+            animation: ringRotate 20s linear infinite;
+        }
+
+        .avatar-ring::before {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #00e5ff;
+            border-radius: 50%;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 20px #00e5ff;
+        }
+
+        @keyframes ringRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .avatar-frame {
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            border: 3px solid #f5f5f5;
-            padding: 10px;
+            border: 4px solid transparent;
+            background: linear-gradient(45deg, #0066cc, #00e5ff) border-box;
+            padding: 12px;
             position: relative;
-            animation: rotate 20s linear infinite;
-        }
-
-        @keyframes rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            overflow: hidden;
         }
 
         .avatar-img {
@@ -284,107 +301,185 @@
             height: 100%;
             border-radius: 50%;
             object-fit: cover;
-            border: 2px solid #333;
+            border: 2px solid #001428;
+            background: #000814;
         }
 
-        .status-dot {
+        .status-pulse {
             position: absolute;
-            bottom: 30px;
-            right: 30px;
-            width: 20px;
-            height: 20px;
+            bottom: 40px;
+            right: 40px;
+            width: 25px;
+            height: 25px;
             border-radius: 50%;
-            background: #666;
-            border: 3px solid #0a0a0a;
+            background: #ff4d4d;
+            border: 3px solid #001428;
             z-index: 2;
+            box-shadow: 0 0 20px #ff4d4d;
+            animation: statusPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes statusPulse {
+            0%, 100% { 
+                box-shadow: 0 0 20px #ff4d4d, 0 0 30px rgba(255, 77, 77, 0.5);
+            }
+            50% { 
+                box-shadow: 0 0 30px #ff4d4d, 0 0 50px rgba(255, 77, 77, 0.8);
+            }
         }
 
         .hero-info {
-            max-width: 600px;
+            max-width: 700px;
         }
 
         .hero-title {
-            font-size: 4.5rem;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 5rem;
             font-weight: 800;
-            color: #f5f5f5;
-            margin-bottom: 10px;
-            letter-spacing: 2px;
+            color: #00e5ff;
+            margin-bottom: 15px;
+            letter-spacing: 3px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .hero-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #00e5ff, transparent);
         }
 
         .hero-subtitle {
-            font-size: 1.5rem;
-            color: #aaa;
-            margin-bottom: 30px;
+            font-size: 1.8rem;
+            color: #80ffdb;
+            margin-bottom: 40px;
             font-weight: 300;
+            background: linear-gradient(90deg, #80ffdb, #00e5ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .hero-stats {
-            display: flex;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 20px;
-            margin-bottom: 40px;
-            flex-wrap: wrap;
+            margin-bottom: 50px;
         }
 
         .stat-item {
-            padding: 10px 20px;
-            background: rgba(245, 245, 245, 0.05);
-            border: 1px solid #333;
-            border-radius: 5px;
+            padding: 20px;
+            background: rgba(0, 40, 83, 0.3);
+            border: 1px solid rgba(0, 229, 255, 0.2);
+            border-radius: 15px;
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 0.9rem;
-            color: #ccc;
+            gap: 15px;
+            font-size: 1rem;
+            color: #e0f7ff;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-item:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 229, 255, 0.5);
+            box-shadow: 0 10px 30px rgba(0, 229, 255, 0.2);
         }
 
         .stat-item i {
-            color: #888;
+            color: #00e5ff;
+            font-size: 1.3rem;
         }
 
         .hero-description {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            color: #bbb;
-            margin-bottom: 40px;
-            max-width: 500px;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #b3e5fc;
+            margin-bottom: 50px;
+            max-width: 600px;
+            padding: 25px;
+            background: rgba(0, 40, 83, 0.2);
+            border-left: 4px solid #00e5ff;
+            border-radius: 0 10px 10px 0;
         }
 
         .social-links {
             display: flex;
-            gap: 15px;
+            gap: 20px;
             flex-wrap: wrap;
         }
 
         .social-link {
-            width: 50px;
-            height: 50px;
-            border: 1px solid #333;
+            width: 60px;
+            height: 60px;
+            border: 2px solid rgba(0, 229, 255, 0.3);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #aaa;
+            color: #00e5ff;
             text-decoration: none;
             transition: all 0.3s ease;
-            font-size: 1.2rem;
+            font-size: 1.5rem;
+            background: rgba(0, 40, 83, 0.3);
+            position: relative;
+            overflow: hidden;
         }
 
         .social-link:hover {
-            border-color: #f5f5f5;
-            color: #f5f5f5;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(245, 245, 245, 0.1);
+            border-color: #00e5ff;
+            color: #000;
+            background: #00e5ff;
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 0 30px rgba(0, 229, 255, 0.5);
         }
 
-        /* Логотип NameMC */
+        .social-link::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .social-link:hover::before {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Логотип NameMC с космическим стилем */
         .namemc-logo {
-            font-family: 'Arial Black', sans-serif;
+            display: inline-block;
+            font-family: 'Orbitron', sans-serif;
             font-weight: 900;
-            font-size: 1.3rem;
+            font-size: 1.8rem;
             color: #fff;
-            background: linear-gradient(135deg, #555, #888);
-            border-radius: 3px;
-            padding: 2px 5px;
+            background: linear-gradient(135deg, #0066cc, #00e5ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            padding: 2px 8px;
+            position: relative;
+        }
+
+        .namemc-logo::after {
+            content: 'N';
+            position: absolute;
+            top: 0;
+            left: 0;
+            color: transparent;
+            background: linear-gradient(135deg, #0066cc, #00e5ff);
+            -webkit-background-clip: text;
+            filter: blur(8px);
+            z-index: -1;
         }
 
         /* Секции */
@@ -393,98 +488,104 @@
             position: relative;
         }
 
-        .section-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #111;
-            z-index: -1;
-        }
-
         .section-title {
-            font-size: 2.5rem;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
             font-weight: 700;
-            color: #f5f5f5;
-            margin-bottom: 50px;
+            color: #00e5ff;
+            margin-bottom: 70px;
             text-align: center;
-            letter-spacing: 1px;
+            letter-spacing: 3px;
+            position: relative;
         }
 
-        /* Новая сетка - Проекты слева, Информация по центру, Музыка по центру снизу */
-        .section-grid {
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #00e5ff, transparent);
+        }
+
+        /* Космическая сетка */
+        .cosmic-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            max-width: 1200px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+            max-width: 1400px;
             margin: 0 auto;
-        }
-
-        /* Карточка проектов - слева */
-        .projects-column {
-            grid-column: 1;
-        }
-
-        /* Карточка информации - по центру */
-        .info-column {
-            grid-column: 2;
-        }
-
-        /* Карточка статистики - занимает всю ширину под информацией */
-        .stats-full-width {
-            grid-column: 1 / -1;
-            margin-top: 30px;
-        }
-
-        /* Карточка музыки - по центру под статистикой */
-        .music-center {
-            grid-column: 1 / -1;
-            max-width: 600px;
-            margin: 30px auto 0;
+            position: relative;
         }
 
         /* Карточки */
-        .info-card {
-            background: rgba(245, 245, 245, 0.02);
-            border: 1px solid #222;
-            border-radius: 10px;
-            padding: 30px;
-            transition: all 0.3s ease;
+        .cosmic-card {
+            background: rgba(0, 40, 83, 0.2);
+            border: 1px solid rgba(0, 229, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            transition: all 0.4s ease;
             height: 100%;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
         }
 
-        .info-card:hover {
+        .cosmic-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #00e5ff, transparent);
+        }
+
+        .cosmic-card:hover {
             transform: translateY(-10px);
-            border-color: #444;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border-color: rgba(0, 229, 255, 0.3);
+            box-shadow: 
+                0 20px 40px rgba(0, 229, 255, 0.1),
+                inset 0 0 50px rgba(0, 229, 255, 0.05);
         }
 
         .card-header {
             display: flex;
             align-items: center;
-            gap: 15px;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #222;
+            gap: 20px;
+            margin-bottom: 35px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(0, 229, 255, 0.2);
         }
 
         .card-icon {
-            width: 50px;
-            height: 50px;
-            border: 1px solid #333;
-            border-radius: 10px;
+            width: 60px;
+            height: 60px;
+            border: 2px solid rgba(0, 229, 255, 0.3);
+            border-radius: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #aaa;
-            font-size: 1.5rem;
+            color: #00e5ff;
+            font-size: 1.8rem;
+            background: rgba(0, 102, 204, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .cosmic-card:hover .card-icon {
+            border-color: #00e5ff;
+            background: rgba(0, 229, 255, 0.1);
+            transform: rotate(10deg) scale(1.1);
         }
 
         .card-title {
-            font-size: 1.3rem;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
             font-weight: 600;
-            color: #f5f5f5;
+            color: #80ffdb;
+            letter-spacing: 1px;
         }
 
         /* Информация */
@@ -493,12 +594,13 @@
         }
 
         .info-list li {
-            padding: 12px 0;
-            border-bottom: 1px solid #222;
+            padding: 18px 0;
+            border-bottom: 1px solid rgba(0, 229, 255, 0.1);
             display: flex;
             align-items: center;
-            gap: 12px;
-            color: #bbb;
+            gap: 15px;
+            color: #b3e5fc;
+            font-size: 1.1rem;
         }
 
         .info-list li:last-child {
@@ -506,53 +608,99 @@
         }
 
         .info-list i {
-            color: #888;
-            width: 20px;
+            color: #00e5ff;
+            width: 25px;
+            font-size: 1.2rem;
+        }
+
+        .info-list strong {
+            color: #80ffdb;
+            margin-right: 5px;
+        }
+
+        /* Космическая цитата */
+        .cosmic-quote {
+            border-left: 4px solid #ff4d8d;
+            padding-left: 25px;
+            margin: 40px 0;
+            position: relative;
+        }
+
+        .cosmic-quote::before {
+            content: '"';
+            position: absolute;
+            top: -20px;
+            left: -10px;
+            font-size: 4rem;
+            color: rgba(255, 77, 141, 0.2);
+            font-family: serif;
+        }
+
+        .quote-text {
+            font-style: italic;
+            color: #e0f7ff;
+            line-height: 1.8;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        .quote-author {
+            color: #80ffdb;
+            font-size: 1rem;
+            text-align: right;
+            font-weight: 600;
         }
 
         /* Проекты */
-        .project-card {
-            background: rgba(245, 245, 245, 0.02);
-            border: 1px solid #222;
-            border-radius: 10px;
+        .project-grid {
+            display: grid;
+            gap: 25px;
+        }
+
+        .project-item {
+            background: rgba(0, 40, 83, 0.3);
+            border: 1px solid rgba(0, 229, 255, 0.1);
+            border-radius: 15px;
             padding: 25px;
             transition: all 0.3s ease;
-            margin-bottom: 20px;
         }
 
-        .project-card:last-child {
-            margin-bottom: 0;
+        .project-item:hover {
+            border-color: rgba(0, 229, 255, 0.3);
+            transform: translateX(10px);
         }
 
-        .project-card:hover {
-            border-color: #444;
+        .project-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
         }
 
         .project-icon {
-            width: 60px;
-            height: 60px;
-            border: 1px solid #333;
-            border-radius: 10px;
+            width: 50px;
+            height: 50px;
+            border: 1px solid rgba(0, 229, 255, 0.3);
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 20px;
-            font-size: 1.8rem;
-            color: #aaa;
+            color: #00e5ff;
+            font-size: 1.5rem;
+            background: rgba(0, 102, 204, 0.2);
         }
 
         .project-title {
+            font-family: 'Orbitron', sans-serif;
             font-size: 1.4rem;
             font-weight: 600;
-            color: #f5f5f5;
-            margin-bottom: 10px;
+            color: #80ffdb;
         }
 
         .project-desc {
-            font-size: 0.95rem;
-            color: #aaa;
-            margin-bottom: 20px;
-            line-height: 1.5;
+            color: #b3e5fc;
+            margin-bottom: 15px;
+            line-height: 1.6;
         }
 
         .project-tags {
@@ -561,83 +709,75 @@
             flex-wrap: wrap;
         }
 
-        .project-tag {
-            padding: 5px 12px;
-            background: rgba(245, 245, 245, 0.05);
-            border: 1px solid #333;
+        .cosmic-tag {
+            padding: 8px 16px;
+            background: rgba(0, 229, 255, 0.1);
+            border: 1px solid rgba(0, 229, 255, 0.3);
             border-radius: 20px;
-            font-size: 0.8rem;
-            color: #aaa;
+            font-size: 0.9rem;
+            color: #00e5ff;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 500;
+            letter-spacing: 1px;
         }
 
-        /* Статистика с градиентными шкалами */
-        .stat-card {
-            background: rgba(245, 245, 245, 0.02);
-            border: 1px solid #222;
-            border-radius: 10px;
-            padding: 30px;
+        /* Космическая статистика */
+        .stats-grid {
+            display: grid;
+            gap: 30px;
         }
 
         .stat-item-full {
-            margin-bottom: 25px;
+            background: rgba(0, 40, 83, 0.3);
+            border: 1px solid rgba(0, 229, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
         }
 
         .stat-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
 
         .stat-name {
             display: flex;
             align-items: center;
-            gap: 10px;
-            color: #bbb;
-            font-size: 0.95rem;
+            gap: 15px;
+            color: #b3e5fc;
+            font-size: 1.1rem;
         }
 
         .stat-name i {
-            color: #888;
+            color: #00e5ff;
+            font-size: 1.3rem;
         }
 
         .stat-value {
-            color: #f5f5f5;
-            font-weight: 600;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #00e5ff;
+            text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
         }
 
-        .stat-bar {
-            height: 8px;
-            background: #222;
-            border-radius: 4px;
+        .cosmic-bar {
+            height: 12px;
+            background: rgba(0, 40, 83, 0.5);
+            border-radius: 6px;
             overflow: hidden;
-        }
-
-        /* Градиентные шкалы */
-        .stat-fill {
-            height: 100%;
-            border-radius: 4px;
-            transition: width 1s ease;
             position: relative;
         }
 
-        .stat-fill.minecraft {
-            background: linear-gradient(90deg, #555, #888, #aaa);
+        .cosmic-fill {
+            height: 100%;
+            border-radius: 6px;
+            transition: width 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
         }
 
-        .stat-fill.cs2 {
-            background: linear-gradient(90deg, #666, #999, #ccc);
-        }
-
-        .stat-fill.fortnite {
-            background: linear-gradient(90deg, #777, #aaa, #ddd);
-        }
-
-        .stat-fill.rust {
-            background: linear-gradient(90deg, #888, #bbb, #eee);
-        }
-
-        .stat-fill::after {
+        .cosmic-fill::after {
             content: '';
             position: absolute;
             top: 0;
@@ -646,112 +786,173 @@
             bottom: 0;
             background: linear-gradient(90deg, 
                 transparent 0%, 
-                rgba(255, 255, 255, 0.2) 50%, 
+                rgba(255, 255, 255, 0.3) 50%, 
                 transparent 100%);
-            animation: shimmer 2s infinite;
+            animation: cosmicShimmer 3s infinite;
         }
 
-        @keyframes shimmer {
+        @keyframes cosmicShimmer {
             0% { transform: translateX(-100%); }
             100% { transform: translateX(100%); }
         }
 
-        .activity-box {
-            text-align: center;
-            padding: 25px;
-            border: 1px solid #222;
-            border-radius: 10px;
-            background: rgba(245, 245, 245, 0.02);
-            margin-top: 30px;
+        /* Градиенты для игр */
+        .cosmic-fill.minecraft {
+            background: linear-gradient(90deg, #0066cc, #00e5ff);
         }
 
-        .activity-number {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #f5f5f5;
-            margin-bottom: 10px;
+        .cosmic-fill.cs2 {
+            background: linear-gradient(90deg, #ff4d4d, #ff9966);
         }
 
-        .activity-text {
-            color: #aaa;
-            font-size: 0.95rem;
+        .cosmic-fill.fortnite {
+            background: linear-gradient(90deg, #9933ff, #cc66ff);
         }
 
-        /* Музыка по центру */
+        .cosmic-fill.rust {
+            background: linear-gradient(90deg, #ff9900, #ffcc00);
+        }
+
+        /* Музыкальная секция */
+        .music-center {
+            grid-column: 1 / -1;
+            max-width: 800px;
+            margin: 60px auto 0;
+        }
+
         .music-card {
-            background: rgba(245, 245, 245, 0.02);
-            border: 1px solid #222;
-            border-radius: 10px;
-            padding: 30px;
-            text-align: center;
-        }
-
-        .music-placeholder {
-            padding: 30px 20px;
-            color: #888;
-        }
-
-        .music-placeholder i {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            opacity: 0.5;
-        }
-
-        .artist-tags {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-top: 25px;
-        }
-
-        .artist-tag {
-            padding: 8px 16px;
-            background: rgba(245, 245, 245, 0.05);
-            border: 1px solid #333;
+            background: rgba(0, 40, 83, 0.3);
+            border: 1px solid rgba(0, 229, 255, 0.1);
             border-radius: 20px;
-            font-size: 0.9rem;
-            color: #aaa;
+            padding: 50px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
         }
 
-        /* Цитата */
-        .quote-box {
-            border-left: 3px solid #444;
-            padding-left: 20px;
-            margin: 30px 0;
+        .music-card::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(0, 229, 255, 0.1) 0%, transparent 70%);
+            transform: translate(-50%, -50%);
+            z-index: 0;
         }
 
-        .quote-text {
-            font-style: italic;
-            color: #bbb;
-            line-height: 1.6;
+        .music-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .music-icon {
+            font-size: 4rem;
+            color: #00e5ff;
+            margin-bottom: 30px;
+            animation: musicPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes musicPulse {
+            0%, 100% { 
+                transform: scale(1);
+                text-shadow: 0 0 20px rgba(0, 229, 255, 0.5);
+            }
+            50% { 
+                transform: scale(1.1);
+                text-shadow: 0 0 40px rgba(0, 229, 255, 0.8);
+            }
+        }
+
+        .music-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            color: #80ffdb;
             margin-bottom: 10px;
         }
 
-        .quote-author {
-            color: #888;
+        .music-status {
+            color: #b3e5fc;
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+        }
+
+        .artists-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .artist-card {
+            background: rgba(0, 40, 83, 0.4);
+            border: 1px solid rgba(0, 229, 255, 0.2);
+            border-radius: 15px;
+            padding: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .artist-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 229, 255, 0.4);
+            box-shadow: 0 10px 30px rgba(0, 229, 255, 0.2);
+        }
+
+        .artist-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            color: #00e5ff;
+            margin-bottom: 10px;
+        }
+
+        .artist-genre {
+            color: #80ffdb;
             font-size: 0.9rem;
-            text-align: right;
+            opacity: 0.8;
         }
 
         /* Футер */
-        .footer {
-            padding: 60px 20px;
+        .cosmic-footer {
+            padding: 80px 20px;
             text-align: center;
-            border-top: 1px solid #222;
-            color: #666;
-            font-size: 0.9rem;
+            border-top: 1px solid rgba(0, 229, 255, 0.1);
+            position: relative;
+            margin-top: 100px;
         }
 
-        .footer p {
-            margin-bottom: 10px;
+        .cosmic-footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #00e5ff, transparent);
+        }
+
+        .footer-text {
+            color: #80ffdb;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+        .footer-heart {
+            color: #ff4d8d;
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
         }
 
         /* Анимации появления */
         .fade-in {
             opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
+            transform: translateY(50px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
         }
 
         .fade-in.visible {
@@ -759,132 +960,200 @@
             transform: translateY(0);
         }
 
+        /* Планета в углу */
+        .floating-planet {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle at 30% 30%, #001428, #000814);
+            border-radius: 50%;
+            right: -100px;
+            bottom: -100px;
+            z-index: -1;
+            filter: blur(2px);
+            box-shadow: 
+                inset 0 0 100px rgba(0, 102, 204, 0.3),
+                0 0 100px rgba(0, 102, 204, 0.1);
+            animation: planetFloat 20s ease-in-out infinite;
+        }
+
+        @keyframes planetFloat {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(-20px, -20px) rotate(5deg); }
+            50% { transform: translate(0, -40px) rotate(0deg); }
+            75% { transform: translate(20px, -20px) rotate(-5deg); }
+        }
+
         /* Адаптив */
-        @media (max-width: 1024px) {
+        @media (max-width: 1200px) {
+            .cosmic-grid {
+                grid-template-columns: 1fr;
+                max-width: 800px;
+            }
+            
+            .hero-grid {
+                gap: 60px;
+            }
+        }
+
+        @media (max-width: 992px) {
             .hero-grid {
                 grid-template-columns: 1fr;
                 text-align: center;
-                gap: 40px;
+                gap: 50px;
             }
-
+            
             .avatar-container {
                 margin: 0 auto;
             }
-
-            .hero-stats {
-                justify-content: center;
+            
+            .cosmic-title {
+                font-size: 4rem;
             }
-
-            .social-links {
-                justify-content: center;
-            }
-
-            .section-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .projects-column,
-            .info-column {
-                grid-column: 1;
+            
+            .hero-title {
+                font-size: 4rem;
             }
         }
 
         @media (max-width: 768px) {
+            .cosmic-title {
+                font-size: 3rem;
+                letter-spacing: 5px;
+            }
+            
             .hero-title {
                 font-size: 3rem;
             }
-
-            .matrix-title {
-                font-size: 3rem;
-            }
-
+            
             .section-title {
-                font-size: 2rem;
+                font-size: 2.5rem;
+            }
+            
+            .hero-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .cosmic-card {
+                padding: 30px;
             }
         }
 
         @media (max-width: 480px) {
+            .cosmic-title {
+                font-size: 2.5rem;
+            }
+            
             .hero-title {
                 font-size: 2.5rem;
             }
-
-            .matrix-title {
-                font-size: 2.5rem;
-            }
-
+            
             .avatar-container {
-                width: 200px;
-                height: 200px;
+                width: 250px;
+                height: 250px;
+            }
+            
+            .avatar-ring {
+                width: 270px;
+                height: 270px;
+            }
+            
+            .cosmic-enter-btn {
+                padding: 15px 50px;
+                font-size: 1.1rem;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Матричная заставка -->
-    <div class="matrix-screen" id="matrixScreen">
-        <canvas class="matrix-canvas" id="matrixCanvas"></canvas>
-        <div class="matrix-overlay">
-            <h1 class="matrix-title">PARADOX</h1>
-            <div class="matrix-user-info">
-                > ПОЛЬЗОВАТЕЛЬ ИЗ: <span id="userLocation" class="user-location">ОПРЕДЕЛЯЕМ МЕСТОПОЖЕНИЕ<span class="loading-dots"></span></span>
+    <!-- Космическая заставка -->
+    <div class="cosmic-screen" id="cosmicScreen">
+        <canvas class="cosmic-canvas" id="cosmicCanvas"></canvas>
+        <div class="planet-orbit">
+            <div class="planet"></div>
+        </div>
+        
+        <div class="cosmic-overlay">
+            <h1 class="cosmic-title">PARADOX</h1>
+            
+            <div class="terminal-text">
+                СИСТЕМА: STARPORT_v3.5
             </div>
-            <div class="matrix-visitors">
-                > УНИКАЛЬНЫХ ПОСЕТИТЕЛЕЙ: 
-                <span id="visitorsCount" class="visitors-count">0</span>
-                <span class="visitors-text">человек</span>
-                <span id="newVisitorBadge" class="visitors-new" style="display: none;">[НОВЫЙ]</span>
+            <div class="terminal-text">
+                МЕСТОПОЛОЖЕНИЕ: <span id="userLocation" class="user-location">КАЗАХСТАНСКИЙ СЕКТОР</span>
             </div>
-            <p class="matrix-subtitle">НАЖМИ, ЧТОБЫ ВОЙТИ В СИСТЕМУ</p>
-            <button class="matrix-enter-btn" id="matrixEnterBtn">
-                ВХОД
+            <div class="terminal-text">
+                ПОСЕТИТЕЛИ: <span id="visitorsCount" class="visitors-count">ЗАГРУЗКА...</span> КОСМОНАВТОВ
+            </div>
+            
+            <p style="color: #80ffdb; margin-top: 30px; letter-spacing: 2px; text-align: center;">
+                АКТИВИРУЙТЕ ПОРТАЛ ДЛЯ ПЕРЕХОДА
+            </p>
+            
+            <button class="cosmic-enter-btn" id="cosmicEnterBtn">
+                АКТИВИРОВАТЬ ПОРТАЛ
             </button>
-            <div class="matrix-terminal">
-                > SYSTEM: PARADOX_OS v2.0<br>
-                > STATUS: OFFLINE<br>
-                > UNIQUE_VISITORS: <span id="terminalVisitors">LOADING...</span>
+            
+            <div style="position: absolute; bottom: 50px; color: #4dffd1; font-family: 'Courier New', monospace; font-size: 0.9rem; text-align: center; letter-spacing: 1px;">
+                > STAR COMMAND: PARADOX_STATION<br>
+                > STATUS: ORBITING EARTH<br>
+                > COORDINATES: 43.2567° N, 76.9286° E
             </div>
         </div>
+        
+        <!-- Кометки -->
+        <div class="comet" style="animation-delay: 0s;"></div>
+        <div class="comet" style="top: 30%; animation-delay: 3s; animation-duration: 15s;"></div>
+        <div class="comet" style="top: 70%; animation-delay: 7s; animation-duration: 12s;"></div>
     </div>
+
+    <!-- Звёздный фон -->
+    <div class="stars-bg" id="starsBg"></div>
+
+    <!-- Планета в углу -->
+    <div class="floating-planet"></div>
 
     <!-- Основной контент -->
     <div class="main-content" id="mainContent">
         <!-- Герой секция -->
         <section class="hero-section">
-            <div class="hero-bg"></div>
+            <div class="nebula"></div>
+            
             <div class="hero-grid fade-in">
                 <div class="avatar-container">
+                    <div class="avatar-ring"></div>
                     <div class="avatar-frame">
                         <img src="logo.png" alt="PARADOX" class="avatar-img">
                     </div>
-                    <div class="status-dot"></div>
+                    <div class="status-pulse"></div>
                 </div>
 
                 <div class="hero-info">
                     <h1 class="hero-title">PARADOX</h1>
-                    <p class="hero-subtitle">нищий плеер</p>
+                    <p class="hero-subtitle">КОСМИЧЕСКИЙ СТРАННИК</p>
                     
                     <div class="hero-stats">
                         <div class="stat-item">
-                            <i class="fas fa-circle"></i>
-                            <span>Оффлайн</span>
+                            <i class="fas fa-satellite"></i>
+                            <span>СТАНЦИЯ: ОФФЛАЙН</span>
                         </div>
                         <div class="stat-item">
-                            <i class="fas fa-microchip"></i>
-                            <span>Ryzen 5 3600 | 16 GB RAM</span>
+                            <i class="fas fa-rocket"></i>
+                            <span>СИСТЕМА: RYZEN 5 3600 | 16 GB RAM</span>
                         </div>
                         <div class="stat-item">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <span>Казахстан</span>
+                            <i class="fas fa-globe-asia"></i>
+                            <span>СЕКТОР: КАЗАХСТАН</span>
                         </div>
                         <div class="stat-item" id="currentTime">
                             <i class="fas fa-clock"></i>
-                            <span>--:--:--</span>
+                            <span>--:--:-- STAR TIME</span>
                         </div>
                     </div>
 
                     <p class="hero-description">
-                        Обычный типок, который страдает фигнёй в интернете. Страшный майнкрафтер/хойщик. 
-                        Люблю музыку, программирование и игры.
+                        КОСМИЧЕСКИЙ СТРАННИК, ИССЛЕДУЮЩИЙ ЦИФРОВЫЕ ГАЛАКТИКИ. СПЕЦИАЛИСТ ПО МАЙНКРАФТ-АНОМАЛИЯМ И КОДОВЫМ ТУМАННОСТЯМ. 
+                        УВЛЕКАЮСЬ КОСМИЧЕСКОЙ МУЗЫКОЙ, ПРОГРАММИРОВАНИЕМ ЗВЁЗДНЫХ СИСТЕМ И МЕЖГАЛАКТИЧЕСКИМИ ИГРАМИ.
                     </p>
 
                     <div class="social-links">
@@ -907,99 +1176,106 @@
 
         <!-- Контент секция -->
         <section class="content-section">
-            <div class="section-bg"></div>
-            <h2 class="section-title fade-in">СИСТЕМНАЯ ИНФОРМАЦИЯ</h2>
+            <h2 class="section-title fade-in">СИСТЕМНЫЕ ДАННЫЕ СТАНЦИИ</h2>
             
-            <div class="section-grid">
+            <div class="cosmic-grid">
                 <!-- Проекты слева -->
-                <div class="projects-column">
-                    <div class="info-card fade-in">
-                        <div class="card-header">
-                            <div class="card-icon">
-                                <i class="fas fa-rocket"></i>
-                            </div>
-                            <h3 class="card-title">Проекты</h3>
+                <div class="cosmic-card fade-in">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-satellite-dish"></i>
                         </div>
-                        
-                        <div class="project-card">
-                            <div class="project-icon">
-                                <i class="fab fa-telegram"></i>
+                        <h3 class="card-title">ЗВЁЗДНЫЕ ПРОЕКТЫ</h3>
+                    </div>
+                    
+                    <div class="project-grid">
+                        <div class="project-item">
+                            <div class="project-header">
+                                <div class="project-icon">
+                                    <i class="fab fa-telegram"></i>
+                                </div>
+                                <h4 class="project-title">СЕКТОР ДАРТА WW</h4>
                             </div>
-                            <h4 class="project-title">Шиза дротика</h4>
-                            <p class="project-desc">Telegram • Личный тгк дарта/ww</p>
+                            <p class="project-desc">ТЕЛЕГРАМ • ЛИЧНЫЙ КОММУНИКАТОР ДАРТА/WW</p>
                             <div class="project-tags">
-                                <span class="project-tag">Активен</span>
-                                <span class="project-tag">Сутинёр</span>
+                                <span class="cosmic-tag">АКТИВЕН</span>
+                                <span class="cosmic-tag">СУТИНЁР</span>
+                                <span class="cosmic-tag">КОСМИЧЕСКИЙ ЧАТ</span>
                             </div>
                         </div>
 
-                        <div class="project-card">
-                            <div class="project-icon">
-                                <i class="fab fa-discord"></i>
+                        <div class="project-item">
+                            <div class="project-header">
+                                <div class="project-icon">
+                                    <i class="fas fa-code"></i>
+                                </div>
+                                <h4 class="project-title">NEXGEN RECODE</h4>
                             </div>
-                            <h4 class="project-title">Nexgen RECODE</h4>
-                            <p class="project-desc">Discord • Minecraft Cheat Client</p>
+                            <p class="project-desc">ДИСКОРД • МАЙНКРАФТ КЛИЕНТ ДЛЯ ИССЛЕДОВАНИЯ АНОМАЛИЙ</p>
                             <div class="project-tags">
-                                <span class="project-tag">Разработка</span>
-                                <span class="project-tag">Java</span>
+                                <span class="cosmic-tag">РАЗРАБОТКА</span>
+                                <span class="cosmic-tag">JAVA</span>
+                                <span class="cosmic-tag">КОСМИЧЕСКИЙ КОД</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Информация по центру -->
-                <div class="info-column">
-                    <div class="info-card fade-in">
-                        <div class="card-header">
-                            <div class="card-icon">
-                                <i class="fas fa-user"></i>
-                            </div>
-                            <h3 class="card-title">Информация</h3>
+                <!-- Информация справа -->
+                <div class="cosmic-card fade-in">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-user-astronaut"></i>
                         </div>
-                        <ul class="info-list">
-                            <li>
-                                <i class="fas fa-user"></i>
-                                <span><strong>Возраст:</strong> 15 лет</span>
-                            </li>
-                            <li>
-                                <i class="fas fa-gamepad"></i>
-                                <span><strong>Игры:</strong> Minecraft, CS2</span>
-                            </li>
-                            <li>
-                                <i class="fas fa-music"></i>
-                                <span><strong>Музыка:</strong> ooes, FEDUK, blago white</span>
-                            </li>
-                        </ul>
+                        <h3 class="card-title">ДАННЫЕ ЭКИПАЖА</h3>
+                    </div>
+                    
+                    <ul class="info-list">
+                        <li>
+                            <i class="fas fa-user-circle"></i>
+                            <span><strong>СТАЖ:</strong> 15 ЗВЁЗДНЫХ ЛЕТ</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-gamepad"></i>
+                            <span><strong>ИГРОВЫЕ СИМУЛЯТОРЫ:</strong> MINECRAFT, CS2</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-headphones"></i>
+                            <span><strong>КОСМИЧЕСКАЯ МУЗЫКА:</strong> OOES, FEDUK, BLAGO WHITE</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-map-marked-alt"></i>
+                            <span><strong>БАЗА:</strong> КАЗАХСТАНСКИЙ СЕКТОР, ЗЕМЛЯ</span>
+                        </li>
+                    </ul>
 
-                        <div class="quote-box">
-                            <p class="quote-text">"Искал медь — сгорел медведь."</p>
-                            <p class="quote-author">— Великий ww123rov</p>
-                        </div>
+                    <div class="cosmic-quote">
+                        <p class="quote-text">"ИСКАЛ МЕДЬ — СГОРЕЛ МЕДВЕДЬ."</p>
+                        <p class="quote-author">— КОМАНДИР WW123ROV</p>
                     </div>
                 </div>
 
-                <!-- Статистика -->
-                <div class="stats-full-width">
-                    <div class="stat-card fade-in">
+                <!-- Статистика - полная ширина -->
+                <div style="grid-column: 1 / -1;">
+                    <div class="cosmic-card fade-in">
                         <div class="card-header">
                             <div class="card-icon">
-                                <i class="fas fa-chart-bar"></i>
+                                <i class="fas fa-chart-network"></i>
                             </div>
-                            <h3 class="card-title">Статистика</h3>
+                            <h3 class="card-title">СТАТИСТИКА СИМУЛЯЦИЙ</h3>
                         </div>
                         
-                        <div style="margin-bottom: 30px;">
-                            <h4 style="color: #aaa; font-size: 0.95rem; margin-bottom: 20px;">В какие игры я больше всего играю</h4>
+                        <div class="stats-grid">
                             <div class="stat-item-full">
                                 <div class="stat-header">
                                     <div class="stat-name">
                                         <i class="fas fa-cube"></i>
-                                        <span>Minecraft</span>
+                                        <span>MINECRAFT</span>
                                     </div>
                                     <div class="stat-value">60%</div>
                                 </div>
-                                <div class="stat-bar">
-                                    <div class="stat-fill minecraft" data-width="60"></div>
+                                <div class="cosmic-bar">
+                                    <div class="cosmic-fill minecraft" data-width="60"></div>
                                 </div>
                             </div>
                             
@@ -1007,12 +1283,12 @@
                                 <div class="stat-header">
                                     <div class="stat-name">
                                         <i class="fas fa-crosshairs"></i>
-                                        <span>Counter-Strike 2</span>
+                                        <span>COUNTER-STRIKE 2</span>
                                     </div>
                                     <div class="stat-value">30%</div>
                                 </div>
-                                <div class="stat-bar">
-                                    <div class="stat-fill cs2" data-width="30"></div>
+                                <div class="cosmic-bar">
+                                    <div class="cosmic-fill cs2" data-width="30"></div>
                                 </div>
                             </div>
                             
@@ -1020,12 +1296,12 @@
                                 <div class="stat-header">
                                     <div class="stat-name">
                                         <i class="fas fa-bolt"></i>
-                                        <span>Fortnite</span>
+                                        <span>FORTNITE</span>
                                     </div>
                                     <div class="stat-value">8%</div>
                                 </div>
-                                <div class="stat-bar">
-                                    <div class="stat-fill fortnite" data-width="8"></div>
+                                <div class="cosmic-bar">
+                                    <div class="cosmic-fill fortnite" data-width="8"></div>
                                 </div>
                             </div>
                             
@@ -1033,19 +1309,19 @@
                                 <div class="stat-header">
                                     <div class="stat-name">
                                         <i class="fas fa-skull"></i>
-                                        <span>Rust</span>
+                                        <span>RUST</span>
                                     </div>
                                     <div class="stat-value">2%</div>
                                 </div>
-                                <div class="stat-bar">
-                                    <div class="stat-fill rust" data-width="2"></div>
+                                <div class="cosmic-bar">
+                                    <div class="cosmic-fill rust" data-width="2"></div>
                                 </div>
                             </div>
                         </div>
-
-                        <div class="activity-box">
-                            <div class="activity-number">100+</div>
-                            <div class="activity-text">сломанных режимов сна</div>
+                        
+                        <div style="text-align: center; margin-top: 40px; padding: 30px; background: rgba(0, 40, 83, 0.3); border-radius: 15px; border: 1px solid rgba(0, 229, 255, 0.1);">
+                            <div style="font-family: 'Orbitron', sans-serif; font-size: 3rem; color: #00e5ff; margin-bottom: 10px;">100+</div>
+                            <div style="color: #80ffdb; font-size: 1.2rem;">НАРУШЕННЫХ ОРБИТ СНА</div>
                         </div>
                     </div>
                 </div>
@@ -1053,25 +1329,30 @@
                 <!-- Музыка по центру -->
                 <div class="music-center">
                     <div class="music-card fade-in">
-                        <div class="card-header" style="justify-content: center; border-bottom: none; margin-bottom: 10px;">
-                            <div class="card-icon">
+                        <div class="music-content">
+                            <div class="music-icon">
                                 <i class="fas fa-music"></i>
                             </div>
-                            <h3 class="card-title">Музыка</h3>
-                        </div>
-                        
-                        <div class="music-placeholder">
-                            <i class="fas fa-volume-mute"></i>
-                            <p style="color: #888; margin-bottom: 10px;">Не слушает музыку</p>
-                        </div>
-
-                        <div>
-                            <h4 style="color: #aaa; font-size: 0.95rem; margin-bottom: 15px; text-align: center;">Любимые исполнители:</h4>
-                            <div class="artist-tags">
-                                <span class="artist-tag">ooes</span>
-                                <span class="artist-tag">FEDUK</span>
-                                <span class="artist-tag">blago white</span>
-                                <span class="artist-tag">Sadsvit</span>
+                            <h3 class="music-title">КОСМИЧЕСКАЯ МУЗЫКА</h3>
+                            <p class="music-status">СЛУШАЕТ: ТИШИНА ВАКУУМА</p>
+                            
+                            <div class="artists-grid">
+                                <div class="artist-card">
+                                    <div class="artist-name">OOES</div>
+                                    <div class="artist-genre">ЭЛЕКТРО-НЕБУЛА</div>
+                                </div>
+                                <div class="artist-card">
+                                    <div class="artist-name">FEDUK</div>
+                                    <div class="artist-genre">РЭП-ИМПУЛЬСЫ</div>
+                                </div>
+                                <div class="artist-card">
+                                    <div class="artist-name">BLAGO WHITE</div>
+                                    <div class="artist-genre">КИБЕРПАНК-ВИБРАЦИИ</div>
+                                </div>
+                                <div class="artist-card">
+                                    <div class="artist-name">SADSVIT</div>
+                                    <div class="artist-genre">МЕЛАНХОЛИЧНЫЕ ВОЛНЫ</div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1080,73 +1361,238 @@
         </section>
 
         <!-- Футер -->
-        <footer class="footer fade-in">
-            <p>PARADOX © 2024</p>
-            <p style="opacity: 0.6; margin-top: 10px;">
-                Сделано с <i class="fas fa-heart" style="color: #666;"></i> в бело-серых тонах
+        <footer class="cosmic-footer fade-in">
+            <p class="footer-text">PARADOX SPACE STATION © 2024</p>
+            <p class="footer-text" style="opacity: 0.8; margin-top: 15px;">
+                СОЗДАНО В <i class="fas fa-heart footer-heart"></i> НА ОРБИТЕ ЗЕМЛИ
+            </p>
+            <p class="footer-text" style="font-size: 0.9rem; margin-top: 20px; color: #4dffd1;">
+                КООРДИНАТЫ: 43.2567° N, 76.9286° E | СТАНЦИЯ: PARADOX_ORBIT_ALPHA
             </p>
         </footer>
     </div>
 
     <script>
-        // Matrix эффект
-        function createMatrixEffect() {
-            const canvas = document.getElementById('matrixCanvas');
+        // Создание звёздного фона
+        function createStars() {
+            const starsBg = document.getElementById('starsBg');
+            const starsCount = 200;
+            
+            for (let i = 0; i < starsCount; i++) {
+                const star = document.createElement('div');
+                star.style.position = 'absolute';
+                star.style.width = Math.random() * 3 + 'px';
+                star.style.height = star.style.width;
+                star.style.background = '#ffffff';
+                star.style.borderRadius = '50%';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.opacity = Math.random() * 0.8 + 0.2;
+                
+                // Анимация мерцания
+                star.style.animation = `starTwinkle ${Math.random() * 3 + 2}s infinite alternate`;
+                
+                starsBg.appendChild(star);
+            }
+            
+            // Добавляем стили для анимации
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes starTwinkle {
+                    0%, 100% { opacity: 0.2; }
+                    50% { opacity: 1; }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        // Космический фон с частицами
+        function createCosmicBackground() {
+            const canvas = document.getElementById('cosmicCanvas');
             const ctx = canvas.getContext('2d');
             
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
             
-            const letters = "01";
-            const fontSize = 16;
-            const columns = canvas.width / fontSize;
-            const drops = [];
+            const particles = [];
+            const particleCount = 100;
             
-            for(let i = 0; i < columns; i++) {
-                drops[i] = Math.random() * canvas.height;
+            // Создаём частицы
+            for (let i = 0; i < particleCount; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    radius: Math.random() * 2 + 0.5,
+                    speed: Math.random() * 0.5 + 0.1,
+                    color: `rgba(${Math.floor(Math.random() * 100 + 155)}, ${Math.floor(Math.random() * 100 + 155)}, 255, ${Math.random() * 0.5 + 0.1})`
+                });
             }
             
             function draw() {
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                // Чёрный фон с градиентом
+                const gradient = ctx.createRadialGradient(
+                    canvas.width / 2, canvas.height / 2, 0,
+                    canvas.width / 2, canvas.height / 2, canvas.width
+                );
+                gradient.addColorStop(0, 'rgba(0, 8, 20, 0.1)');
+                gradient.addColorStop(1, 'rgba(0, 0, 0, 0.8)');
+                
+                ctx.fillStyle = gradient;
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
                 
-                // Серые тона для матрицы
-                ctx.fillStyle = '#666';
-                ctx.font = `${fontSize}px monospace`;
-                
-                for(let i = 0; i < drops.length; i++) {
-                    const text = letters.charAt(Math.floor(Math.random() * letters.length));
+                // Рисуем частицы
+                particles.forEach(particle => {
+                    ctx.beginPath();
+                    ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = particle.color;
+                    ctx.fill();
                     
-                    // Градиент от серого к белому
-                    const gradient = ctx.createLinearGradient(0, drops[i] * fontSize, 0, drops[i] * fontSize + fontSize);
-                    gradient.addColorStop(0, '#888');
-                    gradient.addColorStop(0.5, '#aaa');
-                    gradient.addColorStop(1, '#ccc');
-                    ctx.fillStyle = gradient;
-                    
-                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                    
-                    if(drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                        drops[i] = 0;
+                    // Двигаем частицы
+                    particle.y -= particle.speed;
+                    if (particle.y < 0) {
+                        particle.y = canvas.height;
+                        particle.x = Math.random() * canvas.width;
                     }
-                    drops[i]++;
-                }
+                });
+                
+                requestAnimationFrame(draw);
             }
             
-            const matrixInterval = setInterval(draw, 35);
+            draw();
             
             window.addEventListener('resize', () => {
                 canvas.width = window.innerWidth;
                 canvas.height = window.innerHeight;
             });
-            
-            return matrixInterval;
         }
 
         // Определение страны пользователя
         async function getUserCountry() {
             const userLocation = document.getElementById('userLocation');
-            const terminalLocation = document.getElementById('terminalVisitors');
             
             try {
-               
+                const response = await fetch('https://ipapi.co/json/');
+                const data = await response.json();
+                userLocation.textContent = `${data.country_name || 'ЗЕМЛЯ'}`;
+            } catch (error) {
+                userLocation.textContent = 'КАЗАХСТАНСКИЙ СЕКТОР';
+            }
+        }
+
+        // Счётчик посетителей
+        function initVisitorCounter() {
+            const visitorsCount = document.getElementById('visitorsCount');
+            const storedVisitors = localStorage.getItem('paradoxVisitors');
+            let visitors = storedVisitors ? parseInt(storedVisitors) : Math.floor(Math.random() * 100) + 50;
+            
+            // Увеличиваем счётчик
+            visitors++;
+            localStorage.setItem('paradoxVisitors', visitors.toString());
+            
+            // Анимация счётчика
+            let current = 0;
+            const increment = Math.ceil(visitors / 50);
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= visitors) {
+                    current = visitors;
+                    clearInterval(timer);
+                }
+                visitorsCount.textContent = current;
+            }, 30);
+        }
+
+        // Текущее время
+        function updateTime() {
+            const timeElement = document.getElementById('currentTime');
+            const now = new Date();
+            
+            const timeString = now.toLocaleTimeString('ru-RU', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            
+            timeElement.querySelector('span').textContent = `${timeString} STAR TIME`;
+        }
+
+        // Анимация статистики
+        function animateStats() {
+            const statBars = document.querySelectorAll('.cosmic-fill');
+            statBars.forEach(bar => {
+                const width = bar.getAttribute('data-width');
+                bar.style.width = '0%';
+                
+                setTimeout(() => {
+                    bar.style.width = width + '%';
+                }, 500);
+            });
+        }
+
+        // Запуск анимаций при прокрутке
+        function initScrollAnimations() {
+            const fadeElements = document.querySelectorAll('.fade-in');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+            
+            fadeElements.forEach(el => observer.observe(el));
+        }
+
+        // Переход с заставки
+        document.getElementById('cosmicEnterBtn').addEventListener('click', function() {
+            const cosmicScreen = document.getElementById('cosmicScreen');
+            const mainContent = document.getElementById('mainContent');
+            
+            // Анимация исчезновения заставки
+            cosmicScreen.style.opacity = '0';
+            cosmicScreen.style.transition = 'opacity 1.5s ease';
+            
+            setTimeout(() => {
+                cosmicScreen.style.display = 'none';
+                mainContent.classList.add('show');
+                
+                // Запускаем анимации
+                animateStats();
+                initScrollAnimations();
+            }, 1500);
+            
+            // Запускаем звёздный фон
+            createStars();
+        });
+
+        // Инициализация
+        window.addEventListener('DOMContentLoaded', () => {
+            createCosmicBackground();
+            getUserCountry();
+            initVisitorCounter();
+            setInterval(updateTime, 1000);
+            updateTime();
+            
+            // Случайные кометы
+            setInterval(() => {
+                const comet = document.createElement('div');
+                comet.className = 'comet';
+                comet.style.top = Math.random() * 100 + '%';
+                comet.style.animationDelay = '0s';
+                comet.style.animationDuration = Math.random() * 10 + 8 + 's';
+                document.getElementById('cosmicScreen').appendChild(comet);
+                
+                // Удаляем комету после анимации
+                setTimeout(() => {
+                    if (comet.parentNode) {
+                        comet.parentNode.removeChild(comet);
+                    }
+                }, 15000);
+            }, 3000);
+        });
+    </script>
+</body>
+</html>
