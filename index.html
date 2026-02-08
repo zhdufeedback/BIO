@@ -63,7 +63,7 @@
             color: #fff;
             letter-spacing: 5px;
             text-transform: uppercase;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
             position: relative;
             animation: titleGlow 3s ease-in-out infinite;
@@ -77,10 +77,10 @@
         .matrix-user-info {
             font-size: 1.2rem;
             color: #aaa;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
             letter-spacing: 1px;
             text-align: center;
-            min-height: 30px;
+            min-height: 25px;
         }
 
         .user-location {
@@ -94,10 +94,60 @@
             50% { opacity: 1; }
         }
 
+        .matrix-visitors {
+            font-size: 1rem;
+            color: #888;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+            text-align: center;
+            min-height: 25px;
+        }
+
+        .visitors-count {
+            color: #4ade80;
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+            animation: countPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes countPulse {
+            0%, 100% { 
+                color: #4ade80;
+                text-shadow: 0 0 5px rgba(74, 222, 128, 0.3);
+            }
+            50% { 
+                color: #22c55e;
+                text-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
+            }
+        }
+
+        .visitors-text {
+            color: #94a3b8;
+            font-size: 0.95rem;
+            animation: fadeInOut 2s ease-in-out infinite;
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+
+        .visitors-new {
+            color: #fbbf24;
+            font-weight: 600;
+            margin-left: 5px;
+            animation: newVisitorPulse 1s ease-in-out infinite;
+        }
+
+        @keyframes newVisitorPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
         .matrix-subtitle {
             font-size: 1.1rem;
             color: #888;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
             letter-spacing: 2px;
             text-align: center;
         }
@@ -115,6 +165,7 @@
             position: relative;
             overflow: hidden;
             text-transform: uppercase;
+            margin-top: 10px;
         }
 
         .matrix-enter-btn:hover {
@@ -775,7 +826,13 @@
         <div class="matrix-overlay">
             <h1 class="matrix-title">PARADOX</h1>
             <div class="matrix-user-info">
-                > ПОЛЬЗОВАТЕЛЬ ИЗ: <span id="userLocation" class="user-location">ОПРЕДЕЛЯЕМ МЕСТОПОЛОЖЕНИЕ<span class="loading-dots"></span></span>
+                > ПОЛЬЗОВАТЕЛЬ ИЗ: <span id="userLocation" class="user-location">ОПРЕДЕЛЯЕМ МЕСТОПОЖЕНИЕ<span class="loading-dots"></span></span>
+            </div>
+            <div class="matrix-visitors">
+                > УНИКАЛЬНЫХ ПОСЕТИТЕЛЕЙ: 
+                <span id="visitorsCount" class="visitors-count">0</span>
+                <span class="visitors-text">человек</span>
+                <span id="newVisitorBadge" class="visitors-new" style="display: none;">[НОВЫЙ]</span>
             </div>
             <p class="matrix-subtitle">НАЖМИ, ЧТОБЫ ВОЙТИ В СИСТЕМУ</p>
             <button class="matrix-enter-btn" id="matrixEnterBtn">
@@ -784,7 +841,7 @@
             <div class="matrix-terminal">
                 > SYSTEM: PARADOX_OS v2.0<br>
                 > STATUS: OFFLINE<br>
-                > USER_LOCATION: <span id="terminalLocation">SCANNING...</span>
+                > UNIQUE_VISITORS: <span id="terminalVisitors">LOADING...</span>
             </div>
         </div>
     </div>
@@ -797,14 +854,14 @@
             <div class="hero-grid fade-in">
                 <div class="avatar-container">
                     <div class="avatar-frame">
-                        <img src="images.jpg" alt="PARADOX" class="avatar-img">
+                        <img src="logo.png" alt="PARADOX" class="avatar-img">
                     </div>
                     <div class="status-dot"></div>
                 </div>
 
                 <div class="hero-info">
                     <h1 class="hero-title">PARADOX</h1>
-                    <p class="hero-subtitle">обычный игрок</p>
+                    <p class="hero-subtitle">нищий плеер</p>
                     
                     <div class="hero-stats">
                         <div class="stat-item">
@@ -813,7 +870,7 @@
                         </div>
                         <div class="stat-item">
                             <i class="fas fa-microchip"></i>
-                            <span>Ryzen 5 3600</span>
+                            <span>Ryzen 5 3600 | 16 GB RAM</span>
                         </div>
                         <div class="stat-item">
                             <i class="fas fa-map-marker-alt"></i>
@@ -826,8 +883,8 @@
                     </div>
 
                     <p class="hero-description">
-                        Страдает фигней в интернете и в жизни. 
-                        Любит играть в майнкрафт и в кс.
+                        Обычный типок, который страдает фигнёй в интернете. Страшный майнкрафтер/хойщик. 
+                        Люблю музыку, программирование и игры.
                     </p>
 
                     <div class="social-links">
@@ -868,11 +925,11 @@
                             <div class="project-icon">
                                 <i class="fab fa-telegram"></i>
                             </div>
-                            <h4 class="project-title">Далбоебизм Бурятки</h4>
-                            <p class="project-desc">Telegram • Личный ТГК</p>
+                            <h4 class="project-title">Шиза дротика</h4>
+                            <p class="project-desc">Telegram • Личный тгк дарта/ww</p>
                             <div class="project-tags">
                                 <span class="project-tag">Активен</span>
-                                <span class="project-tag">Подвал</span>
+                                <span class="project-tag">Сутинёр</span>
                             </div>
                         </div>
 
@@ -880,10 +937,10 @@
                             <div class="project-icon">
                                 <i class="fab fa-discord"></i>
                             </div>
-                            <h4 class="project-title">Paradox Client</h4>
-                            <p class="project-desc">Discord • Lunar Client</p>
+                            <h4 class="project-title">Nexgen RECODE</h4>
+                            <p class="project-desc">Discord • Minecraft Cheat Client</p>
                             <div class="project-tags">
-                                <span class="project-tag">Minecraft</span>
+                                <span class="project-tag">Разработка</span>
                                 <span class="project-tag">Java</span>
                             </div>
                         </div>
@@ -902,21 +959,21 @@
                         <ul class="info-list">
                             <li>
                                 <i class="fas fa-user"></i>
-                                <span><strong>Возраст:</strong> 14 лет</span>
+                                <span><strong>Возраст:</strong> 15 лет</span>
                             </li>
                             <li>
                                 <i class="fas fa-gamepad"></i>
-                                <span><strong>Игры:</strong> Minecraft</span>
+                                <span><strong>Игры:</strong> Minecraft, CS2</span>
                             </li>
                             <li>
                                 <i class="fas fa-music"></i>
-                                <span><strong>Музыка:</strong> Xdree - Я Люблю Хардкор</span>
+                                <span><strong>Музыка:</strong> ooes, FEDUK, blago white</span>
                             </li>
                         </ul>
 
                         <div class="quote-box">
-                            <p class="quote-text">"А парадокси реально шалава? та нет братан не думаю чо она целовалась"</p>
-                            <p class="quote-author">— Paradox</p>
+                            <p class="quote-text">"Искал медь — сгорел медведь."</p>
+                            <p class="quote-author">— Великий ww123rov</p>
                         </div>
                     </div>
                 </div>
@@ -1005,17 +1062,16 @@
                         
                         <div class="music-placeholder">
                             <i class="fas fa-volume-mute"></i>
-                            <p style="color: #888; margin-bottom: 10px;">Не слушает музыку в данный момент</p>
+                            <p style="color: #888; margin-bottom: 10px;">Не слушает музыку</p>
                         </div>
 
                         <div>
                             <h4 style="color: #aaa; font-size: 0.95rem; margin-bottom: 15px; text-align: center;">Любимые исполнители:</h4>
                             <div class="artist-tags">
-                                <span class="artist-tag">Тебя</span>
-                                <span class="artist-tag">это</span>
-                                <span class="artist-tag">ебать</span>
-                                <span class="artist-tag">не</span>
-                                <span class="artist-tag">должно</span>
+                                <span class="artist-tag">ooes</span>
+                                <span class="artist-tag">FEDUK</span>
+                                <span class="artist-tag">blago white</span>
+                                <span class="artist-tag">Sadsvit</span>
                             </div>
                         </div>
                     </div>
@@ -1025,9 +1081,9 @@
 
         <!-- Футер -->
         <footer class="footer fade-in">
-            <p>PARADOX © 2026</p>
+            <p>PARADOX © 2024</p>
             <p style="opacity: 0.6; margin-top: 10px;">
-                Думаю прикольно сделал
+                Сделано с <i class="fas fa-heart" style="color: #666;"></i> в бело-серых тонах
             </p>
         </footer>
     </div>
@@ -1090,162 +1146,7 @@
         // Определение страны пользователя
         async function getUserCountry() {
             const userLocation = document.getElementById('userLocation');
-            const terminalLocation = document.getElementById('terminalLocation');
+            const terminalLocation = document.getElementById('terminalVisitors');
             
             try {
-                // Пробуем получить страну через Geolocation API
-                if (navigator.geolocation) {
-                    return new Promise((resolve) => {
-                        navigator.geolocation.getCurrentPosition(
-                            async (position) => {
-                                try {
-                                    const response = await fetch(
-                                        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${position.coords.latitude}&lon=${position.coords.longitude}`
-                                    );
-                                    const data = await response.json();
-                                    const country = data.address.country || 'Неизвестная страна';
-                                    resolve(country);
-                                } catch (error) {
-                                    // Если не получилось через координаты, пробуем через IP
-                                    resolve(await getCountryByIP());
-                                }
-                            },
-                            async () => {
-                                // Если пользователь отказался от геолокации
-                                resolve(await getCountryByIP());
-                            }
-                        );
-                    });
-                } else {
-                    // Если браузер не поддерживает геолокацию
-                    return await getCountryByIP();
-                }
-            } catch (error) {
-                return 'Неизвестная страна';
-            }
-        }
-
-        // Получение страны по IP
-        async function getCountryByIP() {
-            try {
-                const response = await fetch('https://ipapi.co/json/');
-                const data = await response.json();
-                return data.country_name || data.country || 'Неизвестная страна';
-            } catch (error) {
-                try {
-                    const response = await fetch('https://ipinfo.io/json');
-                    const data = await response.json();
-                    return data.country || 'Неизвестная страна';
-                } catch (error) {
-                    return 'Неизвестная страна';
-                }
-            }
-        }
-
-        // Заставка
-        const matrixScreen = document.getElementById('matrixScreen');
-        const mainContent = document.getElementById('mainContent');
-        const matrixEnterBtn = document.getElementById('matrixEnterBtn');
-        
-        // Запускаем матричный эффект
-        let matrixInterval;
-        
-        // Инициализация при загрузке
-        document.addEventListener('DOMContentLoaded', async () => {
-            // Запускаем матрицу
-            matrixInterval = createMatrixEffect();
-            
-            // Определяем страну
-            userLocation.innerHTML = 'ОПРЕДЕЛЯЕМ МЕСТОПОЖЕНИЕ<span class="loading-dots"></span>';
-            terminalLocation.textContent = 'SCANNING...';
-            
-            const country = await getUserCountry();
-            
-            // Отображаем страну
-            userLocation.innerHTML = `<span class="user-location">${country.toUpperCase()}</span>`;
-            terminalLocation.textContent = country.toUpperCase();
-            
-            // Анимация для кнопки
-            matrixEnterBtn.addEventListener('mousedown', () => {
-                matrixEnterBtn.style.transform = 'scale(0.95)';
-            });
-            matrixEnterBtn.addEventListener('mouseup', () => {
-                matrixEnterBtn.style.transform = '';
-            });
-            matrixEnterBtn.addEventListener('mouseleave', () => {
-                matrixEnterBtn.style.transform = '';
-            });
-            
-            // Включаем кнопку после определения страны
-            matrixEnterBtn.disabled = false;
-        });
-
-        // Обработка входа
-        matrixEnterBtn.addEventListener('click', () => {
-            // Останавливаем матричный эффект
-            clearInterval(matrixInterval);
-            
-            // Анимация исчезновения заставки
-            matrixScreen.style.opacity = '0';
-            matrixScreen.style.transition = 'opacity 1s ease';
-            
-            setTimeout(() => {
-                matrixScreen.style.display = 'none';
-                mainContent.classList.add('show');
-                
-                // Включаем прокрутку
-                document.body.style.overflow = 'auto';
-                
-                // Запускаем анимации
-                initAnimations();
-                updateTime();
-            }, 1000);
-        });
-
-        // Время
-        function updateTime() {
-            const timeElement = document.getElementById('currentTime').querySelector('span');
-            const update = () => {
-                const now = new Date();
-                const timeString = now.toLocaleTimeString("ru-RU", { 
-                    timeZone: "Asia/Almaty",
-                    hour12: false,
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit'
-                });
-                timeElement.textContent = timeString;
-            };
-            update();
-            setInterval(update, 1000);
-        }
-
-        // Анимации появления
-        function initAnimations() {
-            // Прогресс-бары
-            document.querySelectorAll('.stat-fill').forEach(bar => {
-                const width = bar.getAttribute('data-width');
-                setTimeout(() => {
-                    bar.style.width = width + '%';
-                }, 500);
-            });
-            
-            // Анимация появления элементов при скролле
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                    }
-                });
-            }, {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
-            });
-            
-            document.querySelectorAll('.fade-in').forEach(el => {
-                observer.observe(el);
-            });
-        }
-    </script>
-</body>
-</html>
+               
