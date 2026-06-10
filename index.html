@@ -2,10 +2,10 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PARADOX | 2026</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>PARADOX | Путь самурая</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@100;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -15,902 +15,722 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background: #000;
-            color: #fff;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            background: #0a0708;
+            color: #ece9e0;
             overflow-x: hidden;
-            min-height: 100vh;
-            letter-spacing: 0.5px;
         }
 
-        /* Фоновые элементы 2026 стиля */
-        .bg-grid {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                linear-gradient(0deg, transparent 24%, rgba(100, 200, 255, 0.05) 25%, rgba(100, 200, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(100, 200, 255, 0.05) 75%, rgba(100, 200, 255, 0.05) 76%, transparent 77%, transparent),
-                linear-gradient(90deg, transparent 24%, rgba(100, 200, 255, 0.05) 25%, rgba(100, 200, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(100, 200, 255, 0.05) 75%, rgba(100, 200, 255, 0.05) 76%, transparent 77%, transparent);
-            background-size: 50px 50px;
-            z-index: -2;
-            pointer-events: none;
-        }
-
-        .animated-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 20% 50%, rgba(255, 0, 200, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 50%, rgba(0, 200, 255, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 50% 20%, rgba(100, 255, 200, 0.1) 0%, transparent 50%);
-            z-index: -1;
-            pointer-events: none;
-            animation: bgShift 15s ease-in-out infinite;
-        }
-
-        @keyframes bgShift {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 0.8; }
-        }
-
-        /* Загрузочный экран */
-        .loading-screen {
+        /* Заставка: лепестки сакуры + меч */
+        .sakura-screen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100vh;
-            background: #000;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            background: #0a0507;
             z-index: 9999;
-            gap: 30px;
-        }
-
-        .loading-text {
-            font-size: 3rem;
-            font-weight: 900;
-            background: linear-gradient(90deg, #00d9ff, #ff00ff, #00d9ff);
-            background-size: 200% 200%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: gradientShift 3s ease infinite;
-            letter-spacing: 3px;
-        }
-
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .loading-bar {
-            width: 300px;
-            height: 3px;
-            background: rgba(0, 217, 255, 0.2);
-            border-radius: 10px;
             overflow: hidden;
-            position: relative;
         }
 
-        .loading-bar::after {
-            content: '';
+        .petal-canvas {
             position: absolute;
             top: 0;
             left: 0;
+            width: 100%;
             height: 100%;
-            width: 30%;
-            background: linear-gradient(90deg, transparent, #00d9ff, transparent);
-            animation: loading 2s infinite;
+            opacity: 0.45;
         }
 
-        @keyframes loading {
-            0% { left: -100%; }
-            100% { left: 100%; }
+        .sakura-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(20,10,15,0.5) 0%, rgba(5,3,5,0.9) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1;
+            backdrop-filter: blur(2px);
         }
 
-        .system-info {
-            font-size: 0.9rem;
-            color: #888;
-            font-family: 'Space Mono', monospace;
+        .katana-title {
+            font-size: 5rem;
+            font-weight: 800;
+            letter-spacing: 6px;
+            background: linear-gradient(135deg, #f5cdd4, #e2a1b0, #c77d8f);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 20px rgba(226,161,176,0.5);
+            margin-bottom: 20px;
+            animation: bladeGlow 3s infinite;
+        }
+
+        @keyframes bladeGlow {
+            0% { text-shadow: 0 0 5px #e2a1b0; opacity: 0.9; }
+            50% { text-shadow: 0 0 25px #f5cdd4; opacity: 1; }
+            100% { text-shadow: 0 0 5px #e2a1b0; opacity: 0.9; }
+        }
+
+        .sakura-location-box {
+            font-size: 1.1rem;
+            background: rgba(0,0,0,0.6);
+            padding: 8px 24px;
+            border-radius: 40px;
             letter-spacing: 1px;
+            margin-bottom: 10px;
+            backdrop-filter: blur(5px);
+            color: #f0d3d9;
+        }
+
+        .highlight-loc {
+            color: #ffced9;
+            font-weight: 600;
+            border-bottom: 1px solid #e2a1b0;
+        }
+
+        .enter-samurai {
+            padding: 14px 48px;
+            background: transparent;
+            border: 1.5px solid #e2a1b0;
+            color: #ffdfe6;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 30px;
+            border-radius: 50px;
+            box-shadow: 0 0 12px rgba(226,161,176,0.3);
+        }
+
+        .enter-samurai:hover {
+            background: rgba(226,161,176,0.2);
+            box-shadow: 0 0 30px rgba(226,161,176,0.5);
+            transform: translateY(-2px);
+        }
+
+        .status-terminal {
+            position: absolute;
+            bottom: 40px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #ac8b8f;
+            font-family: monospace;
         }
 
         /* Основной контент */
-        .content {
-            position: relative;
+        .main-content {
             opacity: 0;
-            animation: fadeIn 0.8s ease 2s forwards;
+            transition: opacity 1s ease;
+        }
+        .main-content.show {
+            opacity: 1;
         }
 
-        @keyframes fadeIn {
-            to { opacity: 1; }
-        }
-
-        /* Навигация */
-        .nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 80px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 50px;
-            z-index: 100;
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(0, 217, 255, 0.1);
-            background: rgba(0, 0, 0, 0.5);
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 900;
-            color: #fff;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 40px;
-            font-size: 0.9rem;
-        }
-
-        .nav-link {
-            color: #aaa;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: linear-gradient(90deg, #00d9ff, #ff00ff);
-            transition: width 0.3s ease;
-        }
-
-        .nav-link:hover::after {
-            width: 100%;
-        }
-
-        .nav-link:hover {
-            color: #fff;
-        }
-
-        /* Герой секция */
-        .hero {
+        /* Герой — самурайский сет */
+        .hero-samurai {
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 100px 50px 50px;
-            position: relative;
-            overflow: hidden;
+            padding: 40px 20px;
+            background: radial-gradient(ellipse at 20% 30%, #1e1217, #070405);
         }
 
-        .hero-content {
+        .hero-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 80px;
-            align-items: center;
-            max-width: 1400px;
+            grid-template-columns: auto 1fr;
+            gap: 60px;
+            max-width: 1200px;
             width: 100%;
-        }
-
-        .hero-left {
-            z-index: 2;
-        }
-
-        .hero-title {
-            font-size: 6rem;
-            font-weight: 900;
-            line-height: 1.1;
-            margin-bottom: 20px;
-            letter-spacing: -2px;
-        }
-
-        .title-gradient {
-            background: linear-gradient(90deg, #00d9ff, #ff00ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero-subtitle {
-            font-size: 1.3rem;
-            color: #aaa;
-            margin-bottom: 40px;
-            font-weight: 300;
-            letter-spacing: 1px;
-        }
-
-        .hero-desc {
-            font-size: 1rem;
-            color: #ccc;
-            line-height: 1.8;
-            margin-bottom: 50px;
-            max-width: 500px;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 50px;
-        }
-
-        .stat-card {
-            background: rgba(0, 217, 255, 0.05);
-            border: 1px solid rgba(0, 217, 255, 0.2);
-            padding: 20px;
-            border-radius: 10px;
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
-        }
-
-        .stat-card:hover {
-            background: rgba(0, 217, 255, 0.1);
-            border-color: rgba(0, 217, 255, 0.4);
-            transform: translateY(-5px);
-        }
-
-        .stat-label {
-            font-size: 0.8rem;
-            color: #888;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 8px;
-        }
-
-        .stat-value {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #00d9ff;
-        }
-
-        .cta-buttons {
-            display: flex;
-            gap: 20px;
-        }
-
-        .btn {
-            padding: 15px 40px;
-            border: none;
-            border-radius: 5px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        .btn-primary {
-            background: linear-gradient(90deg, #00d9ff, #ff00ff);
-            color: #000;
-            border: 2px solid transparent;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 40px rgba(0, 217, 255, 0.3);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: #fff;
-            border: 2px solid #fff;
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateY(-3px);
-        }
-
-        .hero-right {
-            position: relative;
-            height: 500px;
-            display: flex;
             align-items: center;
-            justify-content: center;
         }
 
-        .avatar-container {
+        .avatar-katana {
             position: relative;
-            width: 350px;
-            height: 350px;
+            width: 260px;
+            height: 260px;
         }
 
-        .avatar-frame {
+        .katana-circle {
             width: 100%;
             height: 100%;
-            border: 2px solid #00d9ff;
-            border-radius: 20px;
-            overflow: hidden;
-            position: relative;
-            box-shadow: 0 0 50px rgba(0, 217, 255, 0.3);
-            animation: borderGlow 3s ease-in-out infinite;
-        }
-
-        @keyframes borderGlow {
-            0%, 100% { box-shadow: 0 0 50px rgba(0, 217, 255, 0.3); }
-            50% { box-shadow: 0 0 80px rgba(255, 0, 255, 0.3); }
+            border-radius: 50%;
+            border: 2px solid #e2a1b0;
+            box-shadow: 0 0 30px rgba(226,161,176,0.2);
+            padding: 8px;
         }
 
         .avatar-img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
-        }
-
-        .avatar-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(0, 217, 255, 0.1), rgba(255, 0, 255, 0.1));
-            pointer-events: none;
-        }
-
-        .status-indicator {
-            position: absolute;
-            bottom: 30px;
-            right: 30px;
-            width: 15px;
-            height: 15px;
             border-radius: 50%;
-            background: #ff00ff;
-            border: 2px solid #000;
-            box-shadow: 0 0 20px #ff00ff;
-            animation: pulse 2s ease-in-out infinite;
+            object-fit: cover;
+            filter: grayscale(15%);
+            border: 1px solid #a86f7e;
         }
 
-        @keyframes pulse {
-            0%, 100% { box-shadow: 0 0 20px #ff00ff; }
-            50% { box-shadow: 0 0 40px #ff00ff; }
+        .status-dot-sakura {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 18px;
+            height: 18px;
+            background: #e2a1b0;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #ffb7c5;
+            border: 2px solid #1e1217;
         }
 
-        /* Секции */
-        .section {
-            padding: 150px 50px;
-            position: relative;
+        .hero-title {
+            font-size: 4.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #f5cdd4, #ffffff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 2px;
         }
 
-        .section-title {
-            font-size: 4rem;
-            font-weight: 900;
-            margin-bottom: 80px;
+        .hero-sub {
+            font-size: 1.3rem;
+            color: #cfaab0;
+            border-left: 3px solid #e2a1b0;
+            padding-left: 15px;
+            margin: 15px 0;
+        }
+
+        .stats-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin: 25px 0;
+        }
+
+        .stat-pill {
+            background: rgba(226,161,176,0.08);
+            border: 1px solid #4a2e34;
+            padding: 6px 18px;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .description-text {
+            color: #c9b3b8;
+            max-width: 500px;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .social-links-jp {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .soc-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 1px solid #633c44;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #e2a1b0;
+            font-size: 1.4rem;
+            transition: 0.2s;
+            text-decoration: none;
+        }
+
+        .soc-icon:hover {
+            border-color: #ffc0cd;
+            color: white;
+            transform: translateY(-3px);
+            background: rgba(226,161,176,0.15);
+        }
+
+        /* Секция пути самурая */
+        .bushido-section {
+            padding: 80px 20px;
+            background: #0c080a;
+        }
+
+        .section-header {
             text-align: center;
-            letter-spacing: -1px;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 50px;
+        }
+        .section-header span {
+            font-size: 0.9rem;
+            color: #c77d8f;
+            display: block;
+            font-weight: 400;
         }
 
-        .projects-grid {
+        .grid-bushido {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: 1fr 1fr;
             gap: 30px;
             max-width: 1200px;
             margin: 0 auto;
         }
 
-        .project-card {
-            background: rgba(0, 217, 255, 0.05);
-            border: 1px solid rgba(0, 217, 255, 0.2);
-            padding: 40px;
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
+        .card-samurai {
+            background: rgba(20, 12, 15, 0.6);
+            backdrop-filter: blur(4px);
+            border: 1px solid #38242a;
+            border-radius: 24px;
+            padding: 28px;
+            transition: 0.2s;
         }
 
-        .project-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 217, 255, 0.1), transparent);
-            transition: left 0.5s ease;
+        .card-samurai:hover {
+            border-color: #c77d8f;
         }
 
-        .project-card:hover::before {
-            left: 100%;
-        }
-
-        .project-card:hover {
-            background: rgba(0, 217, 255, 0.1);
-            border-color: rgba(0, 217, 255, 0.4);
-            transform: translateY(-10px);
-        }
-
-        .project-icon {
-            font-size: 2.5rem;
+        .card-header-icon {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-bottom: 1px solid #38242a;
+            padding-bottom: 15px;
             margin-bottom: 20px;
-            color: #00d9ff;
+        }
+        .card-header-icon i {
+            font-size: 2rem;
+            color: #e2a1b0;
+        }
+
+        .project-item {
+            margin-bottom: 25px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 18px;
+            padding: 16px;
         }
 
         .project-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 15px;
-            color: #fff;
-        }
-
-        .project-desc {
-            color: #aaa;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-
-        .tech-tags {
+            font-size: 1.3rem;
+            font-weight: 600;
             display: flex;
-            gap: 10px;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .tag-group {
+            display: flex;
+            gap: 8px;
             flex-wrap: wrap;
+            margin-top: 12px;
+        }
+        .tag {
+            background: #2b191f;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            color: #e2bdc4;
         }
 
-        .tech-tag {
-            background: rgba(0, 217, 255, 0.1);
-            border: 1px solid rgba(0, 217, 255, 0.3);
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            color: #00d9ff;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        /* About секция */
-        .about-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 60px;
-            max-width: 1200px;
-            margin: 0 auto;
-            align-items: center;
-        }
-
-        .about-content h3 {
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-            color: #00d9ff;
-        }
-
-        .about-content p {
-            color: #aaa;
-            line-height: 1.8;
-            margin-bottom: 20px;
-        }
-
-        .social-links {
+        .info-row {
             display: flex;
-            gap: 15px;
-            margin-top: 30px;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px dashed #2a1c20;
         }
 
-        .social-link {
-            width: 50px;
-            height: 50px;
-            border: 2px solid rgba(0, 217, 255, 0.3);
-            border-radius: 50%;
+        /* Прогресс-бары с катаной */
+        .game-stat {
+            margin-bottom: 22px;
+        }
+        .game-label {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #00d9ff;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            font-size: 1.2rem;
-        }
-
-        .social-link:hover {
-            background: rgba(0, 217, 255, 0.1);
-            border-color: #00d9ff;
-            transform: translateY(-5px);
-        }
-
-        /* Stats секция */
-        .stats-section {
-            background: rgba(0, 217, 255, 0.05);
-            border-top: 1px solid rgba(0, 217, 255, 0.2);
-            border-bottom: 1px solid rgba(0, 217, 255, 0.2);
-        }
-
-        .stats-container {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 40px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .stat-item {
-            text-align: center;
-        }
-
-        .stat-number {
-            font-size: 3rem;
-            font-weight: 900;
-            background: linear-gradient(90deg, #00d9ff, #ff00ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 10px;
-        }
-
-        .stat-name {
-            font-size: 1rem;
-            color: #aaa;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        /* Футер */
-        .footer {
-            padding: 60px 50px;
-            text-align: center;
-            border-top: 1px solid rgba(0, 217, 255, 0.1);
-            color: #888;
+            justify-content: space-between;
             font-size: 0.9rem;
+            margin-bottom: 6px;
+        }
+        .bar-bg {
+            height: 6px;
+            background: #2a1b20;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .bar-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #c77d8f, #e2a1b0);
+            border-radius: 10px;
+            transition: width 1s ease;
         }
 
-        .footer p {
-            margin-bottom: 10px;
+        .activity-block {
+            background: rgba(226,161,176,0.05);
+            border-radius: 18px;
+            padding: 18px;
+            text-align: center;
+            margin-top: 25px;
         }
 
-        /* Адаптив */
-        @media (max-width: 1024px) {
-            .hero-content {
+        .music-center {
+            max-width: 550px;
+            margin: 40px auto 0;
+        }
+
+        .quote-samurai {
+            border-left: 3px solid #e2a1b0;
+            background: rgba(226,161,176,0.05);
+            padding: 18px;
+            margin-top: 25px;
+            font-style: italic;
+        }
+
+        .footer-samurai {
+            border-top: 1px solid #2a1e22;
+            padding: 50px 20px;
+            text-align: center;
+            color: #886e74;
+        }
+
+        @media (max-width: 900px) {
+            .hero-grid {
                 grid-template-columns: 1fr;
-                gap: 40px;
+                text-align: center;
+                gap: 30px;
             }
-
-            .hero-title {
-                font-size: 4rem;
-            }
-
-            .projects-grid {
+            .grid-bushido {
                 grid-template-columns: 1fr;
             }
-
-            .about-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .stats-container {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .nav {
-                padding: 0 30px;
-            }
-
-            .section {
-                padding: 100px 30px;
-            }
-
-            .hero {
-                padding: 100px 30px 50px;
-            }
+            .hero-title { font-size: 3rem; }
+            .stats-row { justify-content: center; }
+            .social-links-jp { justify-content: center; }
+            .avatar-katana { margin: 0 auto; }
+            .hero-sub { text-align: left; }
         }
 
-        @media (max-width: 768px) {
-            .hero-title {
-                font-size: 3rem;
-            }
-
-            .section-title {
-                font-size: 2.5rem;
-            }
-
-            .nav-links {
-                gap: 20px;
-                font-size: 0.8rem;
-            }
-
-            .stats-container {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 20px;
-            }
-
-            .hero-right {
-                display: none;
-            }
+        .fade-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: 0.7s;
         }
-
-        @media (max-width: 480px) {
-            .hero-title {
-                font-size: 2.2rem;
-            }
-
-            .section-title {
-                font-size: 1.8rem;
-            }
-
-            .nav {
-                padding: 0 20px;
-                height: 70px;
-            }
-
-            .nav-links {
-                display: none;
-            }
-
-            .section {
-                padding: 80px 20px;
-            }
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
     </style>
 </head>
 <body>
-    <div class="bg-grid"></div>
-    <div class="animated-bg"></div>
 
-    <!-- Загрузочный экран -->
-    <div class="loading-screen" id="loadingScreen">
-        <div class="loading-text">PARADOX</div>
-        <div class="loading-bar"></div>
-        <div class="system-info">ИНИЦИАЛИЗАЦИЯ СИСТЕМЫ... PARADOX_v2026</div>
+<!-- ЗАСТАВКА ЛЕПЕСТКИ + МЕЧ -->
+<div class="sakura-screen" id="sakuraScreen">
+    <canvas class="petal-canvas" id="petalCanvas"></canvas>
+    <div class="sakura-overlay">
+        <div class="katana-title">ПАРАДОКС</div>
+        <div class="sakura-location-box">
+            <i class="fas fa-map-marker-alt"></i> ТВОЁ МЕСТОПОЛОЖЕНИЕ: 
+            <span id="screenUserLoc" class="highlight-loc">СКАНИРОВАНИЕ...</span>
+        </div>
+        <div class="sakura-location-box" style="font-size:0.8rem;">
+            ⚔️  ДЕРЗНИ — И САКУРА УКАЖЕТ ПУТЬ  ⚔️
+        </div>
+        <button class="enter-samurai" id="enterBtn"> ВЗЯТЬ КАТАНУ </button>
+        <div class="status-terminal">
+            >  СИСТЕМА: ДУХ САМУРАЯ v2.0 <br>
+            >  МЕСТО: <span id="termLocSpan">ОПРЕДЕЛЯЮ...</span>
+        </div>
     </div>
+</div>
 
-    <!-- Контент -->
-    <div class="content" id="mainContent">
-        <!-- Навигация -->
-        <nav class="nav">
-            <div class="logo">PARADOX</div>
-            <div class="nav-links">
-                <a href="#projects" class="nav-link">Проекты</a>
-                <a href="#about" class="nav-link">Обо мне</a>
-                <a href="#contact" class="nav-link">Контакт</a>
-            </div>
-        </nav>
-
-        <!-- Герой -->
-        <section class="hero">
-            <div class="hero-content">
-                <div class="hero-left">
-                    <h1 class="hero-title">
-                        <span class="title-gradient">PARADOX</span>
-                    </h1>
-                    <p class="hero-subtitle">Цифровой странник и гейм-энтузиаст</p>
-                    <p class="hero-desc">
-                        15-летний из Казахстана. Гриндю Minecraft и CS2 как ненормальный. В меня душа музыкой, а график сна давно сломан. Люблю экспериментировать в сети.
-                    </p>
-
-                    <div class="stats-grid">
-                        <div class="stat-card">
-                            <div class="stat-label">Статус</div>
-                            <div class="stat-value">ОФФЛАЙН</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-label">Локация</div>
-                            <div class="stat-value">КЗ</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-label">Днюха</div>
-                            <div class="stat-value">13 МАР</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-label">Пк</div>
-                            <div class="stat-value">RYZEN 5</div>
-                        </div>
-                    </div>
-
-                    <div class="cta-buttons">
-                        <a href="#projects" class="btn btn-primary">Смотреть</a>
-                        <a href="#contact" class="btn btn-secondary">Связь</a>
-                    </div>
+<!-- ОСНОВНОЙ КОНТЕНТ (ВСЁ НА РУССКОМ) -->
+<div class="main-content" id="mainContent">
+    <section class="hero-samurai">
+        <div class="hero-grid">
+            <div class="avatar-katana fade-up">
+                <div class="katana-circle">
+                    <img src="logo.png" alt="PARADOX" class="avatar-img" onerror="this.src='https://placehold.co/400x400/2a1a20/e2a1b0?text=侍'">
                 </div>
-
-                <div class="hero-right">
-                    <div class="avatar-container">
-                        <div class="avatar-frame">
-                            <img src="logo.png" alt="PARADOX" class="avatar-img">
-                            <div class="avatar-overlay"></div>
-                        </div>
-                        <div class="status-indicator"></div>
-                    </div>
+                <div class="status-dot-sakura"></div>
+                <div style="text-align:center; margin-top:10px; font-size:0.7rem; opacity:0.6;"><i class="fas fa-feather-alt"></i>  самурайский клинок</div>
+            </div>
+            <div class="fade-up">
+                <h1 class="hero-title">PARADOX</h1>
+                <div class="hero-sub">« Бродячий воин-неудачник »<br>  —  нищий плеер</div>
+                <div class="stats-row">
+                    <div class="stat-pill"><i class="fas fa-circle" style="color:#e2a1b0;"></i> Оффлайн</div>
+                    <div class="stat-pill"><i class="fas fa-microchip"></i> Ryzen 5 3600 | 16 ГБ</div>
+                    <div class="stat-pill"><i class="fas fa-map-marker-alt"></i> <span id="heroCountryDisplay">Казахстан</span></div>
+                    <div class="stat-pill"><i class="fas fa-birthday-cake"></i> Днюха: 13 марта</div>
+                </div>
+                <p class="description-text">
+                    Обычный типок, который страдает фигнёй в интернете. Страшный майнкрафтер. 
+                    Любит музыку и игры. Родился 13 марта, следует кодексу самурая с примесью хаоса.
+                </p>
+                <div class="social-links-jp">
+                    <a href="https://t.me/luckyametist" target="_blank" class="soc-icon" id="tgLinkBtn"><i class="fab fa-telegram"></i></a>
+                    <a href="https://discord.com/users/1312012805913837608" target="_blank" class="soc-icon"><i class="fab fa-discord"></i></a>
+                    <a href="https://www.youtube.com/@zhdufeedback" target="_blank" class="soc-icon"><i class="fab fa-youtube"></i></a>
+                    <a href="https://ru.namemc.com/profile/LuckyParadox.1" target="_blank" class="soc-icon"><span style="font-weight:900;">N</span></a>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Проекты -->
-        <section class="section" id="projects">
-            <h2 class="section-title">Проекты</h2>
-            <div class="projects-grid">
-                <div class="project-card">
-                    <div class="project-icon">
-                        <i class="fab fa-telegram"></i>
-                    </div>
-                    <h3 class="project-title">Пустошь Парадокса</h3>
-                    <p class="project-desc">Личный Telegram канал. Цифровое пространство для мыслей, экспериментов и случайных размышлений.</p>
-                    <div class="tech-tags">
-                        <span class="tech-tag">Telegram</span>
-                        <span class="tech-tag">Активен</span>
+    <section class="bushido-section">
+        <div class="section-header fade-up">
+            СИСТЕМНАЯ ИНФОРМАЦИЯ
+            <span>⚔️  кодекс воина  ⚔️</span>
+        </div>
+        <div class="grid-bushido">
+            <!-- ЛЕВАЯ КОЛОНКА: ПРОЕКТЫ -->
+            <div class="card-samurai fade-up">
+                <div class="card-header-icon">
+                    <i class="fas fa-rocket"></i>
+                    <h3 style="font-size:1.4rem;">ПРОЕКТЫ</h3>
+                </div>
+                <div class="project-item">
+                    <div class="project-title"><i class="fab fa-telegram"></i> Пустошь удачи</div>
+                    <p style="color:#bc9ea5; font-size:0.9rem; margin: 8px 0;">Telegram • Личный тгк Парадокса</p>
+                    <div class="tag-group">
+                        <span class="tag">Активен</span>
+                        <span class="tag">Мразь</span>
                     </div>
                 </div>
-
-                <div class="project-card">
-                    <div class="project-icon">
-                        <i class="fab fa-discord"></i>
-                    </div>
-                    <h3 class="project-title">Lunar Client</h3>
-                    <p class="project-desc">Разработка Minecraft клиента. Создание лучшего игрового опыта для комьюнити.</p>
-                    <div class="tech-tags">
-                        <span class="tech-tag">Java</span>
-                        <span class="tech-tag">В разработке</span>
-                    </div>
-                </div>
-
-                <div class="project-card">
-                    <div class="project-icon">
-                        <i class="fas fa-gamepad"></i>
-                    </div>
-                    <h3 class="project-title">Архив Игр</h3>
-                    <p class="project-desc">Коллекция игровых опытов в мирах Minecraft, CS2 и Fortnite.</p>
-                    <div class="tech-tags">
-                        <span class="tech-tag">Minecraft</span>
-                        <span class="tech-tag">CS2</span>
-                    </div>
-                </div>
-
-                <div class="project-card">
-                    <div class="project-icon">
-                        <i class="fas fa-music"></i>
-                    </div>
-                    <h3 class="project-title">Звуковая Библиотека</h3>
-                    <p class="project-desc">Подборка андеграунд исполнителей. ooes, FEDUK, blago white, Sadsvit и не только.</p>
-                    <div class="tech-tags">
-                        <span class="tech-tag">Музыка</span>
-                        <span class="tech-tag">Куратор</span>
+                <div class="project-item">
+                    <div class="project-title"><i class="fab fa-discord"></i> Lunar Client</div>
+                    <p style="color:#bc9ea5; font-size:0.9rem; margin: 8px 0;">Discord • Майнкрафт клиент</p>
+                    <div class="tag-group">
+                        <span class="tag">Разработка</span>
+                        <span class="tag">Java</span>
                     </div>
                 </div>
             </div>
-        </section>
 
-        <!-- About -->
-        <section class="section" id="about">
-            <h2 class="section-title">Обо Мне</h2>
-            <div class="about-grid">
-                <div class="about-content">
-                    <h3>Человек За PARADOX</h3>
-                    <p>
-                        Я 15-летний гейм-фанатик и цифровой энтузиаст из Казахстана. Моя жизнь крутится вокруг пикселей, звука и случайных кризисов в 3 утра.
-                    </p>
-                    <p>
-                        Minecraft — мой второй дом. CS2 — мой боевик. Музыка — моё спасение. А интернет? Это мой игровой лаунчпад.
-                    </p>
-                    <p>
-                        Всегда ищу новый проект, новый вызов, новую кроличью нору, в которую можно прыгнуть.
-                    </p>
-                    <div class="social-links">
-                        <a href="https://discord.com/users/1312012805913837608" target="_blank" class="social-link">
-                            <i class="fab fa-discord"></i>
-                        </a>
-                        <a href="https://t.me/luckyametist" target="_blank" class="social-link">
-                            <i class="fab fa-telegram"></i>
-                        </a>
-                        <a href="https://www.youtube.com/@zhdufeedback" target="_blank" class="social-link">
-                            <i class="fab fa-youtube"></i>
-                        </a>
-                        <a href="https://ru.namemc.com/profile/LuckyParadox.1" target="_blank" class="social-link">
-                            <i class="fas fa-cube"></i>
-                        </a>
+            <!-- ПРАВАЯ КОЛОНКА: ИНФОРМАЦИЯ -->
+            <div class="card-samurai fade-up">
+                <div class="card-header-icon">
+                    <i class="fas fa-user-ninja"></i>
+                    <h3 style="font-size:1.4rem;">ИНФОРМАЦИЯ</h3>
+                </div>
+                <div class="info-row"><i class="fas fa-user"></i> <span><strong>Возраст:</strong> 15 лет</span></div>
+                <div class="info-row"><i class="fas fa-gamepad"></i> <span><strong>Игры:</strong> Minecraft, CS2, Fortnite, Rust</span></div>
+                <div class="info-row"><i class="fas fa-music"></i> <span><strong>Музыка:</strong> Alex G, wifiskeleton, s0rrow, ooes, FEDUK, blago white, Sadsvit</span></div>
+                <div class="quote-samurai">
+                    <p>«Искал медь — сгорел медведь.»</p>
+                    <p style="font-size:0.8rem; margin-top:5px;">— Великий ww123rov</p>
+                </div>
+            </div>
+
+            <!-- СТАТИСТИКА (полная ширина) -->
+            <div class="card-samurai fade-up" style="grid-column: span 2;">
+                <div class="card-header-icon">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>СТАТИСТИКА ИГР</h3>
+                </div>
+                <div>
+                    <div class="game-stat">
+                        <div class="game-label"><span><i class="fas fa-cube"></i> Minecraft</span><span>60%</span></div>
+                        <div class="bar-bg"><div class="bar-fill" data-width="60" style="width:0%"></div></div>
+                    </div>
+                    <div class="game-stat">
+                        <div class="game-label"><span><i class="fas fa-crosshairs"></i> Counter-Strike 2</span><span>30%</span></div>
+                        <div class="bar-bg"><div class="bar-fill" data-width="30" style="width:0%"></div></div>
+                    </div>
+                    <div class="game-stat">
+                        <div class="game-label"><span><i class="fas fa-bolt"></i> Fortnite</span><span>8%</span></div>
+                        <div class="bar-bg"><div class="bar-fill" data-width="8" style="width:0%"></div></div>
+                    </div>
+                    <div class="game-stat">
+                        <div class="game-label"><span><i class="fas fa-skull"></i> Rust</span><span>2%</span></div>
+                        <div class="bar-bg"><div class="bar-fill" data-width="2" style="width:0%"></div></div>
+                    </div>
+                    <div class="activity-block">
+                        <div style="font-size: 2.4rem; font-weight:700;">100+</div>
+                        <div>сломанных режимов сна</div>
                     </div>
                 </div>
-                <div class="about-content">
-                    <h3>Любимые Игры</h3>
-                    <p><strong>Minecraft:</strong> 60% — Строить, исследовать, выживать. Это терапия.</p>
-                    <p><strong>Counter-Strike 2:</strong> 30% — Соревновательная. Быстрая. Жестокая. Я это люблю.</p>
-                    <p><strong>Fortnite:</strong> 8% — Когда хочу что-то другое.</p>
-                    <p><strong>Rust:</strong> 2% — Редко, но бывает...</p>
-                    
-                    <h3 style="margin-top: 40px;">Музыкальный Вкус</h3>
-                    <p>
-                        ooes, FEDUK, blago white, Sadsvit, wifiskeleton, s0rrow, и Alex G
-                    </p>
-                    <p style="font-size: 0.9rem; color: #888; margin-top: 20px;">
-                        <em>"Ищу медь — сгорел медведь"</em> — ww123rov
-                    </p>
+            </div>
+
+            <!-- МУЗЫКА ЦЕНТР -->
+            <div class="music-center" style="grid-column: span 2;">
+                <div class="card-samurai fade-up" style="text-align:center;">
+                    <div class="card-header-icon" style="justify-content: center;">
+                        <i class="fas fa-head-side-headphones"></i>
+                        <h3>МУЗЫКА</h3>
+                    </div>
+                    <div style="padding:10px 0 5px;">
+                        <i class="fas fa-volume-mute" style="font-size:2.5rem; opacity:0.5;"></i>
+                        <p style="color:#ad868e;">Не слушает музыку прямо сейчас</p>
+                    </div>
+                    <div>
+                        <h4 style="margin: 15px 0 10px; color:#e2a1b0;">Любимые исполнители:</h4>
+                        <div class="tag-group" style="justify-content: center;">
+                            <span class="tag">ooes</span><span class="tag">FEDUK</span><span class="tag">blago white</span><span class="tag">Sadsvit</span>
+                            <span class="tag">Alex G</span><span class="tag">wifiskeleton</span>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Stats -->
-        <section class="section stats-section">
-            <div class="stats-container">
-                <div class="stat-item">
-                    <div class="stat-number">15</div>
-                    <div class="stat-name">Лет</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">100+</div>
-                    <div class="stat-name">Сломанных Снов</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">2024</div>
-                    <div class="stat-name">С начала</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">∞</div>
-                    <div class="stat-name">Любопытства</div>
-                </div>
-            </div>
-        </section>
+    <footer class="footer-samurai fade-up">
+        <p>PARADOX © 2025 — Путь самурая и лепестки сакуры</p>
+        <p style="opacity: 0.6; margin-top: 8px;">Сделано с <i class="fas fa-feather-alt"></i> в бело-серых тонах</p>
+    </footer>
+</div>
 
-        <!-- Футер -->
-        <footer class="footer" id="contact">
-            <p>PARADOX © 2024-2026</p>
-            <p style="opacity: 0.6;">Сделано с любовью. Без сна. Чистая энергия.</p>
-        </footer>
-    </div>
+<script>
+    // 1. Эффект падающих лепестков сакуры (canvas)
+    function initSakuraPetals() {
+        const canvas = document.getElementById('petalCanvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
 
-    <script>
-        // Загрузочный экран
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                const loadingScreen = document.getElementById('loadingScreen');
-                const mainContent = document.getElementById('mainContent');
-                
-                loadingScreen.style.opacity = '0';
-                loadingScreen.style.transition = 'opacity 0.5s ease';
-                
-                setTimeout(() => {
-                    loadingScreen.style.display = 'none';
-                }, 500);
-            }, 2000);
-        });
+        let petals = [];
+        const PETAL_COUNT = 80;
 
-        // Smooth scroll для навигации
-        document.querySelectorAll('a[href^="#"]').forEach(link => {
-            link.addEventListener('click', (e) => {
-                const href = link.getAttribute('href');
-                if (href !== '#') {
-                    e.preventDefault();
-                    const element = document.querySelector(href);
-                    if (element) {
-                        element.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                    }
-                }
+        for (let i = 0; i < PETAL_COUNT; i++) {
+            petals.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: 8 + Math.random() * 10,
+                speedY: 0.5 + Math.random() * 1.2,
+                speedX: -0.3 + Math.random() * 0.6,
+                rotation: Math.random() * Math.PI * 2,
+                rotSpeed: 0.01 + Math.random() * 0.02,
+                opacity: 0.4 + Math.random() * 0.5
             });
-        });
+        }
 
-        // Анимация при скролле
+        function drawPetals() {
+            if (!ctx) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let p of petals) {
+                ctx.save();
+                ctx.translate(p.x, p.y);
+                ctx.rotate(p.rotation);
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                ctx.quadraticCurveTo(p.size * 0.4, -p.size * 0.6, p.size, 0);
+                ctx.quadraticCurveTo(p.size * 0.4, p.size * 0.6, 0, 0);
+                ctx.fillStyle = `rgba(226, 161, 176, ${p.opacity * 0.8})`;
+                ctx.fill();
+                ctx.restore();
+
+                p.x += p.speedX;
+                p.y += p.speedY;
+                p.rotation += p.rotSpeed;
+                if (p.y > canvas.height) p.y = -20;
+                if (p.x > canvas.width) p.x = -20;
+                if (p.x < -30) p.x = canvas.width + 10;
+            }
+            requestAnimationFrame(drawPetals);
+        }
+        drawPetals();
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    }
+
+    // 2. Определение страны пользователя
+    async function getUserCountry() {
+        try {
+            const res = await fetch('https://ipapi.co/json/');
+            const data = await res.json();
+            return data.country_name || data.country || 'Казахстан';
+        } catch(e) {
+            try {
+                const res2 = await fetch('https://ipinfo.io/json');
+                const data2 = await res2.json();
+                return data2.country || 'Казахстан';
+            } catch(e2) {
+                return 'Казахстан';
+            }
+        }
+    }
+
+    // 3. Управление заставкой
+    let sakuraInterval;
+    const matrixScreen = document.getElementById('sakuraScreen');
+    const mainContent = document.getElementById('mainContent');
+    const enterBtn = document.getElementById('enterBtn');
+
+    window.addEventListener('DOMContentLoaded', async () => {
+        initSakuraPetals();
+        const country = await getUserCountry();
+        // Обновить везде
+        const screenLocSpan = document.getElementById('screenUserLoc');
+        const termLocSpan = document.getElementById('termLocSpan');
+        const heroCountrySpan = document.getElementById('heroCountryDisplay');
+        if (screenLocSpan) screenLocSpan.innerText = country.toUpperCase();
+        if (termLocSpan) termLocSpan.innerText = country.toUpperCase();
+        if (heroCountrySpan) heroCountrySpan.innerText = country;
+    });
+
+    enterBtn.addEventListener('click', () => {
+        // Плавно скрыть заставку
+        matrixScreen.style.opacity = '0';
+        matrixScreen.style.transition = 'opacity 0.8s ease';
+        setTimeout(() => {
+            matrixScreen.style.display = 'none';
+            mainContent.classList.add('show');
+            document.body.style.overflow = 'auto';
+            initScrollAnimations();
+            startProgressBars();
+            updateClock();
+        }, 900);
+    });
+
+    function startProgressBars() {
+        const fills = document.querySelectorAll('.bar-fill');
+        fills.forEach(bar => {
+            const widthVal = bar.getAttribute('data-width');
+            if (widthVal) setTimeout(() => { bar.style.width = widthVal + '%'; }, 300);
+        });
+    }
+
+    function updateClock() {
+        const timeDiv = document.querySelector('.stat-pill:last-child');
+        if (timeDiv && timeDiv.innerHTML.includes('Днюха')) {
+            // можно оставить как есть
+        }
+        // добавим время в герое? не обязательно, оставим просто дату
+    }
+
+    function initScrollAnimations() {
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
+                    entry.target.classList.add('visible');
                 }
             });
-        }, { threshold: 0.1 });
-
-        document.querySelectorAll('.project-card').forEach(card => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(20px)';
-            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-            observer.observe(card);
+        }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+        // дополнительно добавим для уже видимых
+        document.querySelectorAll('.fade-up').forEach(el => {
+            if (el.getBoundingClientRect().top < window.innerHeight - 100) el.classList.add('visible');
         });
-    </script>
+    }
+
+    // ловим клик на телеграм (ссылка уже есть, но для акцента)
+    const tgBtn = document.getElementById('tgLinkBtn');
+    if (tgBtn) {
+        tgBtn.addEventListener('click', (e) => {
+            // ссылка ведет на тгк или профиль, используем уже заданную в href
+            console.log('переход в телеграм');
+        });
+    }
+</script>
 </body>
 </html>
