@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PARADOX?</title>
+    <title>桜の侍 | PARADOX</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+JP:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -15,7 +15,7 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Noto Sans JP', 'Inter', sans-serif;
             background: #0a0a0a;
             color: #f5f5f5;
             overflow-x: hidden;
@@ -60,18 +60,28 @@
         .matrix-title {
             font-size: 5rem;
             font-weight: 800;
-            color: #fff;
+            color: #ffb6d9;
             letter-spacing: 5px;
             text-transform: uppercase;
             margin-bottom: 20px;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            text-shadow: 0 0 20px rgba(255, 182, 217, 0.6);
             position: relative;
             animation: titleGlow 3s ease-in-out infinite;
+            font-family: 'Noto Sans JP', sans-serif;
         }
 
         @keyframes titleGlow {
-            0%, 100% { text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
-            50% { text-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 30px rgba(255, 255, 255, 0.4); }
+            0%, 100% { text-shadow: 0 0 20px rgba(255, 182, 217, 0.6); }
+            50% { text-shadow: 0 0 30px rgba(255, 182, 217, 0.8), 0 0 40px rgba(255, 182, 217, 0.4); }
+        }
+
+        .matrix-kanji {
+            display: block;
+            font-size: 3rem;
+            color: #ffb6d9;
+            margin-bottom: 20px;
+            font-weight: 700;
+            text-shadow: 0 0 20px rgba(255, 182, 217, 0.6);
         }
 
         .matrix-user-info {
@@ -84,7 +94,7 @@
         }
 
         .user-location {
-            color: #fff;
+            color: #ffb6d9;
             font-weight: 500;
             animation: locationPulse 2s ease-in-out infinite;
         }
@@ -105,8 +115,8 @@
         .matrix-enter-btn {
             padding: 15px 60px;
             background: transparent;
-            border: 2px solid #fff;
-            color: #fff;
+            border: 2px solid #ffb6d9;
+            color: #ffb6d9;
             font-size: 1.1rem;
             font-weight: 500;
             letter-spacing: 2px;
@@ -118,9 +128,9 @@
         }
 
         .matrix-enter-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 182, 217, 0.1);
             transform: translateY(-2px);
-            box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 30px rgba(255, 182, 217, 0.3);
         }
 
         .matrix-enter-btn::before {
@@ -130,7 +140,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 182, 217, 0.2), transparent);
             transition: 0.5s;
         }
 
@@ -194,7 +204,18 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(45deg, #1a1a1a, #0a0a0a);
+            background: linear-gradient(45deg, #1a0a0f, #0a0a0a);
+            z-index: -1;
+        }
+
+        /* Сакура фон */
+        .sakura-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
             z-index: -1;
         }
 
@@ -217,10 +238,11 @@
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            border: 3px solid #f5f5f5;
+            border: 3px solid #ffb6d9;
             padding: 10px;
             position: relative;
             animation: rotate 20s linear infinite;
+            box-shadow: 0 0 30px rgba(255, 182, 217, 0.3);
         }
 
         @keyframes rotate {
@@ -243,9 +265,10 @@
             width: 20px;
             height: 20px;
             border-radius: 50%;
-            background: #666;
+            background: #ff6b9d;
             border: 3px solid #0a0a0a;
             z-index: 2;
+            box-shadow: 0 0 15px rgba(255, 107, 157, 0.6);
         }
 
         .hero-info {
@@ -255,9 +278,18 @@
         .hero-title {
             font-size: 4.5rem;
             font-weight: 800;
-            color: #f5f5f5;
+            color: #ffb6d9;
             margin-bottom: 10px;
             letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(255, 182, 217, 0.3);
+        }
+
+        .hero-kanji {
+            font-size: 2.5rem;
+            color: #ff6b9d;
+            font-weight: 700;
+            margin-bottom: 20px;
+            font-family: 'Noto Sans JP';
         }
 
         .hero-subtitle {
@@ -276,18 +308,18 @@
 
         .stat-item {
             padding: 10px 20px;
-            background: rgba(245, 245, 245, 0.05);
-            border: 1px solid #333;
+            background: rgba(255, 182, 217, 0.05);
+            border: 1px solid #ff6b9d;
             border-radius: 5px;
             display: flex;
             align-items: center;
             gap: 10px;
             font-size: 0.9rem;
-            color: #ccc;
+            color: #ffb6d9;
         }
 
         .stat-item i {
-            color: #888;
+            color: #ff6b9d;
         }
 
         .hero-description {
@@ -307,22 +339,23 @@
         .social-link {
             width: 50px;
             height: 50px;
-            border: 1px solid #333;
+            border: 1px solid #ff6b9d;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #aaa;
+            color: #ffb6d9;
             text-decoration: none;
             transition: all 0.3s ease;
             font-size: 1.2rem;
         }
 
         .social-link:hover {
-            border-color: #f5f5f5;
-            color: #f5f5f5;
+            border-color: #ffb6d9;
+            color: #fff;
             transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(245, 245, 245, 0.1);
+            box-shadow: 0 5px 20px rgba(255, 182, 217, 0.3);
+            background: rgba(255, 182, 217, 0.1);
         }
 
         /* Логотип NameMC */
@@ -331,7 +364,7 @@
             font-weight: 900;
             font-size: 1.3rem;
             color: #fff;
-            background: linear-gradient(135deg, #555, #888);
+            background: linear-gradient(135deg, #ff6b9d, #ffb6d9);
             border-radius: 3px;
             padding: 2px 5px;
         }
@@ -348,20 +381,20 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: #111;
+            background: #0a0a0a;
             z-index: -1;
         }
 
         .section-title {
             font-size: 2.5rem;
             font-weight: 700;
-            color: #f5f5f5;
+            color: #ffb6d9;
             margin-bottom: 50px;
             text-align: center;
             letter-spacing: 1px;
+            font-family: 'Noto Sans JP';
         }
 
-        /* Новая сетка - Проекты слева, Информация по центру, Музыка по центру снизу */
         .section-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -370,23 +403,19 @@
             margin: 0 auto;
         }
 
-        /* Карточка проектов - слева */
         .projects-column {
             grid-column: 1;
         }
 
-        /* Карточка информации - по центру */
         .info-column {
             grid-column: 2;
         }
 
-        /* Карточка статистики - занимает всю ширину под информацией */
         .stats-full-width {
             grid-column: 1 / -1;
             margin-top: 30px;
         }
 
-        /* Карточка музыки - по центру под статистикой */
         .music-center {
             grid-column: 1 / -1;
             max-width: 600px;
@@ -395,18 +424,19 @@
 
         /* Карточки */
         .info-card {
-            background: rgba(245, 245, 245, 0.02);
-            border: 1px solid #222;
+            background: rgba(255, 182, 217, 0.02);
+            border: 1px solid #ff6b9d;
             border-radius: 10px;
             padding: 30px;
             transition: all 0.3s ease;
             height: 100%;
+            box-shadow: 0 0 20px rgba(255, 182, 217, 0.1);
         }
 
         .info-card:hover {
             transform: translateY(-10px);
-            border-color: #444;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border-color: #ffb6d9;
+            box-shadow: 0 20px 40px rgba(255, 107, 157, 0.2);
         }
 
         .card-header {
@@ -415,25 +445,26 @@
             gap: 15px;
             margin-bottom: 25px;
             padding-bottom: 15px;
-            border-bottom: 1px solid #222;
+            border-bottom: 1px solid #ff6b9d;
         }
 
         .card-icon {
             width: 50px;
             height: 50px;
-            border: 1px solid #333;
+            border: 1px solid #ff6b9d;
             border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #aaa;
+            color: #ffb6d9;
             font-size: 1.5rem;
         }
 
         .card-title {
             font-size: 1.3rem;
             font-weight: 600;
-            color: #f5f5f5;
+            color: #ffb6d9;
+            font-family: 'Noto Sans JP';
         }
 
         /* Информация */
@@ -443,7 +474,7 @@
 
         .info-list li {
             padding: 12px 0;
-            border-bottom: 1px solid #222;
+            border-bottom: 1px solid #333;
             display: flex;
             align-items: center;
             gap: 12px;
@@ -455,14 +486,14 @@
         }
 
         .info-list i {
-            color: #888;
+            color: #ff6b9d;
             width: 20px;
         }
 
         /* Проекты */
         .project-card {
-            background: rgba(245, 245, 245, 0.02);
-            border: 1px solid #222;
+            background: rgba(255, 182, 217, 0.02);
+            border: 1px solid #333;
             border-radius: 10px;
             padding: 25px;
             transition: all 0.3s ease;
@@ -474,27 +505,29 @@
         }
 
         .project-card:hover {
-            border-color: #444;
+            border-color: #ff6b9d;
+            box-shadow: 0 0 20px rgba(255, 107, 157, 0.1);
         }
 
         .project-icon {
             width: 60px;
             height: 60px;
-            border: 1px solid #333;
+            border: 1px solid #ff6b9d;
             border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             margin-bottom: 20px;
             font-size: 1.8rem;
-            color: #aaa;
+            color: #ffb6d9;
         }
 
         .project-title {
             font-size: 1.4rem;
             font-weight: 600;
-            color: #f5f5f5;
+            color: #ffb6d9;
             margin-bottom: 10px;
+            font-family: 'Noto Sans JP';
         }
 
         .project-desc {
@@ -512,19 +545,20 @@
 
         .project-tag {
             padding: 5px 12px;
-            background: rgba(245, 245, 245, 0.05);
-            border: 1px solid #333;
+            background: rgba(255, 182, 217, 0.05);
+            border: 1px solid #ff6b9d;
             border-radius: 20px;
             font-size: 0.8rem;
-            color: #aaa;
+            color: #ffb6d9;
         }
 
-        /* Статистика с градиентными шкалами */
+        /* Статистика */
         .stat-card {
-            background: rgba(245, 245, 245, 0.02);
-            border: 1px solid #222;
+            background: rgba(255, 182, 217, 0.02);
+            border: 1px solid #ff6b9d;
             border-radius: 10px;
             padding: 30px;
+            box-shadow: 0 0 20px rgba(255, 182, 217, 0.1);
         }
 
         .stat-item-full {
@@ -547,11 +581,11 @@
         }
 
         .stat-name i {
-            color: #888;
+            color: #ff6b9d;
         }
 
         .stat-value {
-            color: #f5f5f5;
+            color: #ffb6d9;
             font-weight: 600;
         }
 
@@ -560,9 +594,9 @@
             background: #222;
             border-radius: 4px;
             overflow: hidden;
+            border: 1px solid #333;
         }
 
-        /* Градиентные шкалы */
         .stat-fill {
             height: 100%;
             border-radius: 4px;
@@ -571,19 +605,19 @@
         }
 
         .stat-fill.minecraft {
-            background: linear-gradient(90deg, #555, #888, #aaa);
+            background: linear-gradient(90deg, #ff6b9d, #ffb6d9, #ffc9e3);
         }
 
         .stat-fill.cs2 {
-            background: linear-gradient(90deg, #666, #999, #ccc);
+            background: linear-gradient(90deg, #ff5a8a, #ffb6d9, #ffb6d9);
         }
 
         .stat-fill.fortnite {
-            background: linear-gradient(90deg, #777, #aaa, #ddd);
+            background: linear-gradient(90deg, #ff6b9d, #ff8db3, #ffb6d9);
         }
 
         .stat-fill.rust {
-            background: linear-gradient(90deg, #888, #bbb, #eee);
+            background: linear-gradient(90deg, #ff4d6d, #ffb6d9, #ffc9e3);
         }
 
         .stat-fill::after {
@@ -608,16 +642,16 @@
         .activity-box {
             text-align: center;
             padding: 25px;
-            border: 1px solid #222;
+            border: 1px solid #ff6b9d;
             border-radius: 10px;
-            background: rgba(245, 245, 245, 0.02);
+            background: rgba(255, 182, 217, 0.02);
             margin-top: 30px;
         }
 
         .activity-number {
             font-size: 2.5rem;
             font-weight: 700;
-            color: #f5f5f5;
+            color: #ffb6d9;
             margin-bottom: 10px;
         }
 
@@ -626,13 +660,14 @@
             font-size: 0.95rem;
         }
 
-        /* Музыка по центру */
+        /* Музыка */
         .music-card {
-            background: rgba(245, 245, 245, 0.02);
-            border: 1px solid #222;
+            background: rgba(255, 182, 217, 0.02);
+            border: 1px solid #ff6b9d;
             border-radius: 10px;
             padding: 30px;
             text-align: center;
+            box-shadow: 0 0 20px rgba(255, 182, 217, 0.1);
         }
 
         .music-placeholder {
@@ -643,7 +678,8 @@
         .music-placeholder i {
             font-size: 3rem;
             margin-bottom: 20px;
-            opacity: 0.5;
+            color: #ff6b9d;
+            opacity: 0.7;
         }
 
         .artist-tags {
@@ -656,16 +692,16 @@
 
         .artist-tag {
             padding: 8px 16px;
-            background: rgba(245, 245, 245, 0.05);
-            border: 1px solid #333;
+            background: rgba(255, 182, 217, 0.05);
+            border: 1px solid #ff6b9d;
             border-radius: 20px;
             font-size: 0.9rem;
-            color: #aaa;
+            color: #ffb6d9;
         }
 
         /* Цитата */
         .quote-box {
-            border-left: 3px solid #444;
+            border-left: 3px solid #ff6b9d;
             padding-left: 20px;
             margin: 30px 0;
         }
@@ -687,7 +723,7 @@
         .footer {
             padding: 60px 20px;
             text-align: center;
-            border-top: 1px solid #222;
+            border-top: 1px solid #ff6b9d;
             color: #666;
             font-size: 0.9rem;
         }
@@ -773,18 +809,19 @@
     <div class="matrix-screen" id="matrixScreen">
         <canvas class="matrix-canvas" id="matrixCanvas"></canvas>
         <div class="matrix-overlay">
+            <span class="matrix-kanji">桜の侍</span>
             <h1 class="matrix-title">PARADOX</h1>
             <div class="matrix-user-info">
-                > ПОЛЬЗОВАТЕЛЬ ИЗ: <span id="userLocation" class="user-location">ОПРЕДЕЛЯЕМ МЕСТОПОЛОЖЕНИЕ<span class="loading-dots"></span></span>
+                > ユーザー位置: <span id="userLocation" class="user-location">検査中<span class="loading-dots"></span></span>
             </div>
-            <p class="matrix-subtitle">НАЖМИ, ЧТОБЫ ВОЙТИ В СИСТЕМУ</p>
+            <p class="matrix-subtitle">入力してシステムに入る</p>
             <button class="matrix-enter-btn" id="matrixEnterBtn">
-                ВХОД
+                ENTER
             </button>
             <div class="matrix-terminal">
-                > SYSTEM: PARADOX_OS v2.0<br>
+                > SYSTEM: SAKURA_OS v2.0<br>
                 > STATUS: OFFLINE<br>
-                > USER_LOCATION: <span id="terminalLocation">SCANNING...</span>
+                > USER_LOCATION: <span id="terminalLocation">スキャン中...</span>
             </div>
         </div>
     </div>
@@ -803,31 +840,32 @@
                 </div>
 
                 <div class="hero-info">
+                    <div class="hero-kanji">⚔️ 侍</div>
                     <h1 class="hero-title">PARADOX</h1>
-                    <p class="hero-subtitle">нищий плеер</p>
+                    <p class="hero-subtitle">桜の下の浪人</p>
                     
                     <div class="hero-stats">
                         <div class="stat-item">
                             <i class="fas fa-circle"></i>
-                            <span>Оффлайн</span>
+                            <span>オフライン</span>
                         </div>
                         <div class="stat-item">
                             <i class="fas fa-microchip"></i>
-                            <span>Ryzen 5 3600 | 16 GB RAM</span>
+                            <span>Ryzen 5 3600 | 16 GB</span>
                         </div>
                         <div class="stat-item">
                             <i class="fas fa-map-marker-alt"></i>
-                            <span>Казахстан</span>
+                            <span>カザフスタン</span>
                         </div>
                         <div class="stat-item" id="currentTime">
                             <i class="fas fa-clock"></i>
-                            <span>Днюха: 13 марта</span>
+                            <span>誕生日: 3月13日</span>
                         </div>
                     </div>
 
                     <p class="hero-description">
-                        Обычный типок, который страдает фигнёй в интернете. Страшный майнкрафтер. 
-                        Любит музыку и игры. Днюха 13 марта
+                        インターネットの侍。マインクラフトの刃。音楽とゲームの世界で剣を磨く15歳の浪人。
+                        桜の季節に生まれし者。
                     </p>
 
                     <div class="social-links">
@@ -851,7 +889,7 @@
         <!-- Контент секция -->
         <section class="content-section">
             <div class="section-bg"></div>
-            <h2 class="section-title fade-in">СИСТЕМНАЯ ИНФОРМАЦИЯ</h2>
+            <h2 class="section-title fade-in">侍の道</h2>
             
             <div class="section-grid">
                 <!-- Проекты слева -->
@@ -859,20 +897,20 @@
                     <div class="info-card fade-in">
                         <div class="card-header">
                             <div class="card-icon">
-                                <i class="fas fa-rocket"></i>
+                                <i class="fas fa-scroll"></i>
                             </div>
-                            <h3 class="card-title">Проекты</h3>
+                            <h3 class="card-title">修行</h3>
                         </div>
                         
                         <div class="project-card">
                             <div class="project-icon">
                                 <i class="fab fa-telegram"></i>
                             </div>
-                            <h4 class="project-title">Пустошь удачи</h4>
-                            <p class="project-desc">Telegram • Личный тгк Парадокса</p>
+                            <h4 class="project-title">パラドックスの庭園</h4>
+                            <p class="project-desc">Telegram • 個人の修行の地</p>
                             <div class="project-tags">
-                                <span class="project-tag">Активен</span>
-                                <span class="project-tag">Мразь</span>
+                                <span class="project-tag">活動中</span>
+                                <span class="project-tag">非公開</span>
                             </div>
                         </div>
 
@@ -881,9 +919,9 @@
                                 <i class="fab fa-discord"></i>
                             </div>
                             <h4 class="project-title">Lunar Client</h4>
-                            <p class="project-desc">Discord • MinecraftClient</p>
+                            <p class="project-desc">Discord • マインクラフト同志</p>
                             <div class="project-tags">
-                                <span class="project-tag">Разработка</span>
+                                <span class="project-tag">開発中</span>
                                 <span class="project-tag">Java</span>
                             </div>
                         </div>
@@ -895,28 +933,28 @@
                     <div class="info-card fade-in">
                         <div class="card-header">
                             <div class="card-icon">
-                                <i class="fas fa-user"></i>
+                                <i class="fas fa-user-ninja"></i>
                             </div>
-                            <h3 class="card-title">Информация</h3>
+                            <h3 class="card-title">侍の素性</h3>
                         </div>
                         <ul class="info-list">
                             <li>
-                                <i class="fas fa-user"></i>
-                                <span><strong>Возраст:</strong> 15 лет</span>
+                                <i class="fas fa-birthday-cake"></i>
+                                <span><strong>年齢:</strong> 15才</span>
                             </li>
                             <li>
                                 <i class="fas fa-gamepad"></i>
-                                <span><strong>Игры:</strong> Minecraft, CS2</span>
+                                <span><strong>剣:</strong> Minecraft, CS2</span>
                             </li>
                             <li>
                                 <i class="fas fa-music"></i>
-                                <span><strong>Музыка:</strong> Alex G, wifiskeleton, s0rrow</span>
+                                <span><strong>音:</strong> Alex G, wifiskeleton, s0rrow</span>
                             </li>
                         </ul>
 
                         <div class="quote-box">
-                            <p class="quote-text">"Искал медь — сгорел медведь."</p>
-                            <p class="quote-author">— Великий ww123rov</p>
+                            <p class="quote-text">「銅を探した者は、熊となりて燃え尽きたり」</p>
+                            <p class="quote-author">— 偉大なる ww123rov</p>
                         </div>
                     </div>
                 </div>
@@ -928,11 +966,11 @@
                             <div class="card-icon">
                                 <i class="fas fa-chart-bar"></i>
                             </div>
-                            <h3 class="card-title">Статистика</h3>
+                            <h3 class="card-title">戦闘統計</h3>
                         </div>
                         
                         <div style="margin-bottom: 30px;">
-                            <h4 style="color: #aaa; font-size: 0.95rem; margin-bottom: 20px;">В какие игры я больше всего играю</h4>
+                            <h4 style="color: #aaa; font-size: 0.95rem; margin-bottom: 20px;">最も修行した世界</h4>
                             <div class="stat-item-full">
                                 <div class="stat-header">
                                     <div class="stat-name">
@@ -988,7 +1026,7 @@
 
                         <div class="activity-box">
                             <div class="activity-number">100+</div>
-                            <div class="activity-text">сломанных режимов сна</div>
+                            <div class="activity-text">失われた睡眠の夜</div>
                         </div>
                     </div>
                 </div>
@@ -1000,16 +1038,16 @@
                             <div class="card-icon">
                                 <i class="fas fa-music"></i>
                             </div>
-                            <h3 class="card-title">Музыка</h3>
+                            <h3 class="card-title">音色</h3>
                         </div>
                         
                         <div class="music-placeholder">
                             <i class="fas fa-volume-mute"></i>
-                            <p style="color: #888; margin-bottom: 10px;">Не слушает музыку</p>
+                            <p style="color: #888; margin-bottom: 10px;">現在: 無音</p>
                         </div>
 
                         <div>
-                            <h4 style="color: #aaa; font-size: 0.95rem; margin-bottom: 15px; text-align: center;">Любимые исполнители:</h4>
+                            <h4 style="color: #aaa; font-size: 0.95rem; margin-bottom: 15px; text-align: center;">好みの奏者:</h4>
                             <div class="artist-tags">
                                 <span class="artist-tag">ooes</span>
                                 <span class="artist-tag">FEDUK</span>
@@ -1024,9 +1062,9 @@
 
         <!-- Футер -->
         <footer class="footer fade-in">
-            <p>PARADOX © 2024</p>
+            <p>桜の侍 PARADOX © 2024</p>
             <p style="opacity: 0.6; margin-top: 10px;">
-                Сделано с <i class="fas fa-heart" style="color: #666;"></i> в бело-серых тонах
+                淡き色で作られし <i class="fas fa-heart" style="color: #ff6b9d;"></i>
             </p>
         </footer>
     </div>
@@ -1040,7 +1078,7 @@
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
             
-            const letters = "01";
+            const letters = "あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをん01";
             const fontSize = 16;
             const columns = canvas.width / fontSize;
             const drops = [];
@@ -1053,18 +1091,16 @@
                 ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
                 
-                // Серые тона для матрицы
-                ctx.fillStyle = '#666';
-                ctx.font = `${fontSize}px monospace`;
+                ctx.fillStyle = '#ff6b9d';
+                ctx.font = `${fontSize}px 'Noto Sans JP'`;
                 
                 for(let i = 0; i < drops.length; i++) {
                     const text = letters.charAt(Math.floor(Math.random() * letters.length));
                     
-                    // Градиент от серого к белому
                     const gradient = ctx.createLinearGradient(0, drops[i] * fontSize, 0, drops[i] * fontSize + fontSize);
-                    gradient.addColorStop(0, '#888');
-                    gradient.addColorStop(0.5, '#aaa');
-                    gradient.addColorStop(1, '#ccc');
+                    gradient.addColorStop(0, '#ff6b9d');
+                    gradient.addColorStop(0.5, '#ffb6d9');
+                    gradient.addColorStop(1, '#ffc9e3');
                     ctx.fillStyle = gradient;
                     
                     ctx.fillText(text, i * fontSize, drops[i] * fontSize);
@@ -1092,7 +1128,6 @@
             const terminalLocation = document.getElementById('terminalLocation');
             
             try {
-                // Пробуем получить страну через Geolocation API
                 if (navigator.geolocation) {
                     return new Promise((resolve) => {
                         navigator.geolocation.getCurrentPosition(
@@ -1102,69 +1137,61 @@
                                         `https://nominatim.openstreetmap.org/reverse?format=json&lat=${position.coords.latitude}&lon=${position.coords.longitude}`
                                     );
                                     const data = await response.json();
-                                    const country = data.address.country || 'Неизвестная страна';
+                                    const country = data.address.country || '不明の地';
                                     resolve(country);
                                 } catch (error) {
-                                    // Если не получилось через координаты, пробуем через IP
                                     resolve(await getCountryByIP());
                                 }
                             },
                             async () => {
-                                // Если пользователь отказался от геолокации
                                 resolve(await getCountryByIP());
                             }
                         );
                     });
                 } else {
-                    // Если браузер не поддерживает геолокацию
                     return await getCountryByIP();
                 }
             } catch (error) {
-                return 'Неизвестная страна';
+                return '不明の地';
             }
         }
 
-        // Получение страны по IP
         async function getCountryByIP() {
             try {
                 const response = await fetch('https://ipapi.co/json/');
                 const data = await response.json();
-                return data.country_name || data.country || 'Неизвестная страна';
+                return data.country_name || data.country || '不明の地';
             } catch (error) {
                 try {
                     const response = await fetch('https://ipinfo.io/json');
                     const data = await response.json();
-                    return data.country || 'Неизвестная страна';
+                    return data.country || '不明の地';
                 } catch (error) {
-                    return 'Неизвестная страна';
+                    return '不明の地';
                 }
             }
         }
 
-        // Заставка
         const matrixScreen = document.getElementById('matrixScreen');
         const mainContent = document.getElementById('mainContent');
         const matrixEnterBtn = document.getElementById('matrixEnterBtn');
         
-        // Запускаем матричный эффект
         let matrixInterval;
         
-        // Инициализация при загрузке
         document.addEventListener('DOMContentLoaded', async () => {
-            // Запускаем матрицу
             matrixInterval = createMatrixEffect();
             
-            // Определяем страну
-            userLocation.innerHTML = 'ОПРЕДЕЛЯЕМ МЕСТОПОЖЕНИЕ<span class="loading-dots"></span>';
-            terminalLocation.textContent = 'SCANNING...';
+            const userLocation = document.getElementById('userLocation');
+            const terminalLocation = document.getElementById('terminalLocation');
+            
+            userLocation.innerHTML = '検査中<span class="loading-dots"></span>';
+            terminalLocation.textContent = 'スキャン中...';
             
             const country = await getUserCountry();
             
-            // Отображаем страну
             userLocation.innerHTML = `<span class="user-location">${country.toUpperCase()}</span>`;
             terminalLocation.textContent = country.toUpperCase();
             
-            // Анимация для кнопки
             matrixEnterBtn.addEventListener('mousedown', () => {
                 matrixEnterBtn.style.transform = 'scale(0.95)';
             });
@@ -1175,16 +1202,12 @@
                 matrixEnterBtn.style.transform = '';
             });
             
-            // Включаем кнопку после определения страны
             matrixEnterBtn.disabled = false;
         });
 
-        // Обработка входа
         matrixEnterBtn.addEventListener('click', () => {
-            // Останавливаем матричный эффект
             clearInterval(matrixInterval);
             
-            // Анимация исчезновения заставки
             matrixScreen.style.opacity = '0';
             matrixScreen.style.transition = 'opacity 1s ease';
             
@@ -1192,21 +1215,18 @@
                 matrixScreen.style.display = 'none';
                 mainContent.classList.add('show');
                 
-                // Включаем прокрутку
                 document.body.style.overflow = 'auto';
                 
-                // Запускаем анимации
                 initAnimations();
                 updateTime();
             }, 1000);
         });
 
-        // Время
         function updateTime() {
             const timeElement = document.getElementById('currentTime').querySelector('span');
             const update = () => {
                 const now = new Date();
-                const timeString = now.toLocaleTimeString("ru-RU", { 
+                const timeString = now.toLocaleTimeString("ja-JP", { 
                     timeZone: "Asia/Almaty",
                     hour12: false,
                     hour: '2-digit',
@@ -1219,9 +1239,7 @@
             setInterval(update, 1000);
         }
 
-        // Анимации появления
         function initAnimations() {
-            // Прогресс-бары
             document.querySelectorAll('.stat-fill').forEach(bar => {
                 const width = bar.getAttribute('data-width');
                 setTimeout(() => {
@@ -1229,7 +1247,6 @@
                 }, 500);
             });
             
-            // Анимация появления элементов при скролле
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
