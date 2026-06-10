@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>桜の侍 | PARADOX</title>
+    <title>PARADOX | 2026</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+JP:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@100;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -15,716 +15,559 @@
         }
 
         body {
-            font-family: 'Noto Sans JP', 'Inter', sans-serif;
-            background: #0a0a0a;
-            color: #f5f5f5;
+            font-family: 'Inter', sans-serif;
+            background: #000;
+            color: #fff;
             overflow-x: hidden;
             min-height: 100vh;
+            letter-spacing: 0.5px;
         }
 
-        /* Матричная заставка */
-        .matrix-screen {
+        /* Фоновые элементы 2026 стиля */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(0deg, transparent 24%, rgba(100, 200, 255, 0.05) 25%, rgba(100, 200, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(100, 200, 255, 0.05) 75%, rgba(100, 200, 255, 0.05) 76%, transparent 77%, transparent),
+                linear-gradient(90deg, transparent 24%, rgba(100, 200, 255, 0.05) 25%, rgba(100, 200, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(100, 200, 255, 0.05) 75%, rgba(100, 200, 255, 0.05) 76%, transparent 77%, transparent);
+            background-size: 50px 50px;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(255, 0, 200, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(0, 200, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 50% 20%, rgba(100, 255, 200, 0.1) 0%, transparent 50%);
+            z-index: -1;
+            pointer-events: none;
+            animation: bgShift 15s ease-in-out infinite;
+        }
+
+        @keyframes bgShift {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 0.8; }
+        }
+
+        /* Загрузочный экран */
+        .loading-screen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100vh;
             background: #000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             z-index: 9999;
+            gap: 30px;
+        }
+
+        .loading-text {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(90deg, #00d9ff, #ff00ff, #00d9ff);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 3s ease infinite;
+            letter-spacing: 3px;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .loading-bar {
+            width: 300px;
+            height: 3px;
+            background: rgba(0, 217, 255, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .loading-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 30%;
+            background: linear-gradient(90deg, transparent, #00d9ff, transparent);
+            animation: loading 2s infinite;
+        }
+
+        @keyframes loading {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .system-info {
+            font-size: 0.9rem;
+            color: #888;
+            font-family: 'Space Mono', monospace;
+            letter-spacing: 1px;
+        }
+
+        /* Основной контент */
+        .content {
+            position: relative;
+            opacity: 0;
+            animation: fadeIn 0.8s ease 2s forwards;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        /* Навигация */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 50px;
+            z-index: 100;
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 217, 255, 0.1);
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            font-size: 0.9rem;
+        }
+
+        .nav-link {
+            color: #aaa;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #00d9ff, #ff00ff);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-link:hover {
+            color: #fff;
+        }
+
+        /* Герой секция */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 100px 50px 50px;
+            position: relative;
             overflow: hidden;
         }
 
-        .matrix-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            filter: contrast(1.2) brightness(0.8);
-        }
-
-        .matrix-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
             align-items: center;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 1;
+            max-width: 1400px;
+            width: 100%;
         }
 
-        .matrix-title {
-            font-size: 5rem;
-            font-weight: 800;
-            color: #ffb6d9;
-            letter-spacing: 5px;
-            text-transform: uppercase;
+        .hero-left {
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-size: 6rem;
+            font-weight: 900;
+            line-height: 1.1;
             margin-bottom: 20px;
-            text-shadow: 0 0 20px rgba(255, 182, 217, 0.6);
-            position: relative;
-            animation: titleGlow 3s ease-in-out infinite;
-            font-family: 'Noto Sans JP', sans-serif;
+            letter-spacing: -2px;
         }
 
-        @keyframes titleGlow {
-            0%, 100% { text-shadow: 0 0 20px rgba(255, 182, 217, 0.6); }
-            50% { text-shadow: 0 0 30px rgba(255, 182, 217, 0.8), 0 0 40px rgba(255, 182, 217, 0.4); }
+        .title-gradient {
+            background: linear-gradient(90deg, #00d9ff, #ff00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        .matrix-kanji {
-            display: block;
-            font-size: 3rem;
-            color: #ffb6d9;
-            margin-bottom: 20px;
-            font-weight: 700;
-            text-shadow: 0 0 20px rgba(255, 182, 217, 0.6);
-        }
-
-        .matrix-user-info {
-            font-size: 1.2rem;
+        .hero-subtitle {
+            font-size: 1.3rem;
             color: #aaa;
-            margin-bottom: 10px;
-            letter-spacing: 1px;
-            text-align: center;
-            min-height: 30px;
-        }
-
-        .user-location {
-            color: #ffb6d9;
-            font-weight: 500;
-            animation: locationPulse 2s ease-in-out infinite;
-        }
-
-        @keyframes locationPulse {
-            0%, 100% { opacity: 0.8; }
-            50% { opacity: 1; }
-        }
-
-        .matrix-subtitle {
-            font-size: 1.1rem;
-            color: #888;
             margin-bottom: 40px;
-            letter-spacing: 2px;
-            text-align: center;
+            font-weight: 300;
+            letter-spacing: 1px;
         }
 
-        .matrix-enter-btn {
-            padding: 15px 60px;
-            background: transparent;
-            border: 2px solid #ffb6d9;
-            color: #ffb6d9;
-            font-size: 1.1rem;
-            font-weight: 500;
-            letter-spacing: 2px;
+        .hero-desc {
+            font-size: 1rem;
+            color: #ccc;
+            line-height: 1.8;
+            margin-bottom: 50px;
+            max-width: 500px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 50px;
+        }
+
+        .stat-card {
+            background: rgba(0, 217, 255, 0.05);
+            border: 1px solid rgba(0, 217, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            background: rgba(0, 217, 255, 0.1);
+            border-color: rgba(0, 217, 255, 0.4);
+            transform: translateY(-5px);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #00d9ff;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 600;
             cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, #00d9ff, #ff00ff);
+            color: #000;
+            border: 2px solid transparent;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 40px rgba(0, 217, 255, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #fff;
+            border: 2px solid #fff;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-3px);
+        }
+
+        .hero-right {
+            position: relative;
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .avatar-container {
+            position: relative;
+            width: 350px;
+            height: 350px;
+        }
+
+        .avatar-frame {
+            width: 100%;
+            height: 100%;
+            border: 2px solid #00d9ff;
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 0 50px rgba(0, 217, 255, 0.3);
+            animation: borderGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes borderGlow {
+            0%, 100% { box-shadow: 0 0 50px rgba(0, 217, 255, 0.3); }
+            50% { box-shadow: 0 0 80px rgba(255, 0, 255, 0.3); }
+        }
+
+        .avatar-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .avatar-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.1), rgba(255, 0, 255, 0.1));
+            pointer-events: none;
+        }
+
+        .status-indicator {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: #ff00ff;
+            border: 2px solid #000;
+            box-shadow: 0 0 20px #ff00ff;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 20px #ff00ff; }
+            50% { box-shadow: 0 0 40px #ff00ff; }
+        }
+
+        /* Секции */
+        .section {
+            padding: 150px 50px;
+            position: relative;
+        }
+
+        .section-title {
+            font-size: 4rem;
+            font-weight: 900;
+            margin-bottom: 80px;
+            text-align: center;
+            letter-spacing: -1px;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .project-card {
+            background: rgba(0, 217, 255, 0.05);
+            border: 1px solid rgba(0, 217, 255, 0.2);
+            padding: 40px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
-            text-transform: uppercase;
         }
 
-        .matrix-enter-btn:hover {
-            background: rgba(255, 182, 217, 0.1);
-            transform: translateY(-2px);
-            box-shadow: 0 0 30px rgba(255, 182, 217, 0.3);
-        }
-
-        .matrix-enter-btn::before {
+        .project-card::before {
             content: '';
             position: absolute;
             top: 0;
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 182, 217, 0.2), transparent);
-            transition: 0.5s;
+            background: linear-gradient(90deg, transparent, rgba(0, 217, 255, 0.1), transparent);
+            transition: left 0.5s ease;
         }
 
-        .matrix-enter-btn:hover::before {
+        .project-card:hover::before {
             left: 100%;
         }
 
-        .matrix-terminal {
-            position: absolute;
-            bottom: 50px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: #666;
-            font-size: 0.9rem;
-            text-align: center;
-            letter-spacing: 1px;
-            line-height: 1.5;
+        .project-card:hover {
+            background: rgba(0, 217, 255, 0.1);
+            border-color: rgba(0, 217, 255, 0.4);
+            transform: translateY(-10px);
         }
 
-        .loading-dots {
-            display: inline-block;
-            animation: dots 1.5s steps(5, end) infinite;
-        }
-
-        @keyframes dots {
-            0%, 20% { content: '.'; }
-            40% { content: '..'; }
-            60% { content: '...'; }
-            80%, 100% { content: ''; }
-        }
-
-        .loading-dots::after {
-            content: '';
-            animation: dots 1.5s steps(5, end) infinite;
-        }
-
-        /* Основной контент */
-        .main-content {
-            opacity: 0;
-            transition: opacity 1s ease;
-        }
-
-        .main-content.show {
-            opacity: 1;
-        }
-
-        /* Герой секция */
-        .hero-section {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-            padding: 20px;
-        }
-
-        .hero-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, #1a0a0f, #0a0a0a);
-            z-index: -1;
-        }
-
-        /* Сакура фон */
-        .sakura-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0.1;
-            z-index: -1;
-        }
-
-        .hero-grid {
-            display: grid;
-            grid-template-columns: auto 1fr;
-            gap: 60px;
-            align-items: center;
-            max-width: 1200px;
-            width: 100%;
-        }
-
-        .avatar-container {
-            position: relative;
-            width: 280px;
-            height: 280px;
-        }
-
-        .avatar-frame {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            border: 3px solid #ffb6d9;
-            padding: 10px;
-            position: relative;
-            animation: rotate 20s linear infinite;
-            box-shadow: 0 0 30px rgba(255, 182, 217, 0.3);
-        }
-
-        @keyframes rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .avatar-img {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid #333;
-        }
-
-        .status-dot {
-            position: absolute;
-            bottom: 30px;
-            right: 30px;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: #ff6b9d;
-            border: 3px solid #0a0a0a;
-            z-index: 2;
-            box-shadow: 0 0 15px rgba(255, 107, 157, 0.6);
-        }
-
-        .hero-info {
-            max-width: 600px;
-        }
-
-        .hero-title {
-            font-size: 4.5rem;
-            font-weight: 800;
-            color: #ffb6d9;
-            margin-bottom: 10px;
-            letter-spacing: 2px;
-            text-shadow: 0 0 20px rgba(255, 182, 217, 0.3);
-        }
-
-        .hero-kanji {
+        .project-icon {
             font-size: 2.5rem;
-            color: #ff6b9d;
-            font-weight: 700;
             margin-bottom: 20px;
-            font-family: 'Noto Sans JP';
+            color: #00d9ff;
         }
 
-        .hero-subtitle {
+        .project-title {
             font-size: 1.5rem;
-            color: #aaa;
-            margin-bottom: 30px;
-            font-weight: 300;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #fff;
         }
 
-        .hero-stats {
+        .project-desc {
+            color: #aaa;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .tech-tags {
             display: flex;
-            gap: 20px;
-            margin-bottom: 40px;
+            gap: 10px;
             flex-wrap: wrap;
         }
 
-        .stat-item {
-            padding: 10px 20px;
-            background: rgba(255, 182, 217, 0.05);
-            border: 1px solid #ff6b9d;
-            border-radius: 5px;
-            display: flex;
+        .tech-tag {
+            background: rgba(0, 217, 255, 0.1);
+            border: 1px solid rgba(0, 217, 255, 0.3);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: #00d9ff;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* About секция */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            max-width: 1200px;
+            margin: 0 auto;
             align-items: center;
-            gap: 10px;
-            font-size: 0.9rem;
-            color: #ffb6d9;
         }
 
-        .stat-item i {
-            color: #ff6b9d;
+        .about-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #00d9ff;
         }
 
-        .hero-description {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            color: #bbb;
-            margin-bottom: 40px;
-            max-width: 500px;
+        .about-content p {
+            color: #aaa;
+            line-height: 1.8;
+            margin-bottom: 20px;
         }
 
         .social-links {
             display: flex;
             gap: 15px;
-            flex-wrap: wrap;
+            margin-top: 30px;
         }
 
         .social-link {
             width: 50px;
             height: 50px;
-            border: 1px solid #ff6b9d;
+            border: 2px solid rgba(0, 217, 255, 0.3);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #ffb6d9;
+            color: #00d9ff;
             text-decoration: none;
             transition: all 0.3s ease;
             font-size: 1.2rem;
         }
 
         .social-link:hover {
-            border-color: #ffb6d9;
-            color: #fff;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 20px rgba(255, 182, 217, 0.3);
-            background: rgba(255, 182, 217, 0.1);
+            background: rgba(0, 217, 255, 0.1);
+            border-color: #00d9ff;
+            transform: translateY(-5px);
         }
 
-        /* Логотип NameMC */
-        .namemc-logo {
-            font-family: 'Arial Black', sans-serif;
-            font-weight: 900;
-            font-size: 1.3rem;
-            color: #fff;
-            background: linear-gradient(135deg, #ff6b9d, #ffb6d9);
-            border-radius: 3px;
-            padding: 2px 5px;
+        /* Stats секция */
+        .stats-section {
+            background: rgba(0, 217, 255, 0.05);
+            border-top: 1px solid rgba(0, 217, 255, 0.2);
+            border-bottom: 1px solid rgba(0, 217, 255, 0.2);
         }
 
-        /* Секции */
-        .content-section {
-            padding: 100px 20px;
-            position: relative;
-        }
-
-        .section-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #0a0a0a;
-            z-index: -1;
-        }
-
-        .section-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #ffb6d9;
-            margin-bottom: 50px;
-            text-align: center;
-            letter-spacing: 1px;
-            font-family: 'Noto Sans JP';
-        }
-
-        .section-grid {
+        .stats-container {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
             max-width: 1200px;
             margin: 0 auto;
         }
 
-        .projects-column {
-            grid-column: 1;
+        .stat-item {
+            text-align: center;
         }
 
-        .info-column {
-            grid-column: 2;
-        }
-
-        .stats-full-width {
-            grid-column: 1 / -1;
-            margin-top: 30px;
-        }
-
-        .music-center {
-            grid-column: 1 / -1;
-            max-width: 600px;
-            margin: 30px auto 0;
-        }
-
-        /* Карточки */
-        .info-card {
-            background: rgba(255, 182, 217, 0.02);
-            border: 1px solid #ff6b9d;
-            border-radius: 10px;
-            padding: 30px;
-            transition: all 0.3s ease;
-            height: 100%;
-            box-shadow: 0 0 20px rgba(255, 182, 217, 0.1);
-        }
-
-        .info-card:hover {
-            transform: translateY(-10px);
-            border-color: #ffb6d9;
-            box-shadow: 0 20px 40px rgba(255, 107, 157, 0.2);
-        }
-
-        .card-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #ff6b9d;
-        }
-
-        .card-icon {
-            width: 50px;
-            height: 50px;
-            border: 1px solid #ff6b9d;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #ffb6d9;
-            font-size: 1.5rem;
-        }
-
-        .card-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: #ffb6d9;
-            font-family: 'Noto Sans JP';
-        }
-
-        /* Информация */
-        .info-list {
-            list-style: none;
-        }
-
-        .info-list li {
-            padding: 12px 0;
-            border-bottom: 1px solid #333;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: #bbb;
-        }
-
-        .info-list li:last-child {
-            border-bottom: none;
-        }
-
-        .info-list i {
-            color: #ff6b9d;
-            width: 20px;
-        }
-
-        /* Проекты */
-        .project-card {
-            background: rgba(255, 182, 217, 0.02);
-            border: 1px solid #333;
-            border-radius: 10px;
-            padding: 25px;
-            transition: all 0.3s ease;
-            margin-bottom: 20px;
-        }
-
-        .project-card:last-child {
-            margin-bottom: 0;
-        }
-
-        .project-card:hover {
-            border-color: #ff6b9d;
-            box-shadow: 0 0 20px rgba(255, 107, 157, 0.1);
-        }
-
-        .project-icon {
-            width: 60px;
-            height: 60px;
-            border: 1px solid #ff6b9d;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-            font-size: 1.8rem;
-            color: #ffb6d9;
-        }
-
-        .project-title {
-            font-size: 1.4rem;
-            font-weight: 600;
-            color: #ffb6d9;
-            margin-bottom: 10px;
-            font-family: 'Noto Sans JP';
-        }
-
-        .project-desc {
-            font-size: 0.95rem;
-            color: #aaa;
-            margin-bottom: 20px;
-            line-height: 1.5;
-        }
-
-        .project-tags {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .project-tag {
-            padding: 5px 12px;
-            background: rgba(255, 182, 217, 0.05);
-            border: 1px solid #ff6b9d;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            color: #ffb6d9;
-        }
-
-        /* Статистика */
-        .stat-card {
-            background: rgba(255, 182, 217, 0.02);
-            border: 1px solid #ff6b9d;
-            border-radius: 10px;
-            padding: 30px;
-            box-shadow: 0 0 20px rgba(255, 182, 217, 0.1);
-        }
-
-        .stat-item-full {
-            margin-bottom: 25px;
-        }
-
-        .stat-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(90deg, #00d9ff, #ff00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             margin-bottom: 10px;
         }
 
         .stat-name {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: #bbb;
-            font-size: 0.95rem;
-        }
-
-        .stat-name i {
-            color: #ff6b9d;
-        }
-
-        .stat-value {
-            color: #ffb6d9;
-            font-weight: 600;
-        }
-
-        .stat-bar {
-            height: 8px;
-            background: #222;
-            border-radius: 4px;
-            overflow: hidden;
-            border: 1px solid #333;
-        }
-
-        .stat-fill {
-            height: 100%;
-            border-radius: 4px;
-            transition: width 1s ease;
-            position: relative;
-        }
-
-        .stat-fill.minecraft {
-            background: linear-gradient(90deg, #ff6b9d, #ffb6d9, #ffc9e3);
-        }
-
-        .stat-fill.cs2 {
-            background: linear-gradient(90deg, #ff5a8a, #ffb6d9, #ffb6d9);
-        }
-
-        .stat-fill.fortnite {
-            background: linear-gradient(90deg, #ff6b9d, #ff8db3, #ffb6d9);
-        }
-
-        .stat-fill.rust {
-            background: linear-gradient(90deg, #ff4d6d, #ffb6d9, #ffc9e3);
-        }
-
-        .stat-fill::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(90deg, 
-                transparent 0%, 
-                rgba(255, 255, 255, 0.2) 50%, 
-                transparent 100%);
-            animation: shimmer 2s infinite;
-        }
-
-        @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-
-        .activity-box {
-            text-align: center;
-            padding: 25px;
-            border: 1px solid #ff6b9d;
-            border-radius: 10px;
-            background: rgba(255, 182, 217, 0.02);
-            margin-top: 30px;
-        }
-
-        .activity-number {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #ffb6d9;
-            margin-bottom: 10px;
-        }
-
-        .activity-text {
+            font-size: 1rem;
             color: #aaa;
-            font-size: 0.95rem;
-        }
-
-        /* Музыка */
-        .music-card {
-            background: rgba(255, 182, 217, 0.02);
-            border: 1px solid #ff6b9d;
-            border-radius: 10px;
-            padding: 30px;
-            text-align: center;
-            box-shadow: 0 0 20px rgba(255, 182, 217, 0.1);
-        }
-
-        .music-placeholder {
-            padding: 30px 20px;
-            color: #888;
-        }
-
-        .music-placeholder i {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            color: #ff6b9d;
-            opacity: 0.7;
-        }
-
-        .artist-tags {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-top: 25px;
-        }
-
-        .artist-tag {
-            padding: 8px 16px;
-            background: rgba(255, 182, 217, 0.05);
-            border: 1px solid #ff6b9d;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            color: #ffb6d9;
-        }
-
-        /* Цитата */
-        .quote-box {
-            border-left: 3px solid #ff6b9d;
-            padding-left: 20px;
-            margin: 30px 0;
-        }
-
-        .quote-text {
-            font-style: italic;
-            color: #bbb;
-            line-height: 1.6;
-            margin-bottom: 10px;
-        }
-
-        .quote-author {
-            color: #888;
-            font-size: 0.9rem;
-            text-align: right;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         /* Футер */
         .footer {
-            padding: 60px 20px;
+            padding: 60px 50px;
             text-align: center;
-            border-top: 1px solid #ff6b9d;
-            color: #666;
+            border-top: 1px solid rgba(0, 217, 255, 0.1);
+            color: #888;
             font-size: 0.9rem;
         }
 
@@ -732,45 +575,39 @@
             margin-bottom: 10px;
         }
 
-        /* Анимации появления */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
-        }
-
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
         /* Адаптив */
         @media (max-width: 1024px) {
-            .hero-grid {
+            .hero-content {
                 grid-template-columns: 1fr;
-                text-align: center;
                 gap: 40px;
             }
 
-            .avatar-container {
-                margin: 0 auto;
+            .hero-title {
+                font-size: 4rem;
             }
 
-            .hero-stats {
-                justify-content: center;
-            }
-
-            .social-links {
-                justify-content: center;
-            }
-
-            .section-grid {
+            .projects-grid {
                 grid-template-columns: 1fr;
             }
 
-            .projects-column,
-            .info-column {
-                grid-column: 1;
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .nav {
+                padding: 0 30px;
+            }
+
+            .section {
+                padding: 100px 30px;
+            }
+
+            .hero {
+                padding: 100px 30px 50px;
             }
         }
 
@@ -779,95 +616,190 @@
                 font-size: 3rem;
             }
 
-            .matrix-title {
-                font-size: 3rem;
+            .section-title {
+                font-size: 2.5rem;
             }
 
-            .section-title {
-                font-size: 2rem;
+            .nav-links {
+                gap: 20px;
+                font-size: 0.8rem;
+            }
+
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+
+            .hero-right {
+                display: none;
             }
         }
 
         @media (max-width: 480px) {
             .hero-title {
-                font-size: 2.5rem;
+                font-size: 2.2rem;
             }
 
-            .matrix-title {
-                font-size: 2.5rem;
+            .section-title {
+                font-size: 1.8rem;
             }
 
-            .avatar-container {
-                width: 200px;
-                height: 200px;
+            .nav {
+                padding: 0 20px;
+                height: 70px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .section {
+                padding: 80px 20px;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Матричная заставка -->
-    <div class="matrix-screen" id="matrixScreen">
-        <canvas class="matrix-canvas" id="matrixCanvas"></canvas>
-        <div class="matrix-overlay">
-            <span class="matrix-kanji">桜の侍</span>
-            <h1 class="matrix-title">PARADOX</h1>
-            <div class="matrix-user-info">
-                > ユーザー位置: <span id="userLocation" class="user-location">検査中<span class="loading-dots"></span></span>
-            </div>
-            <p class="matrix-subtitle">入力してシステムに入る</p>
-            <button class="matrix-enter-btn" id="matrixEnterBtn">
-                ENTER
-            </button>
-            <div class="matrix-terminal">
-                > SYSTEM: SAKURA_OS v2.0<br>
-                > STATUS: OFFLINE<br>
-                > USER_LOCATION: <span id="terminalLocation">スキャン中...</span>
-            </div>
-        </div>
+    <div class="bg-grid"></div>
+    <div class="animated-bg"></div>
+
+    <!-- Загрузочный экран -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-text">PARADOX</div>
+        <div class="loading-bar"></div>
+        <div class="system-info">INITIALIZING SYSTEM... PARADOX_v2026</div>
     </div>
 
-    <!-- Основной контент -->
-    <div class="main-content" id="mainContent">
-        <!-- Герой секция -->
-        <section class="hero-section">
-            <div class="hero-bg"></div>
-            <div class="hero-grid fade-in">
-                <div class="avatar-container">
-                    <div class="avatar-frame">
-                        <img src="logo.png" alt="PARADOX" class="avatar-img">
-                    </div>
-                    <div class="status-dot"></div>
-                </div>
+    <!-- Контент -->
+    <div class="content" id="mainContent">
+        <!-- Навигация -->
+        <nav class="nav">
+            <div class="logo">PARADOX</div>
+            <div class="nav-links">
+                <a href="#projects" class="nav-link">Projects</a>
+                <a href="#about" class="nav-link">About</a>
+                <a href="#contact" class="nav-link">Contact</a>
+            </div>
+        </nav>
 
-                <div class="hero-info">
-                    <div class="hero-kanji">⚔️ 侍</div>
-                    <h1 class="hero-title">PARADOX</h1>
-                    <p class="hero-subtitle">桜の下の浪人</p>
-                    
-                    <div class="hero-stats">
-                        <div class="stat-item">
-                            <i class="fas fa-circle"></i>
-                            <span>オフライン</span>
-                        </div>
-                        <div class="stat-item">
-                            <i class="fas fa-microchip"></i>
-                            <span>Ryzen 5 3600 | 16 GB</span>
-                        </div>
-                        <div class="stat-item">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <span>カザフスタン</span>
-                        </div>
-                        <div class="stat-item" id="currentTime">
-                            <i class="fas fa-clock"></i>
-                            <span>誕生日: 3月13日</span>
-                        </div>
-                    </div>
-
-                    <p class="hero-description">
-                        インターネットの侍。マインクラフトの刃。音楽とゲームの世界で剣を磨く15歳の浪人。
-                        桜の季節に生まれし者。
+        <!-- Герой -->
+        <section class="hero">
+            <div class="hero-content">
+                <div class="hero-left">
+                    <h1 class="hero-title">
+                        <span class="title-gradient">PARADOX</span>
+                    </h1>
+                    <p class="hero-subtitle">Digital wanderer & gaming enthusiast</p>
+                    <p class="hero-desc">
+                        15-year-old from Kazakhstan. Grinding through Minecraft and CS2 like there's no tomorrow. Into dark music, broken sleep schedules, and digital experiments.
                     </p>
 
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-label">Status</div>
+                            <div class="stat-value">OFFLINE</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Location</div>
+                            <div class="stat-value">KZ</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Born</div>
+                            <div class="stat-value">MAR 13</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Setup</div>
+                            <div class="stat-value">RYZEN 5</div>
+                        </div>
+                    </div>
+
+                    <div class="cta-buttons">
+                        <a href="#projects" class="btn btn-primary">Explore</a>
+                        <a href="#contact" class="btn btn-secondary">Connect</a>
+                    </div>
+                </div>
+
+                <div class="hero-right">
+                    <div class="avatar-container">
+                        <div class="avatar-frame">
+                            <img src="logo.png" alt="PARADOX" class="avatar-img">
+                            <div class="avatar-overlay"></div>
+                        </div>
+                        <div class="status-indicator"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Проекты -->
+        <section class="section" id="projects">
+            <h2 class="section-title">Projects</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <div class="project-icon">
+                        <i class="fab fa-telegram"></i>
+                    </div>
+                    <h3 class="project-title">Paradox Garden</h3>
+                    <p class="project-desc">Personal telegram channel. A digital space for thoughts, experiments, and random musings.</p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Telegram</span>
+                        <span class="tech-tag">Active</span>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-icon">
+                        <i class="fab fa-discord"></i>
+                    </div>
+                    <h3 class="project-title">Lunar Client</h3>
+                    <p class="project-desc">Minecraft client development. Crafting a better gaming experience for the community.</p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Java</span>
+                        <span class="tech-tag">In Development</span>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-icon">
+                        <i class="fas fa-gamepad"></i>
+                    </div>
+                    <h3 class="project-title">Gaming Archives</h3>
+                    <p class="project-desc">Collection of gaming experiences across Minecraft, CS2, and Fortnite universes.</p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Minecraft</span>
+                        <span class="tech-tag">CS2</span>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-icon">
+                        <i class="fas fa-music"></i>
+                    </div>
+                    <h3 class="project-title">Sonic Library</h3>
+                    <p class="project-desc">Curated collection of underground artists. ooes, FEDUK, blago white, Sadsvit and beyond.</p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Music</span>
+                        <span class="tech-tag">Curation</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About -->
+        <section class="section" id="about">
+            <h2 class="section-title">About Me</h2>
+            <div class="about-grid">
+                <div class="about-content">
+                    <h3>The Person Behind PARADOX</h3>
+                    <p>
+                        I'm a 15-year-old gamer and digital enthusiast from Kazakhstan. My life revolves around pixels, sound waves, and the occasional existential crisis at 3 AM.
+                    </p>
+                    <p>
+                        Minecraft is my second home. CS2 is my arena. Music is my escape. And the internet? It's my playground.
+                    </p>
+                    <p>
+                        Always looking for the next project, the next challenge, the next rabbit hole to fall into.
+                    </p>
                     <div class="social-links">
                         <a href="https://discord.com/users/1312012805913837608" target="_blank" class="social-link">
                             <i class="fab fa-discord"></i>
@@ -879,389 +811,106 @@
                             <i class="fab fa-youtube"></i>
                         </a>
                         <a href="https://ru.namemc.com/profile/LuckyParadox.1" target="_blank" class="social-link">
-                            <span class="namemc-logo">N</span>
+                            <i class="fas fa-n"></i>
                         </a>
                     </div>
+                </div>
+                <div class="about-content">
+                    <h3>Favorite Games</h3>
+                    <p><strong>Minecraft:</strong> 60% — Building, exploring, surviving. It's therapeutic.</p>
+                    <p><strong>Counter-Strike 2:</strong> 30% — Competitive. Fast. Brutal. I love it.</p>
+                    <p><strong>Fortnite:</strong> 8% — For when I want something different.</p>
+                    <p><strong>Rust:</strong> 2% — Rarely, but when I do...</p>
+                    
+                    <h3 style="margin-top: 40px;">Music Taste</h3>
+                    <p>
+                        ooes, FEDUK, blago white, Sadsvit, wifiskeleton, s0rrow, and Alex G
+                    </p>
+                    <p style="font-size: 0.9rem; color: #888; margin-top: 20px;">
+                        <em>"Ищу медь — сгорел медведь"</em> — ww123rov
+                    </p>
                 </div>
             </div>
         </section>
 
-        <!-- Контент секция -->
-        <section class="content-section">
-            <div class="section-bg"></div>
-            <h2 class="section-title fade-in">侍の道</h2>
-            
-            <div class="section-grid">
-                <!-- Проекты слева -->
-                <div class="projects-column">
-                    <div class="info-card fade-in">
-                        <div class="card-header">
-                            <div class="card-icon">
-                                <i class="fas fa-scroll"></i>
-                            </div>
-                            <h3 class="card-title">修行</h3>
-                        </div>
-                        
-                        <div class="project-card">
-                            <div class="project-icon">
-                                <i class="fab fa-telegram"></i>
-                            </div>
-                            <h4 class="project-title">パラドックスの庭園</h4>
-                            <p class="project-desc">Telegram • 個人の修行の地</p>
-                            <div class="project-tags">
-                                <span class="project-tag">活動中</span>
-                                <span class="project-tag">非公開</span>
-                            </div>
-                        </div>
-
-                        <div class="project-card">
-                            <div class="project-icon">
-                                <i class="fab fa-discord"></i>
-                            </div>
-                            <h4 class="project-title">Lunar Client</h4>
-                            <p class="project-desc">Discord • マインクラフト同志</p>
-                            <div class="project-tags">
-                                <span class="project-tag">開発中</span>
-                                <span class="project-tag">Java</span>
-                            </div>
-                        </div>
-                    </div>
+        <!-- Stats -->
+        <section class="section stats-section">
+            <div class="stats-container">
+                <div class="stat-item">
+                    <div class="stat-number">15</div>
+                    <div class="stat-name">Years Old</div>
                 </div>
-
-                <!-- Информация по центру -->
-                <div class="info-column">
-                    <div class="info-card fade-in">
-                        <div class="card-header">
-                            <div class="card-icon">
-                                <i class="fas fa-user-ninja"></i>
-                            </div>
-                            <h3 class="card-title">侍の素性</h3>
-                        </div>
-                        <ul class="info-list">
-                            <li>
-                                <i class="fas fa-birthday-cake"></i>
-                                <span><strong>年齢:</strong> 15才</span>
-                            </li>
-                            <li>
-                                <i class="fas fa-gamepad"></i>
-                                <span><strong>剣:</strong> Minecraft, CS2</span>
-                            </li>
-                            <li>
-                                <i class="fas fa-music"></i>
-                                <span><strong>音:</strong> Alex G, wifiskeleton, s0rrow</span>
-                            </li>
-                        </ul>
-
-                        <div class="quote-box">
-                            <p class="quote-text">「銅を探した者は、熊となりて燃え尽きたり」</p>
-                            <p class="quote-author">— 偉大なる ww123rov</p>
-                        </div>
-                    </div>
+                <div class="stat-item">
+                    <div class="stat-number">100+</div>
+                    <div class="stat-name">Broken Sleeps</div>
                 </div>
-
-                <!-- Статистика -->
-                <div class="stats-full-width">
-                    <div class="stat-card fade-in">
-                        <div class="card-header">
-                            <div class="card-icon">
-                                <i class="fas fa-chart-bar"></i>
-                            </div>
-                            <h3 class="card-title">戦闘統計</h3>
-                        </div>
-                        
-                        <div style="margin-bottom: 30px;">
-                            <h4 style="color: #aaa; font-size: 0.95rem; margin-bottom: 20px;">最も修行した世界</h4>
-                            <div class="stat-item-full">
-                                <div class="stat-header">
-                                    <div class="stat-name">
-                                        <i class="fas fa-cube"></i>
-                                        <span>Minecraft</span>
-                                    </div>
-                                    <div class="stat-value">60%</div>
-                                </div>
-                                <div class="stat-bar">
-                                    <div class="stat-fill minecraft" data-width="60"></div>
-                                </div>
-                            </div>
-                            
-                            <div class="stat-item-full">
-                                <div class="stat-header">
-                                    <div class="stat-name">
-                                        <i class="fas fa-crosshairs"></i>
-                                        <span>Counter-Strike 2</span>
-                                    </div>
-                                    <div class="stat-value">30%</div>
-                                </div>
-                                <div class="stat-bar">
-                                    <div class="stat-fill cs2" data-width="30"></div>
-                                </div>
-                            </div>
-                            
-                            <div class="stat-item-full">
-                                <div class="stat-header">
-                                    <div class="stat-name">
-                                        <i class="fas fa-bolt"></i>
-                                        <span>Fortnite</span>
-                                    </div>
-                                    <div class="stat-value">8%</div>
-                                </div>
-                                <div class="stat-bar">
-                                    <div class="stat-fill fortnite" data-width="8"></div>
-                                </div>
-                            </div>
-                            
-                            <div class="stat-item-full">
-                                <div class="stat-header">
-                                    <div class="stat-name">
-                                        <i class="fas fa-skull"></i>
-                                        <span>Rust</span>
-                                    </div>
-                                    <div class="stat-value">2%</div>
-                                </div>
-                                <div class="stat-bar">
-                                    <div class="stat-fill rust" data-width="2"></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="activity-box">
-                            <div class="activity-number">100+</div>
-                            <div class="activity-text">失われた睡眠の夜</div>
-                        </div>
-                    </div>
+                <div class="stat-item">
+                    <div class="stat-number">2024</div>
+                    <div class="stat-name">Since Start</div>
                 </div>
-
-                <!-- Музыка по центру -->
-                <div class="music-center">
-                    <div class="music-card fade-in">
-                        <div class="card-header" style="justify-content: center; border-bottom: none; margin-bottom: 10px;">
-                            <div class="card-icon">
-                                <i class="fas fa-music"></i>
-                            </div>
-                            <h3 class="card-title">音色</h3>
-                        </div>
-                        
-                        <div class="music-placeholder">
-                            <i class="fas fa-volume-mute"></i>
-                            <p style="color: #888; margin-bottom: 10px;">現在: 無音</p>
-                        </div>
-
-                        <div>
-                            <h4 style="color: #aaa; font-size: 0.95rem; margin-bottom: 15px; text-align: center;">好みの奏者:</h4>
-                            <div class="artist-tags">
-                                <span class="artist-tag">ooes</span>
-                                <span class="artist-tag">FEDUK</span>
-                                <span class="artist-tag">blago white</span>
-                                <span class="artist-tag">Sadsvit</span>
-                            </div>
-                        </div>
-                    </div>
+                <div class="stat-item">
+                    <div class="stat-number">∞</div>
+                    <div class="stat-name">Curiosity</div>
                 </div>
             </div>
         </section>
 
         <!-- Футер -->
-        <footer class="footer fade-in">
-            <p>桜の侍 PARADOX © 2024</p>
-            <p style="opacity: 0.6; margin-top: 10px;">
-                淡き色で作られし <i class="fas fa-heart" style="color: #ff6b9d;"></i>
-            </p>
+        <footer class="footer" id="contact">
+            <p>PARADOX © 2024-2026</p>
+            <p style="opacity: 0.6;">Built with passion. No sleep. Pure vibes.</p>
         </footer>
     </div>
 
     <script>
-        // Matrix эффект
-        function createMatrixEffect() {
-            const canvas = document.getElementById('matrixCanvas');
-            const ctx = canvas.getContext('2d');
-            
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            
-            const letters = "あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをん01";
-            const fontSize = 16;
-            const columns = canvas.width / fontSize;
-            const drops = [];
-            
-            for(let i = 0; i < columns; i++) {
-                drops[i] = Math.random() * canvas.height;
-            }
-            
-            function draw() {
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                
-                ctx.fillStyle = '#ff6b9d';
-                ctx.font = `${fontSize}px 'Noto Sans JP'`;
-                
-                for(let i = 0; i < drops.length; i++) {
-                    const text = letters.charAt(Math.floor(Math.random() * letters.length));
-                    
-                    const gradient = ctx.createLinearGradient(0, drops[i] * fontSize, 0, drops[i] * fontSize + fontSize);
-                    gradient.addColorStop(0, '#ff6b9d');
-                    gradient.addColorStop(0.5, '#ffb6d9');
-                    gradient.addColorStop(1, '#ffc9e3');
-                    ctx.fillStyle = gradient;
-                    
-                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                    
-                    if(drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                        drops[i] = 0;
-                    }
-                    drops[i]++;
-                }
-            }
-            
-            const matrixInterval = setInterval(draw, 35);
-            
-            window.addEventListener('resize', () => {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-            });
-            
-            return matrixInterval;
-        }
-
-        // Определение страны пользователя
-        async function getUserCountry() {
-            const userLocation = document.getElementById('userLocation');
-            const terminalLocation = document.getElementById('terminalLocation');
-            
-            try {
-                if (navigator.geolocation) {
-                    return new Promise((resolve) => {
-                        navigator.geolocation.getCurrentPosition(
-                            async (position) => {
-                                try {
-                                    const response = await fetch(
-                                        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${position.coords.latitude}&lon=${position.coords.longitude}`
-                                    );
-                                    const data = await response.json();
-                                    const country = data.address.country || '不明の地';
-                                    resolve(country);
-                                } catch (error) {
-                                    resolve(await getCountryByIP());
-                                }
-                            },
-                            async () => {
-                                resolve(await getCountryByIP());
-                            }
-                        );
-                    });
-                } else {
-                    return await getCountryByIP();
-                }
-            } catch (error) {
-                return '不明の地';
-            }
-        }
-
-        async function getCountryByIP() {
-            try {
-                const response = await fetch('https://ipapi.co/json/');
-                const data = await response.json();
-                return data.country_name || data.country || '不明の地';
-            } catch (error) {
-                try {
-                    const response = await fetch('https://ipinfo.io/json');
-                    const data = await response.json();
-                    return data.country || '不明の地';
-                } catch (error) {
-                    return '不明の地';
-                }
-            }
-        }
-
-        const matrixScreen = document.getElementById('matrixScreen');
-        const mainContent = document.getElementById('mainContent');
-        const matrixEnterBtn = document.getElementById('matrixEnterBtn');
-        
-        let matrixInterval;
-        
-        document.addEventListener('DOMContentLoaded', async () => {
-            matrixInterval = createMatrixEffect();
-            
-            const userLocation = document.getElementById('userLocation');
-            const terminalLocation = document.getElementById('terminalLocation');
-            
-            userLocation.innerHTML = '検査中<span class="loading-dots"></span>';
-            terminalLocation.textContent = 'スキャン中...';
-            
-            const country = await getUserCountry();
-            
-            userLocation.innerHTML = `<span class="user-location">${country.toUpperCase()}</span>`;
-            terminalLocation.textContent = country.toUpperCase();
-            
-            matrixEnterBtn.addEventListener('mousedown', () => {
-                matrixEnterBtn.style.transform = 'scale(0.95)';
-            });
-            matrixEnterBtn.addEventListener('mouseup', () => {
-                matrixEnterBtn.style.transform = '';
-            });
-            matrixEnterBtn.addEventListener('mouseleave', () => {
-                matrixEnterBtn.style.transform = '';
-            });
-            
-            matrixEnterBtn.disabled = false;
-        });
-
-        matrixEnterBtn.addEventListener('click', () => {
-            clearInterval(matrixInterval);
-            
-            matrixScreen.style.opacity = '0';
-            matrixScreen.style.transition = 'opacity 1s ease';
-            
+        // Загрузочный экран
+        window.addEventListener('load', () => {
             setTimeout(() => {
-                matrixScreen.style.display = 'none';
-                mainContent.classList.add('show');
+                const loadingScreen = document.getElementById('loadingScreen');
+                const mainContent = document.getElementById('mainContent');
                 
-                document.body.style.overflow = 'auto';
+                loadingScreen.style.opacity = '0';
+                loadingScreen.style.transition = 'opacity 0.5s ease';
                 
-                initAnimations();
-                updateTime();
-            }, 1000);
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                }, 500);
+            }, 2000);
         });
 
-        function updateTime() {
-            const timeElement = document.getElementById('currentTime').querySelector('span');
-            const update = () => {
-                const now = new Date();
-                const timeString = now.toLocaleTimeString("ja-JP", { 
-                    timeZone: "Asia/Almaty",
-                    hour12: false,
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit'
-                });
-                timeElement.textContent = timeString;
-            };
-            update();
-            setInterval(update, 1000);
-        }
-
-        function initAnimations() {
-            document.querySelectorAll('.stat-fill').forEach(bar => {
-                const width = bar.getAttribute('data-width');
-                setTimeout(() => {
-                    bar.style.width = width + '%';
-                }, 500);
-            });
-            
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
+        // Smooth scroll для навигации
+        document.querySelectorAll('a[href^="#"]').forEach(link => {
+            link.addEventListener('click', (e) => {
+                const href = link.getAttribute('href');
+                if (href !== '#') {
+                    e.preventDefault();
+                    const element = document.querySelector(href);
+                    if (element) {
+                        element.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
                     }
-                });
-            }, {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
+                }
             });
-            
-            document.querySelectorAll('.fade-in').forEach(el => {
-                observer.observe(el);
+        });
+
+        // Анимация при скролле
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
             });
-        }
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.project-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(card);
+        });
     </script>
 </body>
 </html>
