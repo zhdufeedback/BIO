@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>BIO by PARADOX</title>
+    <title>PARADOX | Путь самурая</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -317,6 +317,13 @@
             background: rgba(0,0,0,0.2);
             border-radius: 18px;
             padding: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .project-item:hover {
+            background: rgba(226,161,176,0.1);
+            transform: translateX(5px);
         }
 
         .project-title {
@@ -380,17 +387,18 @@
             margin-top: 25px;
         }
 
-        .music-center {
-            max-width: 550px;
-            margin: 40px auto 0;
-        }
-
         .quote-samurai {
             border-left: 3px solid #e2a1b0;
             background: rgba(226,161,176,0.05);
             padding: 18px;
             margin-top: 25px;
             font-style: italic;
+        }
+
+        .music-player-container {
+            max-width: 600px;
+            margin: 0 auto;
+            grid-column: span 2;
         }
 
         .footer-samurai {
@@ -414,6 +422,9 @@
             .social-links-jp { justify-content: center; }
             .avatar-katana { margin: 0 auto; }
             .hero-sub { text-align: left; }
+            .music-player-container {
+                grid-column: span 1;
+            }
         }
 
         .fade-up {
@@ -424,6 +435,12 @@
         .fade-up.visible {
             opacity: 1;
             transform: translateY(0);
+        }
+
+        /* Стиль для SoundCloud embed */
+        iframe[src*="soundcloud"] {
+            border-radius: 18px;
+            border: 1px solid #38242a;
         }
     </style>
 </head>
@@ -439,11 +456,11 @@
             <span id="screenUserLoc" class="highlight-loc">СКАНИРОВАНИЕ...</span>
         </div>
         <div class="sakura-location-box" style="font-size:0.8rem;">
-            La felicità ama il silenzio
+            ⚔️  ДЕРЗНИ — И САКУРА УКАЖЕТ ПУТЬ  ⚔️
         </div>
-        <button class="enter-samurai" id="enterBtn"> ВОЙТИ </button>
+        <button class="enter-samurai" id="enterBtn"> ВЗЯТЬ КАТАНУ </button>
         <div class="status-terminal">
-            >  СИСТЕМА: PARADOX v2.0 <br>
+            >  СИСТЕМА: ДУХ САМУРАЯ v2.0 <br>
             >  МЕСТО: <span id="termLocSpan">ОПРЕДЕЛЯЮ...</span>
         </div>
     </div>
@@ -467,17 +484,16 @@
                     <div class="stat-pill"><i class="fas fa-circle" style="color:#e2a1b0;"></i> Оффлайн</div>
                     <div class="stat-pill"><i class="fas fa-microchip"></i> Ryzen 5 3600 | 16 ГБ</div>
                     <div class="stat-pill"><i class="fas fa-map-marker-alt"></i> <span id="heroCountryDisplay">Казахстан</span></div>
-                    <div class="stat-pill"><i class="fas fa-birthday-cake"></i> Днюха: 13 марта</div>
                 </div>
                 <p class="description-text">
                     Обычный типок, который страдает фигнёй в интернете. Страшный майнкрафтер. 
-                    Любит музыку и игры. Родился 13 марта, следует кодексу самурая с примесью хаоса.
+                    Любит музыку и игры. Следует кодексу самурая с примесью хаоса.
                 </p>
                 <div class="social-links-jp">
                     <a href="https://t.me/luckyametist" target="_blank" class="soc-icon" id="tgLinkBtn"><i class="fab fa-telegram"></i></a>
                     <a href="https://discord.com/users/1312012805913837608" target="_blank" class="soc-icon"><i class="fab fa-discord"></i></a>
                     <a href="https://www.youtube.com/@zhdufeedback" target="_blank" class="soc-icon"><i class="fab fa-youtube"></i></a>
-                    <a href="https://ru.namemc.com/profile/LuckyParadox.1" target="_blank" class="soc-icon"><span style="font-weight:900;">N</span></a>
+                    <a href="https://ru.namemc.com/profile/LuckyParadox.1" target="_blank" class="soc-icon"><i class="fab fa-cube" style="color: #63d471;"></i></a>
                 </div>
             </div>
         </div>
@@ -495,14 +511,16 @@
                     <i class="fas fa-rocket"></i>
                     <h3 style="font-size:1.4rem;">ПРОЕКТЫ</h3>
                 </div>
-                <div class="project-item">
-                    <div class="project-title"><i class="fab fa-telegram"></i> Пустошь удачи</div>
-                    <p style="color:#bc9ea5; font-size:0.9rem; margin: 8px 0;">Telegram • Личный тгк Парадокса</p>
-                    <div class="tag-group">
-                        <span class="tag">Активен</span>
-                        <span class="tag">Мразь</span>
+                <a href="https://t.me/luckyparadoxx" target="_blank" style="text-decoration: none; color: inherit;">
+                    <div class="project-item">
+                        <div class="project-title"><i class="fab fa-telegram"></i> Пустошь удачи</div>
+                        <p style="color:#bc9ea5; font-size:0.9rem; margin: 8px 0;">Telegram • Личный тгк Парадокса</p>
+                        <div class="tag-group">
+                            <span class="tag">Активен</span>
+                            <span class="tag">Мразь</span>
+                        </div>
                     </div>
-                </div>
+                </a>
                 <div class="project-item">
                     <div class="project-title"><i class="fab fa-discord"></i> Lunar Client</div>
                     <p style="color:#bc9ea5; font-size:0.9rem; margin: 8px 0;">Discord • Майнкрафт клиент</p>
@@ -522,6 +540,8 @@
                 <div class="info-row"><i class="fas fa-user"></i> <span><strong>Возраст:</strong> 15 лет</span></div>
                 <div class="info-row"><i class="fas fa-gamepad"></i> <span><strong>Игры:</strong> Minecraft, CS2, Fortnite, Rust</span></div>
                 <div class="info-row"><i class="fas fa-music"></i> <span><strong>Музыка:</strong> Alex G, wifiskeleton, s0rrow, ooes, FEDUK, blago white, Sadsvit</span></div>
+                <div class="info-row"><i class="fas fa-users"></i> <span><strong>Друзья:</strong> вы уже в их сердце</span></div>
+                <div class="info-row"><i class="fas fa-people-group"></i> <span><strong>Сквады:</strong> постоянно меняются</span></div>
                 <div class="quote-samurai">
                     <p>«Искал медь — сгорел медведь.»</p>
                     <p style="font-size:0.8rem; margin-top:5px;">— Великий ww123rov</p>
@@ -558,24 +578,14 @@
                 </div>
             </div>
 
-            <!-- МУЗЫКА ЦЕНТР -->
-            <div class="music-center" style="grid-column: span 2;">
-                <div class="card-samurai fade-up" style="text-align:center;">
+            <!-- МУЗЫКА ПЛЕЕР -->
+            <div class="music-player-container fade-up">
+                <div class="card-samurai" style="text-align:center;">
                     <div class="card-header-icon" style="justify-content: center;">
-                        <i class="fas fa-head-side-headphones"></i>
+                        <i class="fas fa-headphones"></i>
                         <h3>МУЗЫКА</h3>
                     </div>
-                    <div style="padding:10px 0 5px;">
-                        <i class="fas fa-volume-mute" style="font-size:2.5rem; opacity:0.5;"></i>
-                        <p style="color:#ad868e;">Не слушает музыку прямо сейчас</p>
-                    </div>
-                    <div>
-                        <h4 style="margin: 15px 0 10px; color:#e2a1b0;">Любимые исполнители:</h4>
-                        <div class="tag-group" style="justify-content: center;">
-                            <span class="tag">ooes</span><span class="tag">FEDUK</span><span class="tag">blago white</span><span class="tag">Sadsvit</span>
-                            <span class="tag">Alex G</span><span class="tag">wifiskeleton</span>
-                        </div>
-                    </div>
+                    <iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/1835854761&color=%23e2a1b0&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true"></iframe>
                 </div>
             </div>
         </div>
@@ -701,11 +711,7 @@
     }
 
     function updateClock() {
-        const timeDiv = document.querySelector('.stat-pill:last-child');
-        if (timeDiv && timeDiv.innerHTML.includes('Днюха')) {
-            // можно оставить как есть
-        }
-        // добавим время в герое? не обязательно, оставим просто дату
+        // оставляем пустым
     }
 
     function initScrollAnimations() {
@@ -727,7 +733,6 @@
     const tgBtn = document.getElementById('tgLinkBtn');
     if (tgBtn) {
         tgBtn.addEventListener('click', (e) => {
-            // ссылка ведет на тгк или профиль, используем уже заданную в href
             console.log('переход в телеграм');
         });
     }
