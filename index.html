@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>BIO by Paradox?</title>
+    <title>PARADOX | Путь самурая</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -401,6 +401,26 @@
             grid-column: span 2;
         }
 
+        .youtube-player {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 18px;
+            border: 1px solid #38242a;
+        }
+
+        .youtube-player iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 18px;
+        }
+
         .footer-samurai {
             border-top: 1px solid #2a1e22;
             padding: 50px 20px;
@@ -436,12 +456,6 @@
             opacity: 1;
             transform: translateY(0);
         }
-
-        /* Стиль для SoundCloud embed */
-        iframe[src*="soundcloud"] {
-            border-radius: 18px;
-            border: 1px solid #38242a;
-        }
     </style>
 </head>
 <body>
@@ -456,11 +470,11 @@
             <span id="screenUserLoc" class="highlight-loc">СКАНИРОВАНИЕ...</span>
         </div>
         <div class="sakura-location-box" style="font-size:0.8rem;">
-            la felicità ama il silenzio
+            ⚔️  ДЕРЗНИ — И САКУРА УКАЖЕТ ПУТЬ  ⚔️
         </div>
-        <button class="enter-samurai" id="enterBtn"> ВОЙТИ </button>
+        <button class="enter-samurai" id="enterBtn"> ВЗЯТЬ КАТАНУ </button>
         <div class="status-terminal">
-            >  СИСТЕМА: PARADOX v2.0 <br>
+            >  СИСТЕМА: ДУХ САМУРАЯ v2.0 <br>
             >  МЕСТО: <span id="termLocSpan">ОПРЕДЕЛЯЮ...</span>
         </div>
     </div>
@@ -493,7 +507,7 @@
                     <a href="https://t.me/luckyametist" target="_blank" class="soc-icon" id="tgLinkBtn"><i class="fab fa-telegram"></i></a>
                     <a href="https://discord.com/users/1312012805913837608" target="_blank" class="soc-icon"><i class="fab fa-discord"></i></a>
                     <a href="https://www.youtube.com/@zhdufeedback" target="_blank" class="soc-icon"><i class="fab fa-youtube"></i></a>
-                    <a href="https://ru.namemc.com/profile/LuckyParadox.1" target="_blank" class="soc-icon"><i class="fab fa-cube" style="color: #63d471;"></i></a>
+                    <a href="https://ru.namemc.com/profile/LuckyParadox.1" target="_blank" class="soc-icon">⛏️</a>
                 </div>
             </div>
         </div>
@@ -578,14 +592,16 @@
                 </div>
             </div>
 
-            <!-- МУЗЫКА ПЛЕЕР -->
+            <!-- МУЗЫКА ПЛЕЕР YOUTUBE -->
             <div class="music-player-container fade-up">
                 <div class="card-samurai" style="text-align:center;">
                     <div class="card-header-icon" style="justify-content: center;">
-                        <i class="fas fa-headphones"></i>
+                        <i class="fab fa-youtube"></i>
                         <h3>МУЗЫКА</h3>
                     </div>
-                    <iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/1835854761&color=%23e2a1b0&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true"></iframe>
+                    <div class="youtube-player">
+                        <iframe src="https://www.youtube.com/embed/iu8Lh4xvx3g?si=HTY7KkdA5FplN4I8" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
                 </div>
             </div>
         </div>
