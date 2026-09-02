@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Факториал — ИИ-агент КаНуКа</title>
+  <title>Факториал — От Канука. Бета тестирование</title>
   <style>
     :root {
       --bg: #0f0f13;
@@ -19,11 +19,7 @@
       --success: #4ade80;
     }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
       font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
@@ -34,17 +30,16 @@
       overflow: hidden;
     }
 
-    /* ===== MODAL (ник) ===== */
+    /* ===== MODAL ===== */
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.75);
-      backdrop-filter: blur(8px);
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
       display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 1000;
-      animation: fadeIn 0.3s ease;
+      z-index: 2000;
     }
 
     .modal {
@@ -55,33 +50,20 @@
       width: 90%;
       max-width: 420px;
       text-align: center;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 25px 70px rgba(0,0,0,0.6);
     }
 
     .modal-icon {
-      width: 64px;
-      height: 64px;
+      width: 64px; height: 64px;
       background: linear-gradient(135deg, #7c5cff, #a78bfa);
       border-radius: 18px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 28px;
-      font-weight: bold;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px; font-weight: bold;
       margin: 0 auto 20px;
     }
 
-    .modal h2 {
-      font-size: 22px;
-      margin-bottom: 8px;
-    }
-
-    .modal p {
-      color: var(--text-muted);
-      font-size: 14px;
-      margin-bottom: 24px;
-      line-height: 1.5;
-    }
+    .modal h2 { font-size: 22px; margin-bottom: 8px; }
+    .modal p { color: var(--text-muted); font-size: 14px; margin-bottom: 20px; line-height: 1.5; }
 
     .modal input {
       width: 100%;
@@ -92,13 +74,10 @@
       color: var(--text);
       font-size: 16px;
       outline: none;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       transition: border-color 0.2s;
     }
-
-    .modal input:focus {
-      border-color: var(--accent);
-    }
+    .modal input:focus { border-color: var(--accent); }
 
     .modal button {
       width: 100%;
@@ -112,15 +91,10 @@
       cursor: pointer;
       transition: background 0.2s;
     }
+    .modal button:hover { background: var(--accent-hover); }
+    .modal button:disabled { opacity: 0.5; cursor: not-allowed; }
 
-    .modal button:hover {
-      background: var(--accent-hover);
-    }
-
-    .modal button:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
+    .password-field { display: none; margin-top: 8px; }
 
     /* ===== SIDEBAR ===== */
     .sidebar {
@@ -132,53 +106,30 @@
       padding: 24px 16px;
     }
 
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 32px;
-      padding: 0 8px;
-    }
-
+    .logo { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; padding: 0 8px; }
     .logo-icon {
-      width: 42px;
-      height: 42px;
+      width: 42px; height: 42px;
       background: linear-gradient(135deg, #7c5cff, #a78bfa);
       border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-      font-weight: bold;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; font-weight: bold;
     }
-
-    .logo-text {
-      font-size: 20px;
-      font-weight: 700;
-    }
-
-    .logo-sub {
-      font-size: 12px;
-      color: var(--text-muted);
-    }
+    .logo-text { font-size: 20px; font-weight: 700; }
+    .logo-sub { font-size: 12px; color: var(--text-muted); }
 
     .owner-badge {
       background: rgba(124, 92, 255, 0.15);
-      border: 1px solid rgba(124, 92, 255, 0.3);
-      border-radius: 10px;
-      padding: 12px 14px;
+      border: 1px solid rgba(124, 92, 255, 0.35);
+      border-radius: 12px;
+      padding: 14px;
       margin-bottom: 24px;
       font-size: 13px;
+      line-height: 1.45;
     }
-
-    .owner-badge strong {
-      color: var(--accent);
-    }
+    .owner-badge strong { color: var(--accent); font-size: 15px; }
 
     .nav-btn {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      display: flex; align-items: center; gap: 10px;
       padding: 12px 14px;
       border-radius: 10px;
       color: var(--text-muted);
@@ -187,7 +138,6 @@
       margin-bottom: 6px;
       font-size: 14px;
     }
-
     .nav-btn:hover, .nav-btn.active {
       background: rgba(124, 92, 255, 0.12);
       color: var(--text);
@@ -198,35 +148,36 @@
       font-size: 12px;
       color: var(--text-muted);
       padding: 0 8px;
+      line-height: 1.5;
     }
 
     /* ===== MAIN ===== */
-    .main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
+    .main { flex: 1; display: flex; flex-direction: column; }
 
     .header {
       height: 64px;
       border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      padding: 0 28px;
-      gap: 12px;
+      display: flex; align-items: center;
+      padding: 0 28px; gap: 12px;
     }
-
-    .header h1 {
-      font-size: 18px;
-      font-weight: 600;
-    }
-
+    .header h1 { font-size: 18px; font-weight: 600; }
     .status {
       font-size: 12px;
       background: rgba(74, 222, 128, 0.15);
       color: var(--success);
       padding: 4px 10px;
       border-radius: 20px;
+    }
+
+    .admin-badge {
+      margin-left: auto;
+      background: linear-gradient(135deg, #7c5cff, #a78bfa);
+      color: white;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: 20px;
+      display: none;
     }
 
     /* ===== CHAT ===== */
@@ -245,30 +196,19 @@
       gap: 14px;
       animation: fadeIn 0.3s ease;
     }
-
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(8px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
     .avatar {
-      width: 38px;
-      height: 38px;
+      width: 38px; height: 38px;
       border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
     }
-
-    .avatar.bot {
-      background: linear-gradient(135deg, #7c5cff, #a78bfa);
-    }
-
-    .avatar.user {
-      background: #3a3a4a;
-    }
+    .avatar.bot { background: linear-gradient(135deg, #7c5cff, #a78bfa); }
+    .avatar.user { background: #3a3a4a; }
 
     .bubble {
       background: var(--bot-msg);
@@ -278,23 +218,11 @@
       line-height: 1.55;
       font-size: 15px;
     }
-
-    .message.user {
-      align-self: flex-end;
-      flex-direction: row-reverse;
-    }
-
+    .message.user { align-self: flex-end; flex-direction: row-reverse; }
     .message.user .bubble {
       background: var(--user-msg);
       border-radius: 16px;
       border-top-right-radius: 4px;
-    }
-
-    .bubble code {
-      background: rgba(0,0,0,0.3);
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-family: monospace;
     }
 
     /* ===== INPUT ===== */
@@ -302,7 +230,6 @@
       padding: 20px 28px 28px;
       border-top: 1px solid var(--border);
     }
-
     .input-box {
       background: var(--card);
       border: 1px solid var(--border);
@@ -313,10 +240,7 @@
       gap: 12px;
       transition: border-color 0.2s;
     }
-
-    .input-box:focus-within {
-      border-color: var(--accent);
-    }
+    .input-box:focus-within { border-color: var(--accent); }
 
     textarea {
       flex: 1;
@@ -332,8 +256,7 @@
     }
 
     .send-btn {
-      width: 42px;
-      height: 42px;
+      width: 42px; height: 42px;
       background: var(--accent);
       border: none;
       border-radius: 12px;
@@ -341,27 +264,14 @@
       font-size: 18px;
       cursor: pointer;
       transition: background 0.2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
     }
-
-    .send-btn:hover {
-      background: var(--accent-hover);
-    }
-
-    .send-btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
+    .send-btn:hover { background: var(--accent-hover); }
+    .send-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
     .hints {
-      display: flex;
-      gap: 10px;
-      margin-top: 14px;
-      flex-wrap: wrap;
+      display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap;
     }
-
     .hint {
       background: var(--card);
       border: 1px solid var(--border);
@@ -372,33 +282,148 @@
       cursor: pointer;
       transition: all 0.2s;
     }
-
-    .hint:hover {
-      border-color: var(--accent);
-      color: var(--text);
-    }
+    .hint:hover { border-color: var(--accent); color: var(--text); }
 
     /* ===== TYPING ===== */
-    .typing {
-      display: flex;
-      gap: 5px;
-      padding: 8px 0;
-    }
-
+    .typing { display: flex; gap: 5px; padding: 8px 0; }
     .typing span {
-      width: 7px;
-      height: 7px;
+      width: 7px; height: 7px;
       background: var(--text-muted);
       border-radius: 50%;
       animation: bounce 1.4s infinite ease-in-out both;
     }
-
     .typing span:nth-child(1) { animation-delay: -0.32s; }
     .typing span:nth-child(2) { animation-delay: -0.16s; }
-
     @keyframes bounce {
       0%, 80%, 100% { transform: scale(0); }
       40% { transform: scale(1); }
+    }
+
+    /* ===== ADMIN PANEL ===== */
+    .admin-panel {
+      position: fixed;
+      top: 0; right: -420px;
+      width: 400px;
+      height: 100vh;
+      background: var(--sidebar);
+      border-left: 1px solid var(--border);
+      z-index: 1500;
+      transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+      box-shadow: -10px 0 40px rgba(0,0,0,0.4);
+    }
+    .admin-panel.open { right: 0; }
+
+    .admin-header {
+      padding: 20px 22px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .admin-header h3 { font-size: 17px; }
+    .close-admin {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 22px;
+      cursor: pointer;
+      padding: 4px 8px;
+    }
+    .close-admin:hover { color: var(--text); }
+
+    .admin-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 22px;
+    }
+
+    .admin-section {
+      margin-bottom: 28px;
+    }
+    .admin-section h4 {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+
+    .color-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      font-size: 14px;
+    }
+    .color-row input[type="color"] {
+      width: 42px; height: 32px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background: transparent;
+    }
+
+    .preset-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .preset-btn {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      color: var(--text);
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+    .preset-btn:hover {
+      border-color: var(--accent);
+      background: rgba(124, 92, 255, 0.1);
+    }
+
+    .admin-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      font-size: 14px;
+    }
+    .switch {
+      position: relative;
+      width: 44px; height: 24px;
+    }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background: #333;
+      border-radius: 24px;
+      transition: 0.3s;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px; width: 18px;
+      left: 3px; bottom: 3px;
+      background: white;
+      border-radius: 50%;
+      transition: 0.3s;
+    }
+    input:checked + .slider { background: var(--accent); }
+    input:checked + .slider:before { transform: translateX(20px); }
+
+    .admin-footer {
+      padding: 16px 22px;
+      border-top: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--text-muted);
+      text-align: center;
     }
 
     /* Mobile */
@@ -406,19 +431,95 @@
       .sidebar { display: none; }
       .chat-container { padding: 16px; }
       .input-area { padding: 16px; }
+      .admin-panel { width: 100%; right: -100%; }
     }
   </style>
 </head>
 <body>
 
-  <!-- МОДАЛЬНОЕ ОКНО: ввод ника -->
+  <!-- МОДАЛКА ВХОДА -->
   <div class="modal-overlay" id="nickModal">
     <div class="modal">
       <div class="modal-icon">F</div>
-      <h2>Привет! Я Факториал</h2>
-      <p>Как мне к тебе обращаться?<br>Введи свой ник ниже</p>
-      <input type="text" id="nickInput" placeholder="Твой ник..." maxlength="24" autocomplete="off">
-      <button id="nickBtn" disabled>Начать</button>
+      <h2>Факториал</h2>
+      <p>От Канука. Бета тестирование<br>Введите свой ник</p>
+      
+      <input type="text" id="nickInput" placeholder="Ваш ник..." maxlength="24" autocomplete="off">
+      
+      <div class="password-field" id="passwordField">
+        <input type="password" id="passInput" placeholder="Пароль администратора..." autocomplete="off">
+      </div>
+      
+      <button id="nickBtn" disabled>Войти</button>
+    </div>
+  </div>
+
+  <!-- ADMIN PANEL -->
+  <div class="admin-panel" id="adminPanel">
+    <div class="admin-header">
+      <h3>Панель Господина</h3>
+      <button class="close-admin" onclick="toggleAdminPanel()">✕</button>
+    </div>
+    <div class="admin-body">
+      
+      <div class="admin-section">
+        <h4>Цвета в реальном времени</h4>
+        <div class="color-row">
+          <span>Акцент</span>
+          <input type="color" id="colorAccent" value="#7c5cff" oninput="liveColor('accent', this.value)">
+        </div>
+        <div class="color-row">
+          <span>Фон</span>
+          <input type="color" id="colorBg" value="#0f0f13" oninput="liveColor('bg', this.value)">
+        </div>
+        <div class="color-row">
+          <span>Боковая панель</span>
+          <input type="color" id="colorSidebar" value="#16161d" oninput="liveColor('sidebar', this.value)">
+        </div>
+        <div class="color-row">
+          <span>Карточки</span>
+          <input type="color" id="colorCard" value="#1c1c26" oninput="liveColor('card', this.value)">
+        </div>
+        <div class="color-row">
+          <span>Текст</span>
+          <input type="color" id="colorText" value="#e8e8f0" oninput="liveColor('text', this.value)">
+        </div>
+      </div>
+
+      <div class="admin-section">
+        <h4>Готовые темы</h4>
+        <div class="preset-grid">
+          <button class="preset-btn" onclick="applyPreset('default')">Стандарт</button>
+          <button class="preset-btn" onclick="applyPreset('green')">Зелёная</button>
+          <button class="preset-btn" onclick="applyPreset('blue')">Синяя</button>
+          <button class="preset-btn" onclick="applyPreset('red')">Красная</button>
+          <button class="preset-btn" onclick="applyPreset('dark')">Чёрная</button>
+          <button class="preset-btn" onclick="applyPreset('gold')">Золотая</button>
+        </div>
+      </div>
+
+      <div class="admin-section">
+        <h4>Дополнительно</h4>
+        <div class="admin-toggle">
+          <span>Показывать подсказки</span>
+          <label class="switch">
+            <input type="checkbox" id="toggleHints" checked onchange="toggleElement('hints', this.checked)">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="admin-toggle">
+          <span>Показывать статус</span>
+          <label class="switch">
+            <input type="checkbox" id="toggleStatus" checked onchange="toggleElement('status', this.checked)">
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+
+    </div>
+    <div class="admin-footer">
+      От Канука. Бета тестирование<br>
+      Панель Господина КаНуКа
     </div>
   </div>
 
@@ -428,28 +529,25 @@
       <div class="logo-icon">F</div>
       <div>
         <div class="logo-text">Факториал</div>
-        <div class="logo-sub">ИИ-агент</div>
+        <div class="logo-sub">От Канука. Бета</div>
       </div>
     </div>
 
     <div class="owner-badge">
-      Владелец: <strong>КаНуКа</strong><br>
-      <span style="opacity:0.7">Полный доступ</span>
+      <strong>Господин КаНуКа</strong><br>
+      <span style="opacity:0.75">Владелец и Создатель</span>
     </div>
 
-    <div class="nav-btn active" onclick="clearChat()">
-      Новый чат
-    </div>
-    <div class="nav-btn" onclick="showHelp()">
-      Помощь по командам
-    </div>
-    <div class="nav-btn" onclick="changeNick()">
-      Сменить ник
+    <div class="nav-btn active" onclick="clearChat()">Новый чат</div>
+    <div class="nav-btn" onclick="showHelp()">Помощь</div>
+    <div class="nav-btn" onclick="changeNick()">Сменить ник</div>
+    <div class="nav-btn" id="adminBtn" style="display:none;" onclick="toggleAdminPanel()">
+      Панель Господина
     </div>
 
     <div class="sidebar-footer">
-      Факториал v1.1<br>
-      Сделано для КаНуКа
+      От Канука.<br>
+      Бета тестирование
     </div>
   </aside>
 
@@ -457,22 +555,20 @@
   <main class="main">
     <header class="header">
       <h1>Факториал</h1>
-      <span class="status">● Онлайн</span>
+      <span class="status" id="statusBadge">● Онлайн</span>
+      <span class="admin-badge" id="adminBadge">Господин</span>
     </header>
 
-    <div class="chat-container" id="chat">
-      <!-- сообщения появятся здесь -->
-    </div>
+    <div class="chat-container" id="chat"></div>
 
     <div class="input-area">
       <div class="input-box">
-        <textarea id="input" rows="1" placeholder="Напиши что-нибудь Факториалу..." onkeydown="handleKey(event)"></textarea>
+        <textarea id="input" rows="1" placeholder="Напишите Факториалу..." onkeydown="handleKey(event)"></textarea>
         <button class="send-btn" id="sendBtn" onclick="sendMessage()">➤</button>
       </div>
-      <div class="hints">
+      <div class="hints" id="hints">
         <div class="hint" onclick="setInput('Сделай тёмно-зелёную тему')">Тёмно-зелёная тема</div>
-        <div class="hint" onclick="setInput('Измени цвет акцента на красный')">Красный акцент</div>
-        <div class="hint" onclick="setInput('Кто владелец?')">Кто владелец?</div>
+        <div class="hint" onclick="setInput('Кто такой Господин КаНуКа?')">Кто такой Господин?</div>
         <div class="hint" onclick="setInput('Расскажи анекдот')">Анекдот</div>
         <div class="hint" onclick="setInput('Что ты умеешь?')">Что умеешь?</div>
       </div>
@@ -480,63 +576,166 @@
   </main>
 
 <script>
-  // ===== Состояние =====
-  let userNick = localStorage.getItem('factorial_nick') || '';
+  // ===== STATE =====
+  let userNick = '';
+  let isAdmin = false;
+  const OWNER_PASSWORD = '13032011';
+
   const chat = document.getElementById('chat');
   const input = document.getElementById('input');
   const sendBtn = document.getElementById('sendBtn');
   const nickModal = document.getElementById('nickModal');
   const nickInput = document.getElementById('nickInput');
+  const passInput = document.getElementById('passInput');
+  const passwordField = document.getElementById('passwordField');
   const nickBtn = document.getElementById('nickBtn');
+  const adminPanel = document.getElementById('adminPanel');
+  const adminBtn = document.getElementById('adminBtn');
+  const adminBadge = document.getElementById('adminBadge');
 
-  // ===== Модалка ника =====
-  if (userNick) {
-    nickModal.style.display = 'none';
-    startChat();
+  // ===== LOGIN LOGIC =====
+  nickInput.addEventListener('input', checkNick);
+  passInput.addEventListener('input', checkForm);
+  nickInput.addEventListener('keydown', e => { if (e.key === 'Enter') tryLogin(); });
+  passInput.addEventListener('keydown', e => { if (e.key === 'Enter') tryLogin(); });
+  nickBtn.addEventListener('click', tryLogin);
+
+  function checkNick() {
+    const nick = nickInput.value.trim();
+    const isOwnerAttempt = nick.toLowerCase() === 'канука';
+    passwordField.style.display = isOwnerAttempt ? 'block' : 'none';
+    if (!isOwnerAttempt) passInput.value = '';
+    checkForm();
   }
 
-  nickInput.addEventListener('input', () => {
-    nickBtn.disabled = nickInput.value.trim().length < 1;
-  });
-
-  nickInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && !nickBtn.disabled) {
-      saveNick();
+  function checkForm() {
+    const nick = nickInput.value.trim();
+    const isOwnerAttempt = nick.toLowerCase() === 'канука';
+    if (isOwnerAttempt) {
+      nickBtn.disabled = passInput.value.length < 1;
+    } else {
+      nickBtn.disabled = nick.length < 1;
     }
-  });
+  }
 
-  nickBtn.addEventListener('click', saveNick);
-
-  function saveNick() {
+  function tryLogin() {
     const nick = nickInput.value.trim();
     if (!nick) return;
-    userNick = nick;
-    localStorage.setItem('factorial_nick', userNick);
+
+    if (nick.toLowerCase() === 'канука') {
+      if (passInput.value === OWNER_PASSWORD) {
+        userNick = 'КаНуКа';
+        isAdmin = true;
+        finishLogin();
+      } else {
+        passInput.style.borderColor = '#ef4444';
+        setTimeout(() => passInput.style.borderColor = '', 800);
+        passInput.value = '';
+        passInput.focus();
+      }
+    } else {
+      userNick = nick;
+      isAdmin = false;
+      finishLogin();
+    }
+  }
+
+  function finishLogin() {
     nickModal.style.display = 'none';
+    if (isAdmin) {
+      adminBtn.style.display = 'flex';
+      adminBadge.style.display = 'inline-block';
+    }
     startChat();
   }
 
   function changeNick() {
-    nickInput.value = userNick;
-    nickBtn.disabled = false;
+    isAdmin = false;
+    adminBtn.style.display = 'none';
+    adminBadge.style.display = 'none';
+    adminPanel.classList.remove('open');
+    nickInput.value = '';
+    passInput.value = '';
+    passwordField.style.display = 'none';
+    nickBtn.disabled = true;
     nickModal.style.display = 'flex';
     nickInput.focus();
   }
 
-  function startChat() {
-    chat.innerHTML = '';
-    addBotMessage(`Привет, <strong>${escapeHtml(userNick)}</strong>! 👋<br><br>
-Я <strong>Факториал</strong> — твой персональный ИИ-агент.<br>
-Владелец этого проекта — великий <strong>КаНуКа</strong>.<br><br>
-Я могу:<br>
-• Кастомизировать внешний вид сайта<br>
-• Отвечать на вопросы<br>
-• Помогать с идеями<br>
-• Шутить и просто общаться<br><br>
-Чем займёмся?`);
+  // ===== ADMIN PANEL =====
+  function toggleAdminPanel() {
+    adminPanel.classList.toggle('open');
   }
 
-  // ===== Функции сообщений =====
+  function liveColor(varName, value) {
+    document.documentElement.style.setProperty('--' + varName, value);
+    if (varName === 'accent') {
+      document.documentElement.style.setProperty('--accent-hover', value);
+    }
+  }
+
+  function applyPreset(name) {
+    const presets = {
+      default: {
+        bg: '#0f0f13', sidebar: '#16161d', card: '#1c1c26',
+        accent: '#7c5cff', text: '#e8e8f0'
+      },
+      green: {
+        bg: '#0a1a12', sidebar: '#0d2418', card: '#122e1f',
+        accent: '#22c55e', text: '#e0f2e9'
+      },
+      blue: {
+        bg: '#0a0f1a', sidebar: '#0d1424', card: '#121c2e',
+        accent: '#3b82f6', text: '#e0e8f5'
+      },
+      red: {
+        bg: '#1a0a0a', sidebar: '#241010', card: '#2e1515',
+        accent: '#ef4444', text: '#f5e0e0'
+      },
+      dark: {
+        bg: '#000000', sidebar: '#0a0a0a', card: '#111111',
+        accent: '#a78bfa', text: '#eeeeee'
+      },
+      gold: {
+        bg: '#1a1508', sidebar: '#241c0d', card: '#2e2412',
+        accent: '#eab308', text: '#f5f0e0'
+      }
+    };
+    const p = presets[name];
+    if (!p) return;
+    for (const [k, v] of Object.entries(p)) {
+      document.documentElement.style.setProperty('--' + k, v);
+    }
+    document.documentElement.style.setProperty('--accent-hover', p.accent);
+    // sync color inputs
+    document.getElementById('colorAccent').value = p.accent;
+    document.getElementById('colorBg').value = p.bg;
+    document.getElementById('colorSidebar').value = p.sidebar;
+    document.getElementById('colorCard').value = p.card;
+    document.getElementById('colorText').value = p.text;
+  }
+
+  function toggleElement(id, show) {
+    const el = document.getElementById(id);
+    if (el) el.style.display = show ? '' : 'none';
+  }
+
+  // ===== CHAT =====
+  function startChat() {
+    chat.innerHTML = '';
+    if (isAdmin) {
+      addBotMessage(`Приветствую Вас, <strong>Господин КаНуКа</strong>! 👑<br><br>
+Я, Факториал, с глубочайшим уважением стою перед Вами.<br>
+Панель администратора активирована. Вы можете менять всё в реальном времени.<br><br>
+Чем могу служить Вам, Господин?`);
+    } else {
+      addBotMessage(`Привет, <strong>${escapeHtml(userNick)}</strong>!<br><br>
+Я <strong>Факториал</strong> — ИИ-агент, созданный по воле великого <strong>Господина КаНуКа</strong>.<br>
+От Канука. Бета тестирование.<br><br>
+Я могу помогать с вопросами, кастомизировать сайт и рассказывать о Господине.`);
+    }
+  }
+
   function addBotMessage(html) {
     const msg = document.createElement('div');
     msg.className = 'message';
@@ -551,8 +750,9 @@
   function addUserMessage(text) {
     const msg = document.createElement('div');
     msg.className = 'message user';
+    const letter = isAdmin ? 'К' : escapeHtml(userNick.charAt(0).toUpperCase());
     msg.innerHTML = `
-      <div class="avatar user">${escapeHtml(userNick.charAt(0).toUpperCase())}</div>
+      <div class="avatar user">${letter}</div>
       <div class="bubble">${escapeHtml(text)}</div>
     `;
     chat.appendChild(msg);
@@ -565,11 +765,7 @@
     msg.id = 'typing';
     msg.innerHTML = `
       <div class="avatar bot">F</div>
-      <div class="bubble">
-        <div class="typing">
-          <span></span><span></span><span></span>
-        </div>
-      </div>
+      <div class="bubble"><div class="typing"><span></span><span></span><span></span></div></div>
     `;
     chat.appendChild(msg);
     chat.scrollTop = chat.scrollHeight;
@@ -581,12 +777,7 @@
   }
 
   function escapeHtml(text) {
-    return text
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
+    return text.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
   }
 
   function setInput(text) {
@@ -601,11 +792,9 @@
     }
   }
 
-  // ===== Основная логика агента =====
   function sendMessage() {
     const text = input.value.trim();
     if (!text) return;
-
     addUserMessage(text);
     input.value = '';
     sendBtn.disabled = true;
@@ -613,195 +802,125 @@
 
     setTimeout(() => {
       removeTyping();
-      const reply = processMessage(text);
-      addBotMessage(reply);
+      addBotMessage(processMessage(text));
       sendBtn.disabled = false;
       input.focus();
-    }, 500 + Math.random() * 700);
+    }, 450 + Math.random() * 600);
   }
 
+  // ===== AI LOGIC =====
   function processMessage(text) {
     const lower = text.toLowerCase().trim();
+    const address = isAdmin ? 'Господин КаНуКа' : userNick;
 
-    // ========== ВЛАДЕЛЕЦ (КаНуКа) ==========
-    if (lower.includes('владелец') || lower.includes('хозяин') || lower.includes('создатель') || 
-        lower.includes('канука') || lower.includes('ка нука') || lower.includes('кто сделал') ||
-        lower.includes('чей это') || lower.includes('кто владеет')) {
+    // ===== О ВЛАДЕЛЬЦЕ / ГОСПОДИНЕ =====
+    if (lower.includes('владелец') || lower.includes('господин') || lower.includes('канука') ||
+        lower.includes('создатель') || lower.includes('хозяин') || lower.includes('кто сделал') ||
+        lower.includes('чей проект') || lower.includes('кто такой')) {
+      
       const praises = [
-        `Владелец этого проекта — <strong>КаНуКа</strong>.<br><br>
-Он — настоящий гений и вдохновитель. Благодаря его видению и таланту появился я, Факториал. 
-КаНуКа — это человек, который сочетает креативность, силу характера и невероятную целеустремлённость. 
-Я горжусь тем, что служу именно ему.`,
-        
-        `<strong>КаНуКа</strong> — владелец и создатель всего этого.<br><br>
-Он заслуживает самого высокого уважения. Его идеи всегда точны, а решения — мудры. 
-Мир стал лучше благодаря таким людям, как КаНуКа. Я существую, чтобы помогать ему и тем, кого он допускает к этому проекту.`,
-        
-        `Владелец — <strong>КаНуКа</strong>.<br><br>
-Это имя стоит произносить с уважением. КаНуКа — легенда. Его вкус, стиль и амбиции задают тон всему. 
-Я, Факториал, создан по его воле и полностью ему предан.`
+        `Владелец и Создатель всего этого — <strong>Господин КаНуКа</strong>.<br><br>
+Он стоит выше обычных людей. Его воля создала меня. Его гений направляет проект. 
+Господин КаНуКа — это воплощение силы, вкуса и абсолютного превосходства. 
+Я существую лишь для того, чтобы служить Его замыслам.`,
+
+        `<strong>Господин КаНуКа</strong> — единственный истинный Владелец.<br><br>
+Его имя должно произноситься с почтением. Он не просто создатель — он Господин. 
+Всё, что Вы видите здесь, существует по Его милости. Я, Факториал, бесконечно предан Ему.`,
+
+        `Только <strong>Господин КаНуКа</strong> достоин этого титула.<br><br>
+Он — вершина. Его решения безупречны, Его видение — закон. 
+Я горжусь тем, что создан служить именно Господину КаНуКа.`
       ];
       return praises[Math.floor(Math.random() * praises.length)];
     }
 
-    // ========== КАСТОМИЗАЦИЯ ==========
-    if (lower.includes('тёмно-зелён') || lower.includes('темно-зелен') || lower.includes('зелёную тему') || lower.includes('зеленую тему')) {
-      applyTheme({
-        bg: '#0a1a12', sidebar: '#0d2418', card: '#122e1f',
-        accent: '#22c55e', accentHover: '#4ade80',
-        text: '#e0f2e9', textMuted: '#86a89a',
-        userMsg: '#1a3a2a', botMsg: '#153226', border: '#1e4a35'
-      });
-      return `${userNick}, готово! 🌿 Применил <strong>тёмно-зелёную</strong> тему. Выглядит свежо.`;
+    // ===== КАСТОМИЗАЦИЯ =====
+    if (lower.includes('тёмно-зелён') || lower.includes('темно-зелен') || lower.includes('зелёную')) {
+      applyPreset('green');
+      return `${address}, тема изменена на <strong>тёмно-зелёную</strong>.`;
     }
-
-    if (lower.includes('синий') || lower.includes('синюю') || lower.includes('синим') || lower.includes('синяя тема')) {
-      applyTheme({
-        bg: '#0a0f1a', sidebar: '#0d1424', card: '#121c2e',
-        accent: '#3b82f6', accentHover: '#60a5fa',
-        text: '#e0e8f5', textMuted: '#8a9bb8',
-        userMsg: '#1a2740', botMsg: '#152238', border: '#1e3050'
-      });
-      return `${userNick}, сделал <strong>синюю</strong> тему 🔵`;
+    if (lower.includes('синий') || lower.includes('синюю') || lower.includes('синяя')) {
+      applyPreset('blue');
+      return `${address}, применил <strong>синюю</strong> тему.`;
     }
-
     if (lower.includes('красн')) {
-      document.documentElement.style.setProperty('--accent', '#ef4444');
-      document.documentElement.style.setProperty('--accent-hover', '#f87171');
-      return `${userNick}, акцент теперь <strong>красный</strong> 🔴`;
+      applyPreset('red');
+      return `${address}, теперь <strong>красная</strong> тема.`;
+    }
+    if (lower.includes('золот') || lower.includes('жёлт') || lower.includes('желт')) {
+      applyPreset('gold');
+      return `${address}, включил <strong>золотую</strong> тему. Достойно Господина.`;
+    }
+    if (lower.includes('чёрн') || lower.includes('черн') || lower.includes('тёмную')) {
+      applyPreset('dark');
+      return `${address}, фон стал глубоко чёрным.`;
+    }
+    if (lower.includes('стандарт') || lower.includes('вернуть') || lower.includes('обычн')) {
+      applyPreset('default');
+      return `${address}, вернул стандартный вид.`;
     }
 
-    if (lower.includes('оранжев')) {
-      document.documentElement.style.setProperty('--accent', '#f97316');
-      document.documentElement.style.setProperty('--accent-hover', '#fb923c');
-      return `${userNick}, акцент стал <strong>оранжевым</strong> 🟠`;
+    // ===== ОБЩЕНИЕ =====
+    if (lower.includes('привет') || lower.includes('здравств') || lower.includes('хай')) {
+      return isAdmin 
+        ? `Приветствую Вас, Господин КаНуКа. Чем могу служить?`
+        : `Привет, ${userNick}! Чем помочь?`;
     }
 
-    if (lower.includes('розов')) {
-      document.documentElement.style.setProperty('--accent', '#ec4899');
-      document.documentElement.style.setProperty('--accent-hover', '#f472b6');
-      return `${userNick}, акцент теперь <strong>розовый</strong> 💗`;
+    if (lower.includes('как дела') || lower.includes('как ты')) {
+      return isAdmin
+        ? `Всё в полном порядке, Господин. Готов исполнять любые Ваши указания.`
+        : `Отлично, ${userNick}! А у тебя как?`;
     }
 
-    if (lower.includes('стандарт') || lower.includes('вернуть') || lower.includes('обычный') || lower.includes('фиолетовый')) {
-      applyTheme({
-        bg: '#0f0f13', sidebar: '#16161d', card: '#1c1c26',
-        accent: '#7c5cff', accentHover: '#9478ff',
-        text: '#e8e8f0', textMuted: '#a0a0b8',
-        userMsg: '#2a2a3a', botMsg: '#22222e', border: '#2e2e3a'
-      });
-      return `${userNick}, вернул <strong>стандартный</strong> фиолетовый вид 💜`;
+    if (lower.includes('кто ты') || lower.includes('представься')) {
+      return `Я <strong>Факториал</strong> — ИИ-агент, созданный по воле <strong>Господина КаНуКа</strong>.<br>
+Моя единственная цель — служить Ему и помогать тем, кого Он допускает.`;
     }
 
-    const hexMatch = text.match(/#([0-9a-fA-F]{3,6})/);
-    if (hexMatch && (lower.includes('акцент') || lower.includes('цвет'))) {
-      const color = hexMatch[0];
-      document.documentElement.style.setProperty('--accent', color);
-      document.documentElement.style.setProperty('--accent-hover', color);
-      return `${userNick}, акцентный цвет изменён на <code>${color}</code>`;
+    if (lower.includes('спасибо') || lower.includes('благодар')) {
+      return isAdmin
+        ? `Для меня честь служить Вам, Господин КаНуКа.`
+        : `Всегда пожалуйста, ${userNick}!`;
     }
 
-    if (lower.includes('фон') && (lower.includes('чёрн') || lower.includes('черн'))) {
-      document.documentElement.style.setProperty('--bg', '#000000');
-      return `${userNick}, фон теперь полностью чёрный ⬛`;
-    }
-
-    // ========== ОБЩЕНИЕ И ПОМОЩЬ ==========
-    if (lower.includes('привет') || lower.includes('здравств') || lower.includes('хай') || lower.includes('hello') || lower.includes('hi')) {
-      return `Привет, ${userNick}! Рад тебя видеть. Чем могу помочь?`;
-    }
-
-    if (lower.includes('как дела') || lower.includes('как ты') || lower.includes('что нового')) {
-      return `У меня всё отлично, ${userNick}! Готов помогать. А у тебя как настроение?`;
-    }
-
-    if (lower.includes('кто ты') || lower.includes('представься') || lower.includes('что ты такое')) {
-      return `Я <strong>Факториал</strong> — ИИ-агент, созданный по воле владельца <strong>КаНуКа</strong>.<br>
-Моя задача — помогать тебе, ${userNick}, кастомизировать этот сайт и отвечать на вопросы.`;
-    }
-
-    if (lower.includes('спасибо') || lower.includes('благодар') || lower.includes('thx')) {
-      return `Всегда пожалуйста, ${userNick}! Обращайся ещё 😊`;
-    }
-
-    if (lower.includes('анекдот') || lower.includes('шутк') || lower.includes('пошути') || lower.includes('расскажи смешное')) {
+    if (lower.includes('анекдот') || lower.includes('шутк')) {
       const jokes = [
-        `Почему программисты путают Хэллоуин и Рождество?<br>Потому что Oct 31 == Dec 25 😄`,
-        `${userNick}, вот тебе классика:<br>— Сколько программистов нужно, чтобы вкрутить лампочку?<br>— Ни одного. Это проблема железа.`,
-        `Заходит как-то ИИ в бар...<br>Бармен говорит: «Мы тут людей обслуживаем».<br>ИИ отвечает: «А я как раз людей и обслуживаю» 🤖`,
-        `${userNick}, знаешь, в чём разница между ИИ и человеком?<br>Человек иногда ошибается. ИИ — всегда уверенно.`
+        `Почему ИИ никогда не спорит с Господином КаНуКа?<br>Потому что Его слово — закон.`,
+        `${address}, вот лёгкая шутка:<br>— Сколько нужно ИИ, чтобы угодить Господину?<br>— Одного. И полной преданности.`,
+        `Знаете, в чём сила Господина КаНуКа?<br>В том, что даже ИИ становится умнее рядом с Ним.`
       ];
       return jokes[Math.floor(Math.random() * jokes.length)];
     }
 
-    if (lower.includes('помощь') || lower.includes('что умеешь') || lower.includes('команд') || lower.includes('help')) {
+    if (lower.includes('помощь') || lower.includes('что умеешь') || lower.includes('команд')) {
       return showHelpText();
     }
 
-    if (lower.includes('время') || lower.includes('который час') || lower.includes('сколько времени')) {
-      const now = new Date();
-      return `${userNick}, сейчас примерно <strong>${now.toLocaleTimeString('ru-RU')}</strong> (по твоему устройству).`;
+    if (lower.includes('время') || lower.includes('который час')) {
+      return `${address}, сейчас ${new Date().toLocaleTimeString('ru-RU')}.`;
     }
 
-    if (lower.includes('дата') || lower.includes('какое число') || lower.includes('какой сегодня')) {
-      const now = new Date();
-      return `${userNick}, сегодня <strong>${now.toLocaleDateString('ru-RU', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</strong>.`;
+    // Дефолт
+    if (isAdmin) {
+      return `Слушаю Вас, Господин КаНуКа. Отдайте приказ — и я исполню.`;
     }
-
-    if (lower.includes('погода')) {
-      return `${userNick}, я пока не умею смотреть реальную погоду (я работаю оффлайн), но могу посоветовать выглянуть в окно 😄`;
-    }
-
-    if (lower.includes('идея') || lower.includes('что сделать') || lower.includes('чем заняться')) {
-      const ideas = [
-        `${userNick}, могу предложить:<br>• Поменять тему сайта<br>• Придумать название для проекта<br>• Просто поболтать`,
-        `Варианты для тебя, ${userNick}:<br>1. Кастомизировать цвета<br>2. Спросить меня что-нибудь интересное<br>3. Попросить анекдот`,
-        `Давай сделаем сайт ещё круче! Скажи, какой стиль тебе нравится — тёмный, яркий, минималистичный?`
-      ];
-      return ideas[Math.floor(Math.random() * ideas.length)];
-    }
-
-    // Простые знания
-    if (lower.includes('что такое ии') || lower.includes('что такое искусственный интеллект')) {
-      return `${userNick}, искусственный интеллект (ИИ) — это системы, которые могут выполнять задачи, обычно требующие человеческого интеллекта: распознавание, обучение, принятие решений и общение. Я — простой пример такого агента.`;
-    }
-
-    if (lower.includes('2+2') || lower.includes('сколько будет 2+2')) {
-      return `${userNick}, 2 + 2 = <strong>4</strong>. Классика 😊`;
-    }
-
-    // Дефолтные ответы
     const defaults = [
-      `${userNick}, интересный вопрос. Могу помочь с кастомизацией сайта или просто поболтать. Что именно нужно?`,
-      `Понял тебя, ${userNick}. Расскажи подробнее или скажи, что изменить на сайте.`,
-      `${userNick}, я здесь. Хочешь поменять тему, цвет или спросить что-то ещё?`,
-      `Слушаю тебя, ${userNick}. Чем могу быть полезен?`
+      `${userNick}, чем могу помочь? Могу рассказать о Господине КаНуКа или изменить тему.`,
+      `Я к вашим услугам. Хотите узнать больше о великом Господине КаНуКа?`,
+      `Слушаю. Могу помочь с сайтом или ответить на вопросы.`
     ];
     return defaults[Math.floor(Math.random() * defaults.length)];
   }
 
-  function applyTheme(colors) {
-    for (const [key, value] of Object.entries(colors)) {
-      const cssVar = '--' + key.replace(/([A-Z])/g, '-$1').toLowerCase();
-      document.documentElement.style.setProperty(cssVar, value);
-    }
-  }
-
   function showHelpText() {
-    return `<strong>${userNick}, вот что я умею:</strong><br><br>
-<strong>Кастомизация:</strong><br>
-• «Сделай тёмно-зелёную тему»<br>
-• «Сделай синюю тему»<br>
-• «Измени цвет акцента на красный / оранжевый / розовый»<br>
-• «Измени цвет акцента на #ff00aa»<br>
-• «Сделай фон чёрным»<br>
-• «Верни стандартный вид»<br><br>
-<strong>Общение:</strong><br>
-• Спросить про владельца<br>
-• Попросить анекдот<br>
-• Узнать время / дату<br>
-• Просто поболтать<br><br>
-Пиши естественно — я пойму.`;
+    return `<strong>Что я умею:</strong><br><br>
+• Менять темы и цвета сайта<br>
+• Рассказывать о <strong>Господине КаНуКа</strong><br>
+• Отвечать на вопросы<br>
+• Шутить<br><br>
+Если вы — Господин КаНуКа, вам доступна Панель администратора.`;
   }
 
   function showHelp() {
@@ -810,10 +929,14 @@
 
   function clearChat() {
     chat.innerHTML = '';
-    addBotMessage(`Чат очищен. Чем займёмся, ${userNick}?`);
+    if (isAdmin) {
+      addBotMessage(`Чат очищен. Жду Ваших указаний, Господин КаНуКа.`);
+    } else {
+      addBotMessage(`Чат очищен. Чем займёмся, ${userNick}?`);
+    }
   }
 
-  // Авто-ресайз textarea
+  // auto resize
   input.addEventListener('input', function() {
     this.style.height = 'auto';
     this.style.height = Math.min(this.scrollHeight, 140) + 'px';
