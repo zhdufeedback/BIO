@@ -798,6 +798,25 @@
 
         <!-- Create account -->
         <div class="admin-section">
+          <h4>Облако (аккаунты на всех устройствах)</h4>
+          <p style="font-size:12px;color:var(--text-dim);margin-bottom:10px;line-height:1.45;">
+            1. Зайди на <strong>jsonbin.io</strong> → создай бесплатный аккаунт<br>
+            2. API Keys → скопируй <strong>Master Key</strong><br>
+            3. Создай Bin (любое имя) → скопируй <strong>Bin ID</strong><br>
+            4. Вставь ниже и нажми «Сохранить»
+          </p>
+          <div class="account-form" style="flex-direction:column;align-items:stretch;">
+            <input type="text" id="cloudKey" placeholder="Master Key" style="margin-bottom:8px;">
+            <input type="text" id="cloudBin" placeholder="Bin ID">
+          </div>
+          <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
+            <button class="theme-btn" onclick="saveCloudConfig()">Сохранить облако</button>
+            <button class="theme-btn" onclick="syncFromCloud()">Синхронизировать сейчас</button>
+          </div>
+          <p id="cloudStatus" style="font-size:12px;margin-top:8px;color:var(--text-dim);"></p>
+        </div>
+
+        <div class="admin-section">
           <h4>Создать аккаунт</h4>
           <div class="account-form">
             <input type="text" id="newNick" placeholder="Ник" maxlength="24">
@@ -880,15 +899,69 @@
   let mediaStream = null;
   let pendingImage = null;
 
-  // ===================== STORAGE =====================
+  // ===================== STORAGE (local + cloud) =====================
+  function getCloudConfig() {
+    try {
+      return JSON.parse(localStorage.getItem('factorial_cloud') || 'null');
+    } catch { return null; }
+  }
+
+  function setCloudConfig(cfg) {
+    if (cfg) localStorage.setItem('factorial_cloud', JSON.stringify(cfg));
+    else localStorage.removeItem('factorial_cloud');
+  }
+
   function getUsers() {
     try {
       return JSON.parse(localStorage.getItem('factorial_users') || '{}');
     } catch { return {}; }
   }
 
-  function saveUsers(users) {
+  function saveUsersLocal(users) {
     localStorage.setItem('factorial_users', JSON.stringify(users));
+  }
+
+  async function saveUsers(users) {
+    saveUsersLocal(users);
+    const cloud = getCloudConfig();
+    if (cloud?.binId && cloud?.masterKey) {
+      try {
+        await fetch('https://api.jsonbin.io/v3/b/' + cloud.binId, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Master-Key': cloud.masterKey,
+            'X-Bin-Versioning': 'false'
+          },
+          body: JSON.stringify({ users, logs: getLogs() })
+        });
+      } catch (e) {
+        console.warn('Cloud save failed', e);
+      }
+    }
+  }
+
+  async function loadUsersFromCloud() {
+    const cloud = getCloudConfig();
+    if (!cloud?.binId || !cloud?.masterKey) return null;
+    try {
+      const res = await fetch('https://api.jsonbin.io/v3/b/' + cloud.binId + '/latest', {
+        headers: { 'X-Master-Key': cloud.masterKey }
+      });
+      if (!res.ok) return null;
+      const json = await res.json();
+      const data = json.record || json;
+      if (data.users && typeof data.users === 'object') {
+        saveUsersLocal(data.users);
+        if (Array.isArray(data.logs)) {
+          localStorage.setItem('factorial_logs', JSON.stringify(data.logs.slice(0, 100)));
+        }
+        return data.users;
+      }
+    } catch (e) {
+      console.warn('Cloud load failed', e);
+    }
+    return null;
   }
 
   function getLogs() {
@@ -897,35 +970,84 @@
     } catch { return []; }
   }
 
-  function saveLog(entry) {
+  async function saveLog(entry) {
     const logs = getLogs();
     logs.unshift(entry);
     if (logs.length > 100) logs.length = 100;
     localStorage.setItem('factorial_logs', JSON.stringify(logs));
+    // sync full state to cloud
+    await saveUsers(getUsers());
   }
 
   // ===================== DEVICE & IP =====================
   function getDeviceInfo() {
-    const ua = navigator.userAgent;
-    let device = 'Неизвестно';
+    const ua = navigator.userAgent || '';
+    let brand = 'Неизвестно';
+    let os = '';
 
-    if (/iPhone/.test(ua)) device = 'iPhone';
-    else if (/iPad/.test(ua)) device = 'iPad';
-    else if (/Android/.test(ua)) {
-      const m = ua.match(/Android\s([0-9.]+)/);
-      device = m ? `Android ${m[1]}` : 'Android';
-    } else if (/Windows/.test(ua)) device = 'Windows';
-    else if (/Mac OS/.test(ua)) device = 'macOS';
-    else if (/Linux/.test(ua)) device = 'Linux';
+    // Марка / модель
+    if (/iPhone/.test(ua)) {
+      brand = 'Apple iPhone';
+      const m = ua.match(/iPhone OS (\d+[_.]\d+)/);
+      os = m ? 'iOS ' + m[1].replace('_', '.') : 'iOS';
+    } else if (/iPad/.test(ua)) {
+      brand = 'Apple iPad';
+      os = 'iPadOS';
+    } else if (/Android/.test(ua)) {
+      // Пытаемся вытащить модель
+      let model = '';
+      const models = [
+        [/Samsung|SM-[A-Z0-9]+/i, 'Samsung'],
+        [/Xiaomi|Redmi|POCO|Mi\s/i, 'Xiaomi'],
+        [/Huawei|Honor|HUAWEI/i, 'Huawei'],
+        [/OnePlus/i, 'OnePlus'],
+        [/Pixel/i, 'Google Pixel'],
+        [/Realme/i, 'Realme'],
+        [/OPPO/i, 'OPPO'],
+        [/vivo/i, 'vivo'],
+        [/Nokia/i, 'Nokia'],
+        [/Motorola|Moto/i, 'Motorola'],
+        [/LG-/i, 'LG'],
+        [/Sony|Xperia/i, 'Sony'],
+        [/Tecno/i, 'Tecno'],
+        [/Infinix/i, 'Infinix']
+      ];
+      for (const [re, name] of models) {
+        if (re.test(ua)) { brand = name; break; }
+      }
+      if (brand === 'Неизвестно') brand = 'Android';
+      const ver = ua.match(/Android\s([0-9.]+)/);
+      os = ver ? 'Android ' + ver[1] : 'Android';
+      // иногда модель в скобках
+      const paren = ua.match(/\(([^)]+)\)/);
+      if (paren && /Build|\w{3,}-[A-Z0-9]+/i.test(paren[1])) {
+        const parts = paren[1].split(';').map(s => s.trim());
+        const maybeModel = parts.find(p => /[A-Z]{1,3}[-_]?[A-Z0-9]{3,}/i.test(p) && !/Android|Linux|wv/.test(p));
+        if (maybeModel) brand += ' ' + maybeModel.replace(/\s*Build.*$/i, '').trim();
+      }
+    } else if (/Windows/.test(ua)) {
+      brand = 'Windows PC';
+      os = /Windows NT 10/.test(ua) ? 'Windows 10/11' : 'Windows';
+    } else if (/Mac OS X|Macintosh/.test(ua)) {
+      brand = 'Apple Mac';
+      os = 'macOS';
+    } else if (/Linux/.test(ua)) {
+      brand = 'Linux';
+      os = 'Linux';
+    }
 
-    // Browser
     let browser = '';
     if (/Edg\//.test(ua)) browser = 'Edge';
-    else if (/Chrome\//.test(ua)) browser = 'Chrome';
+    else if (/OPR\/|Opera/.test(ua)) browser = 'Opera';
+    else if (/Chrome\//.test(ua) && !/Edg\//.test(ua)) browser = 'Chrome';
     else if (/Firefox\//.test(ua)) browser = 'Firefox';
     else if (/Safari\//.test(ua) && !/Chrome/.test(ua)) browser = 'Safari';
+    else if (/YaBrowser/.test(ua)) browser = 'Yandex';
 
-    return browser ? `${device} · ${browser}` : device;
+    const parts = [brand];
+    if (os) parts.push(os);
+    if (browser) parts.push(browser);
+    return parts.join(' · ');
   }
 
   async function getPublicIP() {
@@ -955,13 +1077,20 @@
   loginPass.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
   loginBtn.addEventListener('click', doLogin);
 
-  function doLogin() {
+  // При открытии сайта сразу подтягиваем аккаунты из облака (если настроено)
+  loadUsersFromCloud();
+
+  async function doLogin() {
     const nick = loginNick.value.trim();
-    const pass = loginPass.value;
+    const pass = loginPass.value.trim();
     if (!nick || !pass) return;
 
     loginError.textContent = '';
     loginBtn.disabled = true;
+    loginBtn.textContent = 'Вход...';
+
+    // Подтягиваем аккаунты из облака (если настроено)
+    await loadUsersFromCloud();
 
     let isAdmin = false;
     let ok = false;
@@ -971,33 +1100,35 @@
       isAdmin = true;
     } else {
       const users = getUsers();
-      if (users[nick] && users[nick] === pass) {
-        ok = true;
-      }
+      // точное совпадение или без учёта регистра ника
+      const found = users[nick] ?? Object.entries(users).find(([k]) => k.toLowerCase() === nick.toLowerCase())?.[1];
+      if (found && found === pass) ok = true;
     }
 
     if (!ok) {
       loginError.textContent = 'Неверный ник или пароль';
       loginBtn.disabled = false;
+      loginBtn.textContent = 'Войти';
       return;
     }
 
-    // Мгновенный вход — IP подтягиваем в фоне
     const device = getDeviceInfo();
     const time = new Date().toLocaleString('ru-RU');
 
     currentUser = { nick, isAdmin };
     showApp();
+    loginBtn.textContent = 'Войти';
 
-    // Лог пишем сразу, IP дописываем асинхронно
     const logEntry = { nick, ip: '…', device, time, isAdmin };
-    saveLog(logEntry);
+    await saveLog(logEntry);
 
-    getPublicIP().then(ip => {
+    getPublicIP().then(async (ip) => {
       const logs = getLogs();
       if (logs[0] && logs[0].nick === nick && logs[0].time === time) {
         logs[0].ip = ip;
         localStorage.setItem('factorial_logs', JSON.stringify(logs));
+        // обновим в облаке
+        await saveUsers(getUsers());
       }
     });
   }
@@ -1036,6 +1167,18 @@
     if (!currentUser?.isAdmin) return;
     renderAccounts();
     renderLogs();
+    const cloud = getCloudConfig();
+    if (cloud) {
+      const k = document.getElementById('cloudKey');
+      const b = document.getElementById('cloudBin');
+      if (k) k.value = cloud.masterKey || '';
+      if (b) b.value = cloud.binId || '';
+      const st = document.getElementById('cloudStatus');
+      if (st) {
+        st.textContent = 'Облако подключено';
+        st.style.color = 'var(--success)';
+      }
+    }
     document.getElementById('adminOverlay').classList.add('open');
   }
 
@@ -1043,7 +1186,7 @@
     document.getElementById('adminOverlay').classList.remove('open');
   }
 
-  function createAccount() {
+  async function createAccount() {
     const nick = document.getElementById('newNick').value.trim();
     const pass = document.getElementById('newPass').value;
 
@@ -1058,19 +1201,51 @@
 
     const users = getUsers();
     users[nick] = pass;
-    saveUsers(users);
+    await saveUsers(users);
 
     document.getElementById('newNick').value = '';
     document.getElementById('newPass').value = '';
     renderAccounts();
   }
 
-  function deleteAccount(nick) {
+  async function deleteAccount(nick) {
     if (!confirm(`Удалить аккаунт «${nick}»?`)) return;
     const users = getUsers();
     delete users[nick];
-    saveUsers(users);
+    await saveUsers(users);
     renderAccounts();
+  }
+
+  function saveCloudConfig() {
+    const masterKey = document.getElementById('cloudKey').value.trim();
+    const binId = document.getElementById('cloudBin').value.trim();
+    const status = document.getElementById('cloudStatus');
+    if (!masterKey || !binId) {
+      status.textContent = 'Заполни Master Key и Bin ID';
+      status.style.color = 'var(--danger)';
+      return;
+    }
+    setCloudConfig({ masterKey, binId });
+    status.textContent = 'Облако сохранено. Нажми «Синхронизировать сейчас».';
+    status.style.color = 'var(--success)';
+    // сразу отправим текущие данные
+    saveUsers(getUsers());
+  }
+
+  async function syncFromCloud() {
+    const status = document.getElementById('cloudStatus');
+    status.textContent = 'Синхронизация...';
+    status.style.color = 'var(--text-dim)';
+    const users = await loadUsersFromCloud();
+    if (users) {
+      status.textContent = 'Синхронизировано: ' + Object.keys(users).length + ' аккаунт(ов)';
+      status.style.color = 'var(--success)';
+      renderAccounts();
+      renderLogs();
+    } else {
+      status.textContent = 'Не удалось загрузить. Проверь Key и Bin ID.';
+      status.style.color = 'var(--danger)';
+    }
   }
 
   function renderAccounts() {
