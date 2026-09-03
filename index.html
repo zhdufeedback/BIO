@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Факториал — От Канука</title>
-  <!-- AI без регистрации -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     :root {
       --bg: #0c0c10;
@@ -808,21 +808,10 @@
         </div>
 
         <div class="admin-section">
-          <h4>Синхронизация с телефоном / другим ПК</h4>
-          <p style="font-size:12px;color:var(--text-dim);margin-bottom:10px;line-height:1.45;">
-            1. Создай аккаунты здесь<br>
-            2. Нажми «Скопировать код»<br>
-            3. На другом устройстве войди как КаНуКа → Админ-панель → «Вставить код»
+          <h4>База данных</h4>
+          <p style="font-size:12px;color:var(--text-dim);line-height:1.45;">
+            Supabase подключена. Аккаунты работают на всех устройствах сразу.
           </p>
-          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
-            <button class="theme-btn" onclick="copySyncCode()">Скопировать код</button>
-            <button class="theme-btn" onclick="document.getElementById('syncPasteBox').style.display='block'">Вставить код</button>
-          </div>
-          <div id="syncPasteBox" style="display:none;">
-            <textarea id="syncCodeInput" placeholder="Вставь код сюда..." style="width:100%;height:72px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:10px;font-size:12px;resize:vertical;"></textarea>
-            <button class="theme-btn" style="margin-top:8px;" onclick="applySyncCode()">Применить код</button>
-          </div>
-          <p id="syncStatus" style="font-size:12px;margin-top:8px;color:var(--text-dim);"></p>
         </div>
 
         <!-- Themes -->
@@ -893,79 +882,81 @@
   const ADMIN_NICK = 'КаНуКа';
   const ADMIN_PASS = '13032011';
 
+  const SUPABASE_URL = 'https://bzvuzefvdbadryqcwnex.supabase.co';
+  const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ6dnV6ZWZ2ZGJhZHJ5cWN3bmV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg0MjA3NTQsImV4cCI6MjEwMzk5Njc1NH0.sFr-cX1IvzgOQrU82Yv-a-GtpgCSCbJuWzw8zHL2LxM';
+
+  const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
   let currentUser = null;   // { nick, isAdmin }
   let chatHistory = [];
   let mediaStream = null;
   let pendingImage = null;
 
-  // ===================== STORAGE =====================
-  function getUsers() {
-    try {
-      return JSON.parse(localStorage.getItem('factorial_users') || '{}');
-    } catch { return {}; }
+  // ===================== PASSWORD HASH =====================
+  async function hashPass(str) {
+    const data = new TextEncoder().encode(str);
+    const buf = await crypto.subtle.digest('SHA-256', data);
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
   }
 
-  function saveUsers(users) {
-    localStorage.setItem('factorial_users', JSON.stringify(users));
-  }
-
-  function getLogs() {
-    try {
-      return JSON.parse(localStorage.getItem('factorial_logs') || '[]');
-    } catch { return []; }
-  }
-
-  function saveLog(entry) {
-    const logs = getLogs();
-    logs.unshift(entry);
-    if (logs.length > 100) logs.length = 100;
-    localStorage.setItem('factorial_logs', JSON.stringify(logs));
-  }
-
-  // Код синхронизации (без сторонних сервисов)
-  function copySyncCode() {
-    const payload = {
-      users: getUsers(),
-      logs: getLogs().slice(0, 50)
-    };
-    const code = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
-    const status = document.getElementById('syncStatus');
-    navigator.clipboard.writeText(code).then(() => {
-      status.textContent = 'Код скопирован! Вставь его на другом устройстве.';
-      status.style.color = 'var(--success)';
-    }).catch(() => {
-      // fallback
-      prompt('Скопируй этот код:', code);
-      status.textContent = 'Скопируй код из окна.';
-      status.style.color = 'var(--text-dim)';
-    });
-  }
-
-  function applySyncCode() {
-    const raw = document.getElementById('syncCodeInput').value.trim();
-    const status = document.getElementById('syncStatus');
-    if (!raw) {
-      status.textContent = 'Вставь код';
-      status.style.color = 'var(--danger)';
-      return;
+  // ===================== SUPABASE STORAGE =====================
+  async function fetchUsers() {
+    const { data, error } = await sb.from('users').select('nick,password');
+    if (error) {
+      console.error('users fetch', error);
+      throw error;
     }
+    return data || [];
+  }
+
+  async function addUserToDb(nick, password) {
+    const password_hash = await hashPass(password);
+    const { error } = await sb.from('users').insert({ nick, password: password_hash });
+    if (error) throw error;
+  }
+
+  async function deleteUserFromDb(nick) {
+    const { error } = await sb.from('users').delete().eq('nick', nick);
+    if (error) throw error;
+  }
+
+  async function checkUserLogin(nick, password) {
+    const password_hash = await hashPass(password);
+    const { data, error } = await sb
+      .from('users')
+      .select('nick')
+      .eq('nick', nick)
+      .eq('password', password_hash)
+      .maybeSingle();
+    if (error) throw error;
+    return !!data;
+  }
+
+  async function saveLog(entry) {
     try {
-      const json = JSON.parse(decodeURIComponent(escape(atob(raw))));
-      if (!json.users || typeof json.users !== 'object') throw new Error('bad');
-      saveUsers(json.users);
-      if (Array.isArray(json.logs)) {
-        localStorage.setItem('factorial_logs', JSON.stringify(json.logs.slice(0, 100)));
-      }
-      status.textContent = 'Готово! Аккаунтов: ' + Object.keys(json.users).length;
-      status.style.color = 'var(--success)';
-      document.getElementById('syncPasteBox').style.display = 'none';
-      document.getElementById('syncCodeInput').value = '';
-      renderAccounts();
-      renderLogs();
+      await sb.from('logs').insert({
+        nick: entry.nick,
+        ip: entry.ip || '—',
+        device: entry.device || '—',
+        time: entry.time,
+        is_admin: !!entry.isAdmin
+      });
     } catch (e) {
-      status.textContent = 'Неверный код. Скопируй ещё раз.';
-      status.style.color = 'var(--danger)';
+      console.warn('log save failed', e);
     }
+  }
+
+  async function fetchLogs() {
+    const { data, error } = await sb
+      .from('logs')
+      .select('*')
+      .order('id', { ascending: false })
+      .limit(50);
+    if (error) {
+      console.error('logs fetch', error);
+      return [];
+    }
+    return data || [];
   }
 
   // ===================== DEVICE & IP =====================
@@ -1080,14 +1071,19 @@
     let isAdmin = false;
     let ok = false;
 
-    if (nick === ADMIN_NICK && pass === ADMIN_PASS) {
-      ok = true;
-      isAdmin = true;
-    } else {
-      const users = getUsers();
-      // точное совпадение или без учёта регистра ника
-      const found = users[nick] ?? Object.entries(users).find(([k]) => k.toLowerCase() === nick.toLowerCase())?.[1];
-      if (found && found === pass) ok = true;
+    try {
+      if (nick === ADMIN_NICK && pass === ADMIN_PASS) {
+        ok = true;
+        isAdmin = true;
+      } else {
+        ok = await checkUserLogin(nick, pass);
+      }
+    } catch (e) {
+      console.error(e);
+      loginError.textContent = 'Ошибка базы. Проверь таблицы users/logs.';
+      loginBtn.disabled = false;
+      loginBtn.textContent = 'Войти';
+      return;
     }
 
     if (!ok) {
@@ -1103,17 +1099,10 @@
     currentUser = { nick, isAdmin };
     showApp();
     loginBtn.textContent = 'Войти';
+    loginBtn.disabled = false;
 
-    const logEntry = { nick, ip: '…', device, time, isAdmin };
-    saveLog(logEntry);
-
-    getPublicIP().then((ip) => {
-      const logs = getLogs();
-      if (logs[0] && logs[0].nick === nick && logs[0].time === time) {
-        logs[0].ip = ip;
-        localStorage.setItem('factorial_logs', JSON.stringify(logs));
-      }
-    });
+    const ip = await getPublicIP();
+    saveLog({ nick, ip, device, time, isAdmin });
   }
 
   function showApp() {
@@ -1157,7 +1146,7 @@
     document.getElementById('adminOverlay').classList.remove('open');
   }
 
-  function createAccount() {
+  async function createAccount() {
     const nick = document.getElementById('newNick').value.trim();
     const pass = document.getElementById('newPass').value;
 
@@ -1170,58 +1159,69 @@
       return;
     }
 
-    const users = getUsers();
-    users[nick] = pass;
-    saveUsers(users);
-
-    document.getElementById('newNick').value = '';
-    document.getElementById('newPass').value = '';
-    renderAccounts();
+    try {
+      await addUserToDb(nick, pass);
+      document.getElementById('newNick').value = '';
+      document.getElementById('newPass').value = '';
+      await renderAccounts();
+      alert('Аккаунт создан: ' + nick);
+    } catch (e) {
+      console.error(e);
+      alert('Не удалось создать. Возможно, такой ник уже есть.\n' + (e.message || e));
+    }
   }
 
-  function deleteAccount(nick) {
+  async function deleteAccount(nick) {
     if (!confirm(`Удалить аккаунт «${nick}»?`)) return;
-    const users = getUsers();
-    delete users[nick];
-    saveUsers(users);
-    renderAccounts();
+    try {
+      await deleteUserFromDb(nick);
+      await renderAccounts();
+    } catch (e) {
+      console.error(e);
+      alert('Ошибка удаления');
+    }
   }
 
-  function renderAccounts() {
-    const users = getUsers();
+  async function renderAccounts() {
     const list = document.getElementById('accountList');
-    const nicks = Object.keys(users);
-
-    if (nicks.length === 0) {
-      list.innerHTML = '<div style="color:var(--text-dim);font-size:13px;">Пока нет аккаунтов</div>';
-      return;
+    list.innerHTML = '<div style="color:var(--text-dim);font-size:13px;">Загрузка...</div>';
+    try {
+      const users = await fetchUsers();
+      if (!users.length) {
+        list.innerHTML = '<div style="color:var(--text-dim);font-size:13px;">Пока нет аккаунтов</div>';
+        return;
+      }
+      list.innerHTML = users.map(u => `
+        <div class="account-item">
+          <span><strong>${escapeHtml(u.nick)}</strong></span>
+          <button class="delete-btn" onclick="deleteAccount('${escapeHtml(u.nick)}')">Удалить</button>
+        </div>
+      `).join('');
+    } catch (e) {
+      list.innerHTML = '<div style="color:var(--danger);font-size:13px;">Ошибка загрузки из базы</div>';
     }
-
-    list.innerHTML = nicks.map(n => `
-      <div class="account-item">
-        <span><strong>${escapeHtml(n)}</strong> · ${escapeHtml(users[n])}</span>
-        <button class="delete-btn" onclick="deleteAccount('${escapeHtml(n)}')">Удалить</button>
-      </div>
-    `).join('');
   }
 
-  function renderLogs() {
-    const logs = getLogs();
+  async function renderLogs() {
     const body = document.getElementById('logBody');
-
-    if (logs.length === 0) {
-      body.innerHTML = '<tr><td colspan="4" style="color:var(--text-dim)">Пока нет записей</td></tr>';
-      return;
+    body.innerHTML = '<tr><td colspan="4" style="color:var(--text-dim)">Загрузка...</td></tr>';
+    try {
+      const logs = await fetchLogs();
+      if (!logs.length) {
+        body.innerHTML = '<tr><td colspan="4" style="color:var(--text-dim)">Пока нет записей</td></tr>';
+        return;
+      }
+      body.innerHTML = logs.map(l => `
+        <tr>
+          <td>${escapeHtml(l.nick)}${l.is_admin ? ' <span style="color:var(--success);font-size:11px">админ</span>' : ''}</td>
+          <td>${escapeHtml(l.ip || '—')}</td>
+          <td class="device-info">${escapeHtml(l.device || '—')}</td>
+          <td style="white-space:nowrap;color:var(--text-dim)">${escapeHtml(l.time || '')}</td>
+        </tr>
+      `).join('');
+    } catch (e) {
+      body.innerHTML = '<tr><td colspan="4" style="color:var(--danger)">Ошибка загрузки</td></tr>';
     }
-
-    body.innerHTML = logs.map(l => `
-      <tr>
-        <td>${escapeHtml(l.nick)}${l.isAdmin ? ' <span style="color:var(--success);font-size:11px">админ</span>' : ''}</td>
-        <td>${escapeHtml(l.ip)}</td>
-        <td class="device-info">${escapeHtml(l.device)}</td>
-        <td style="white-space:nowrap;color:var(--text-dim)">${escapeHtml(l.time)}</td>
-      </tr>
-    `).join('');
   }
 
   // ===================== CHAT UI =====================
