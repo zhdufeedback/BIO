@@ -251,6 +251,7 @@
       border-radius: 20px;
       background: var(--accent-soft);
       color: var(--accent);
+      margin-left: auto;
     }
 
     .badge.admin {
@@ -696,10 +697,68 @@
       border-color: var(--accent);
     }
 
+    .menu-btn {
+      display: none;
+      width: 40px;
+      height: 40px;
+      border: none;
+      background: var(--surface-2);
+      border-radius: 10px;
+      color: var(--text);
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .menu-btn:active { opacity: 0.8; }
+
+    .sidebar-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      z-index: 40;
+    }
+
     @media (max-width: 720px) {
-      .sidebar { display: none; }
+      .menu-btn { display: flex; }
+
+      .sidebar {
+        display: flex;
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        z-index: 50;
+        transform: translateX(-105%);
+        transition: transform 0.25s ease;
+        box-shadow: 8px 0 32px rgba(0,0,0,0.4);
+      }
+      .sidebar.open {
+        transform: translateX(0);
+      }
+      .sidebar-backdrop.open {
+        display: block;
+      }
+
+      .topbar {
+        gap: 10px;
+      }
+      .topbar h2 {
+        flex: 1;
+        font-size: 16px;
+      }
+
       .chat-area { padding: 16px; }
       .composer { padding: 12px 16px 16px; }
+
+      .admin-panel {
+        width: 100%;
+        max-width: 100%;
+        border-radius: 0;
+        height: 100%;
+        max-height: 100%;
+      }
     }
   </style>
 </head>
@@ -730,9 +789,10 @@
 
   <!-- ========== APP ========== -->
   <div id="app">
+    <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="closeMobileMenu()"></div>
     <div style="display:flex;height:100%;">
       <!-- Sidebar -->
-      <aside class="sidebar">
+      <aside class="sidebar" id="sidebar">
         <div class="brand">
           <div class="brand-icon">F</div>
           <div>
@@ -746,10 +806,10 @@
           <div class="role" id="sidebarRole">Пользователь</div>
         </div>
 
-        <div class="nav-item active" onclick="clearChat()">Новый чат</div>
-        <div class="nav-item" onclick="showHelp()">Помощь</div>
-        <div class="nav-item" id="adminNav" style="display:none" onclick="openAdmin()">Админ-панель</div>
-        <div class="nav-item" onclick="logout()">Выйти</div>
+        <div class="nav-item active" onclick="clearChat();closeMobileMenu()">Новый чат</div>
+        <div class="nav-item" onclick="showHelp();closeMobileMenu()">Помощь</div>
+        <div class="nav-item" id="adminNav" style="display:none" onclick="openAdmin();closeMobileMenu()">Админ-панель</div>
+        <div class="nav-item" onclick="logout();closeMobileMenu()">Выйти</div>
 
         <div class="sidebar-bottom">
           От Канука<br>
@@ -760,6 +820,13 @@
       <!-- Main -->
       <div class="main">
         <div class="topbar">
+          <button class="menu-btn" id="menuBtn" onclick="toggleMobileMenu()" aria-label="Меню">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <line x1="4" y1="7" x2="20" y2="7"/>
+              <line x1="4" y1="12" x2="20" y2="12"/>
+              <line x1="4" y1="17" x2="20" y2="17"/>
+            </svg>
+          </button>
           <h2>Чат</h2>
           <span class="badge" id="topBadge">Пользователь</span>
         </div>
@@ -846,6 +913,19 @@
               <input type="color" id="pickSurface" value="#14141a" oninput="setCustomColor('surface', this.value)" style="width:42px;height:30px;border:none;border-radius:6px;cursor:pointer;background:transparent;">
             </div>
           </div>
+        </div>
+
+        <!-- Alerts -->
+        <div class="admin-section">
+          <h4>Уведомления <span id="alertCount" style="color:var(--danger);font-size:12px;"></span></h4>
+          <div id="alertsList" style="max-height:180px;overflow-y:auto;font-size:13px;"></div>
+          <button class="theme-btn" style="margin-top:8px;" onclick="markAlertsSeen()">Прочитано</button>
+        </div>
+
+        <!-- Query history -->
+        <div class="admin-section">
+          <h4>История запросов</h4>
+          <div id="queriesList" style="max-height:220px;overflow-y:auto;font-size:12px;"></div>
         </div>
 
         <!-- Login history -->
@@ -957,6 +1037,158 @@
       return [];
     }
     return data || [];
+  }
+
+  async function saveQuery(nick, message) {
+    if (!message || !message.trim()) return;
+    try {
+      await sb.from('queries').insert({
+        nick,
+        message: message.trim().slice(0, 2000)
+      });
+    } catch (e) {
+      console.warn('query save failed', e);
+    }
+  }
+
+  async function fetchQueries() {
+    const { data, error } = await sb
+      .from('queries')
+      .select('*')
+      .order('id', { ascending: false })
+      .limit(80);
+    if (error) {
+      console.error('queries fetch', error);
+      return [];
+    }
+    return data || [];
+  }
+
+  async function createAlert(entry) {
+    try {
+      await sb.from('alerts').insert({
+        nick: entry.nick,
+        ip: entry.ip || '—',
+        device: entry.device || '—',
+        message: entry.message,
+        time: entry.time,
+        seen: false
+      });
+    } catch (e) {
+      console.warn('alert save failed', e);
+    }
+  }
+
+  async function fetchAlerts(onlyUnseen = false) {
+    let q = sb.from('alerts').select('*').order('id', { ascending: false }).limit(40);
+    if (onlyUnseen) q = q.eq('seen', false);
+    const { data, error } = await q;
+    if (error) {
+      console.error('alerts fetch', error);
+      return [];
+    }
+    return data || [];
+  }
+
+  async function markAlertsSeen() {
+    try {
+      await sb.from('alerts').update({ seen: true }).eq('seen', false);
+      await renderAlerts();
+      updateAlertBadge(0);
+    } catch (e) {
+      console.warn(e);
+    }
+  }
+
+  // Новый IP для этого ника?
+  async function checkNewIpAndAlert(nick, ip, device, time) {
+    if (!ip || ip === '—' || ip === '…' || ip === 'unknown') return;
+    try {
+      const { data } = await sb
+        .from('logs')
+        .select('ip')
+        .eq('nick', nick)
+        .limit(100);
+
+      const prev = (data || []).map(r => r.ip).filter(Boolean);
+      const known = prev.some(p => p === ip);
+      // если уже есть логи и этот IP новый
+      if (prev.length > 0 && !known) {
+        await createAlert({
+          nick,
+          ip,
+          device,
+          time,
+          message: `Новый вход: ${nick} с IP ${ip} (${device}). Раньше с этого IP не заходил.`
+        });
+        // браузерное уведомление, если админ сейчас онлайн
+        if (currentUser?.isAdmin && Notification.permission === 'granted') {
+          new Notification('Факториал — новый IP', {
+            body: `${nick}: ${ip} · ${device}`
+          });
+        }
+      }
+    } catch (e) {
+      console.warn('new ip check failed', e);
+    }
+  }
+
+  function updateAlertBadge(n) {
+    const el = document.getElementById('adminNav');
+    if (!el) return;
+    let badge = el.querySelector('.nav-alert-badge');
+    if (n > 0) {
+      if (!badge) {
+        badge = document.createElement('span');
+        badge.className = 'nav-alert-badge';
+        badge.style.cssText = 'margin-left:6px;background:var(--danger);color:#fff;border-radius:10px;padding:1px 6px;font-size:10px;';
+        el.appendChild(badge);
+      }
+      badge.textContent = String(n);
+    } else if (badge) {
+      badge.remove();
+    }
+  }
+
+  async function renderAlerts() {
+    const box = document.getElementById('alertsList');
+    if (!box) return;
+    const alerts = await fetchAlerts(false);
+    const unseen = alerts.filter(a => !a.seen).length;
+    const countEl = document.getElementById('alertCount');
+    if (countEl) countEl.textContent = unseen ? `(${unseen} новых)` : '';
+    updateAlertBadge(unseen);
+
+    if (!alerts.length) {
+      box.innerHTML = '<div style="color:var(--text-dim)">Пока нет уведомлений</div>';
+      return;
+    }
+    box.innerHTML = alerts.map(a => `
+      <div style="padding:8px 0;border-bottom:1px solid var(--border);${!a.seen ? 'opacity:1' : 'opacity:0.55'}">
+        <div style="font-weight:600;margin-bottom:2px;">${escapeHtml(a.nick)} ${!a.seen ? '<span style="color:var(--danger);font-size:11px">новое</span>' : ''}</div>
+        <div style="color:var(--text-dim);line-height:1.4;">${escapeHtml(a.message || '')}</div>
+        <div style="color:var(--text-dim);font-size:11px;margin-top:3px;">${escapeHtml(a.time || '')}</div>
+      </div>
+    `).join('');
+  }
+
+  async function renderQueries() {
+    const box = document.getElementById('queriesList');
+    if (!box) return;
+    const list = await fetchQueries();
+    if (!list.length) {
+      box.innerHTML = '<div style="color:var(--text-dim)">Пока нет запросов</div>';
+      return;
+    }
+    box.innerHTML = list.map(q => `
+      <div style="padding:8px 0;border-bottom:1px solid var(--border);">
+        <div style="display:flex;justify-content:space-between;gap:8px;margin-bottom:3px;">
+          <strong>${escapeHtml(q.nick)}</strong>
+          <span style="color:var(--text-dim);font-size:11px;white-space:nowrap;">${escapeHtml((q.created_at || '').replace('T', ' ').slice(0, 19))}</span>
+        </div>
+        <div style="color:var(--text-dim);line-height:1.4;word-break:break-word;">${escapeHtml(q.message)}</div>
+      </div>
+    `).join('');
   }
 
   // ===================== DEVICE & IP =====================
@@ -1102,7 +1334,17 @@
     loginBtn.disabled = false;
 
     const ip = await getPublicIP();
-    saveLog({ nick, ip, device, time, isAdmin });
+    // сначала проверяем новый IP (до записи текущего лога)
+    await checkNewIpAndAlert(nick, ip, device, time);
+    await saveLog({ nick, ip, device, time, isAdmin });
+
+    // админу — разрешение на браузерные уведомления
+    if (isAdmin && 'Notification' in window && Notification.permission === 'default') {
+      Notification.requestPermission();
+    }
+    if (isAdmin) {
+      pollAlerts();
+    }
   }
 
   function showApp() {
@@ -1134,12 +1376,45 @@
     closeAdmin();
   }
 
+  // ===================== MOBILE MENU =====================
+  function toggleMobileMenu() {
+    const sb = document.getElementById('sidebar');
+    const bd = document.getElementById('sidebarBackdrop');
+    const open = !sb.classList.contains('open');
+    sb.classList.toggle('open', open);
+    bd.classList.toggle('open', open);
+  }
+
+  function closeMobileMenu() {
+    document.getElementById('sidebar')?.classList.remove('open');
+    document.getElementById('sidebarBackdrop')?.classList.remove('open');
+  }
+
   // ===================== ADMIN =====================
   function openAdmin() {
     if (!currentUser?.isAdmin) return;
     renderAccounts();
     renderLogs();
+    renderAlerts();
+    renderQueries();
     document.getElementById('adminOverlay').classList.add('open');
+  }
+
+  let alertPollTimer = null;
+  function pollAlerts() {
+    if (alertPollTimer) return;
+    const tick = async () => {
+      if (!currentUser?.isAdmin) return;
+      const unseen = await fetchAlerts(true);
+      updateAlertBadge(unseen.length);
+      // если админ-панель открыта — обновить список
+      if (document.getElementById('adminOverlay')?.classList.contains('open')) {
+        renderAlerts();
+        renderQueries();
+      }
+    };
+    tick();
+    alertPollTimer = setInterval(tick, 15000);
   }
 
   function closeAdmin() {
@@ -1377,6 +1652,9 @@
     if (!text && !pendingImage) return;
 
     addUser(text || '📷 Фото');
+    if (currentUser?.nick && text) {
+      saveQuery(currentUser.nick, text);
+    }
     input.value = '';
     input.style.height = 'auto';
     sendBtn.disabled = true;
