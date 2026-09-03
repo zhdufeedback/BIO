@@ -798,25 +798,6 @@
 
         <!-- Create account -->
         <div class="admin-section">
-          <h4>Облако (аккаунты на всех устройствах)</h4>
-          <p style="font-size:12px;color:var(--text-dim);margin-bottom:10px;line-height:1.45;">
-            1. Зайди на <strong>jsonbin.io</strong> → создай бесплатный аккаунт<br>
-            2. API Keys → скопируй <strong>Master Key</strong><br>
-            3. Создай Bin (любое имя) → скопируй <strong>Bin ID</strong><br>
-            4. Вставь ниже и нажми «Сохранить»
-          </p>
-          <div class="account-form" style="flex-direction:column;align-items:stretch;">
-            <input type="text" id="cloudKey" placeholder="Master Key" style="margin-bottom:8px;">
-            <input type="text" id="cloudBin" placeholder="Bin ID">
-          </div>
-          <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
-            <button class="theme-btn" onclick="saveCloudConfig()">Сохранить облако</button>
-            <button class="theme-btn" onclick="syncFromCloud()">Синхронизировать сейчас</button>
-          </div>
-          <p id="cloudStatus" style="font-size:12px;margin-top:8px;color:var(--text-dim);"></p>
-        </div>
-
-        <div class="admin-section">
           <h4>Создать аккаунт</h4>
           <div class="account-form">
             <input type="text" id="newNick" placeholder="Ник" maxlength="24">
@@ -824,6 +805,24 @@
             <button onclick="createAccount()">Создать</button>
           </div>
           <div class="account-list" id="accountList"></div>
+        </div>
+
+        <div class="admin-section">
+          <h4>Синхронизация с телефоном / другим ПК</h4>
+          <p style="font-size:12px;color:var(--text-dim);margin-bottom:10px;line-height:1.45;">
+            1. Создай аккаунты здесь<br>
+            2. Нажми «Скопировать код»<br>
+            3. На другом устройстве войди как КаНуКа → Админ-панель → «Вставить код»
+          </p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+            <button class="theme-btn" onclick="copySyncCode()">Скопировать код</button>
+            <button class="theme-btn" onclick="document.getElementById('syncPasteBox').style.display='block'">Вставить код</button>
+          </div>
+          <div id="syncPasteBox" style="display:none;">
+            <textarea id="syncCodeInput" placeholder="Вставь код сюда..." style="width:100%;height:72px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:10px;font-size:12px;resize:vertical;"></textarea>
+            <button class="theme-btn" style="margin-top:8px;" onclick="applySyncCode()">Применить код</button>
+          </div>
+          <p id="syncStatus" style="font-size:12px;margin-top:8px;color:var(--text-dim);"></p>
         </div>
 
         <!-- Themes -->
@@ -899,69 +898,15 @@
   let mediaStream = null;
   let pendingImage = null;
 
-  // ===================== STORAGE (local + cloud) =====================
-  function getCloudConfig() {
-    try {
-      return JSON.parse(localStorage.getItem('factorial_cloud') || 'null');
-    } catch { return null; }
-  }
-
-  function setCloudConfig(cfg) {
-    if (cfg) localStorage.setItem('factorial_cloud', JSON.stringify(cfg));
-    else localStorage.removeItem('factorial_cloud');
-  }
-
+  // ===================== STORAGE =====================
   function getUsers() {
     try {
       return JSON.parse(localStorage.getItem('factorial_users') || '{}');
     } catch { return {}; }
   }
 
-  function saveUsersLocal(users) {
+  function saveUsers(users) {
     localStorage.setItem('factorial_users', JSON.stringify(users));
-  }
-
-  async function saveUsers(users) {
-    saveUsersLocal(users);
-    const cloud = getCloudConfig();
-    if (cloud?.binId && cloud?.masterKey) {
-      try {
-        await fetch('https://api.jsonbin.io/v3/b/' + cloud.binId, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Master-Key': cloud.masterKey,
-            'X-Bin-Versioning': 'false'
-          },
-          body: JSON.stringify({ users, logs: getLogs() })
-        });
-      } catch (e) {
-        console.warn('Cloud save failed', e);
-      }
-    }
-  }
-
-  async function loadUsersFromCloud() {
-    const cloud = getCloudConfig();
-    if (!cloud?.binId || !cloud?.masterKey) return null;
-    try {
-      const res = await fetch('https://api.jsonbin.io/v3/b/' + cloud.binId + '/latest', {
-        headers: { 'X-Master-Key': cloud.masterKey }
-      });
-      if (!res.ok) return null;
-      const json = await res.json();
-      const data = json.record || json;
-      if (data.users && typeof data.users === 'object') {
-        saveUsersLocal(data.users);
-        if (Array.isArray(data.logs)) {
-          localStorage.setItem('factorial_logs', JSON.stringify(data.logs.slice(0, 100)));
-        }
-        return data.users;
-      }
-    } catch (e) {
-      console.warn('Cloud load failed', e);
-    }
-    return null;
   }
 
   function getLogs() {
@@ -970,13 +915,57 @@
     } catch { return []; }
   }
 
-  async function saveLog(entry) {
+  function saveLog(entry) {
     const logs = getLogs();
     logs.unshift(entry);
     if (logs.length > 100) logs.length = 100;
     localStorage.setItem('factorial_logs', JSON.stringify(logs));
-    // sync full state to cloud
-    await saveUsers(getUsers());
+  }
+
+  // Код синхронизации (без сторонних сервисов)
+  function copySyncCode() {
+    const payload = {
+      users: getUsers(),
+      logs: getLogs().slice(0, 50)
+    };
+    const code = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
+    const status = document.getElementById('syncStatus');
+    navigator.clipboard.writeText(code).then(() => {
+      status.textContent = 'Код скопирован! Вставь его на другом устройстве.';
+      status.style.color = 'var(--success)';
+    }).catch(() => {
+      // fallback
+      prompt('Скопируй этот код:', code);
+      status.textContent = 'Скопируй код из окна.';
+      status.style.color = 'var(--text-dim)';
+    });
+  }
+
+  function applySyncCode() {
+    const raw = document.getElementById('syncCodeInput').value.trim();
+    const status = document.getElementById('syncStatus');
+    if (!raw) {
+      status.textContent = 'Вставь код';
+      status.style.color = 'var(--danger)';
+      return;
+    }
+    try {
+      const json = JSON.parse(decodeURIComponent(escape(atob(raw))));
+      if (!json.users || typeof json.users !== 'object') throw new Error('bad');
+      saveUsers(json.users);
+      if (Array.isArray(json.logs)) {
+        localStorage.setItem('factorial_logs', JSON.stringify(json.logs.slice(0, 100)));
+      }
+      status.textContent = 'Готово! Аккаунтов: ' + Object.keys(json.users).length;
+      status.style.color = 'var(--success)';
+      document.getElementById('syncPasteBox').style.display = 'none';
+      document.getElementById('syncCodeInput').value = '';
+      renderAccounts();
+      renderLogs();
+    } catch (e) {
+      status.textContent = 'Неверный код. Скопируй ещё раз.';
+      status.style.color = 'var(--danger)';
+    }
   }
 
   // ===================== DEVICE & IP =====================
@@ -1077,8 +1066,7 @@
   loginPass.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
   loginBtn.addEventListener('click', doLogin);
 
-  // При открытии сайта сразу подтягиваем аккаунты из облака (если настроено)
-  loadUsersFromCloud();
+  // local only
 
   async function doLogin() {
     const nick = loginNick.value.trim();
@@ -1088,9 +1076,6 @@
     loginError.textContent = '';
     loginBtn.disabled = true;
     loginBtn.textContent = 'Вход...';
-
-    // Подтягиваем аккаунты из облака (если настроено)
-    await loadUsersFromCloud();
 
     let isAdmin = false;
     let ok = false;
@@ -1120,15 +1105,13 @@
     loginBtn.textContent = 'Войти';
 
     const logEntry = { nick, ip: '…', device, time, isAdmin };
-    await saveLog(logEntry);
+    saveLog(logEntry);
 
-    getPublicIP().then(async (ip) => {
+    getPublicIP().then((ip) => {
       const logs = getLogs();
       if (logs[0] && logs[0].nick === nick && logs[0].time === time) {
         logs[0].ip = ip;
         localStorage.setItem('factorial_logs', JSON.stringify(logs));
-        // обновим в облаке
-        await saveUsers(getUsers());
       }
     });
   }
@@ -1167,18 +1150,6 @@
     if (!currentUser?.isAdmin) return;
     renderAccounts();
     renderLogs();
-    const cloud = getCloudConfig();
-    if (cloud) {
-      const k = document.getElementById('cloudKey');
-      const b = document.getElementById('cloudBin');
-      if (k) k.value = cloud.masterKey || '';
-      if (b) b.value = cloud.binId || '';
-      const st = document.getElementById('cloudStatus');
-      if (st) {
-        st.textContent = 'Облако подключено';
-        st.style.color = 'var(--success)';
-      }
-    }
     document.getElementById('adminOverlay').classList.add('open');
   }
 
@@ -1186,7 +1157,7 @@
     document.getElementById('adminOverlay').classList.remove('open');
   }
 
-  async function createAccount() {
+  function createAccount() {
     const nick = document.getElementById('newNick').value.trim();
     const pass = document.getElementById('newPass').value;
 
@@ -1201,51 +1172,19 @@
 
     const users = getUsers();
     users[nick] = pass;
-    await saveUsers(users);
+    saveUsers(users);
 
     document.getElementById('newNick').value = '';
     document.getElementById('newPass').value = '';
     renderAccounts();
   }
 
-  async function deleteAccount(nick) {
+  function deleteAccount(nick) {
     if (!confirm(`Удалить аккаунт «${nick}»?`)) return;
     const users = getUsers();
     delete users[nick];
-    await saveUsers(users);
+    saveUsers(users);
     renderAccounts();
-  }
-
-  function saveCloudConfig() {
-    const masterKey = document.getElementById('cloudKey').value.trim();
-    const binId = document.getElementById('cloudBin').value.trim();
-    const status = document.getElementById('cloudStatus');
-    if (!masterKey || !binId) {
-      status.textContent = 'Заполни Master Key и Bin ID';
-      status.style.color = 'var(--danger)';
-      return;
-    }
-    setCloudConfig({ masterKey, binId });
-    status.textContent = 'Облако сохранено. Нажми «Синхронизировать сейчас».';
-    status.style.color = 'var(--success)';
-    // сразу отправим текущие данные
-    saveUsers(getUsers());
-  }
-
-  async function syncFromCloud() {
-    const status = document.getElementById('cloudStatus');
-    status.textContent = 'Синхронизация...';
-    status.style.color = 'var(--text-dim)';
-    const users = await loadUsersFromCloud();
-    if (users) {
-      status.textContent = 'Синхронизировано: ' + Object.keys(users).length + ' аккаунт(ов)';
-      status.style.color = 'var(--success)';
-      renderAccounts();
-      renderLogs();
-    } else {
-      status.textContent = 'Не удалось загрузить. Проверь Key и Bin ID.';
-      status.style.color = 'var(--danger)';
-    }
   }
 
   function renderAccounts() {
