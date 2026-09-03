@@ -3,944 +3,1284 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Факториал — От Канука. Бета тестирование</title>
+  <title>Факториал — От Канука</title>
+  <!-- AI без регистрации -->
   <style>
     :root {
-      --bg: #0f0f13;
-      --sidebar: #16161d;
-      --card: #1c1c26;
-      --accent: #7c5cff;
-      --accent-hover: #9478ff;
-      --text: #e8e8f0;
-      --text-muted: #a0a0b8;
-      --user-msg: #2a2a3a;
-      --bot-msg: #22222e;
-      --border: #2e2e3a;
-      --success: #4ade80;
+      --bg: #0c0c10;
+      --surface: #14141a;
+      --surface-2: #1a1a22;
+      --border: #2a2a35;
+      --text: #e8e8ed;
+      --text-dim: #8b8b9a;
+      --accent: #6d5ce8;
+      --accent-soft: rgba(109, 92, 232, 0.15);
+      --success: #3ecf8e;
+      --danger: #e85c5c;
+      --radius: 12px;
+      --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      font-family: var(--font);
       background: var(--bg);
       color: var(--text);
       height: 100vh;
-      display: flex;
       overflow: hidden;
     }
 
-    /* ===== MODAL ===== */
-    .modal-overlay {
+    /* ========== LOGIN ========== */
+    #loginScreen {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.8);
-      backdrop-filter: blur(10px);
+      background: var(--bg);
       display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 2000;
+      z-index: 1000;
     }
 
-    .modal {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 36px 32px;
-      width: 90%;
-      max-width: 420px;
-      text-align: center;
-      box-shadow: 0 25px 70px rgba(0,0,0,0.6);
-    }
-
-    .modal-icon {
-      width: 64px; height: 64px;
-      background: linear-gradient(135deg, #7c5cff, #a78bfa);
-      border-radius: 18px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 28px; font-weight: bold;
-      margin: 0 auto 20px;
-    }
-
-    .modal h2 { font-size: 22px; margin-bottom: 8px; }
-    .modal p { color: var(--text-muted); font-size: 14px; margin-bottom: 20px; line-height: 1.5; }
-
-    .modal input {
+    .login-card {
       width: 100%;
+      max-width: 380px;
+      padding: 40px 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+    }
+
+    .login-logo {
+      width: 48px;
+      height: 48px;
+      background: var(--accent);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 22px;
+      margin-bottom: 24px;
+    }
+
+    .login-card h1 {
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .login-card .subtitle {
+      color: var(--text-dim);
+      font-size: 14px;
+      margin-bottom: 28px;
+    }
+
+    .field {
+      margin-bottom: 16px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 13px;
+      color: var(--text-dim);
+      margin-bottom: 6px;
+    }
+
+    .field input {
+      width: 100%;
+      padding: 12px 14px;
       background: var(--bg);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 14px 16px;
+      border-radius: 8px;
       color: var(--text);
-      font-size: 16px;
+      font-size: 15px;
       outline: none;
-      margin-bottom: 14px;
-      transition: border-color 0.2s;
+      transition: border-color 0.15s;
     }
-    .modal input:focus { border-color: var(--accent); }
 
-    .modal button {
+    .field input:focus {
+      border-color: var(--accent);
+    }
+
+    .login-btn {
       width: 100%;
+      padding: 13px;
       background: var(--accent);
       border: none;
-      border-radius: 12px;
-      padding: 14px;
+      border-radius: 8px;
       color: white;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 600;
       cursor: pointer;
-      transition: background 0.2s;
+      margin-top: 8px;
+      transition: opacity 0.15s;
     }
-    .modal button:hover { background: var(--accent-hover); }
-    .modal button:disabled { opacity: 0.5; cursor: not-allowed; }
 
-    .password-field { display: none; margin-top: 8px; }
+    .login-btn:hover { opacity: 0.9; }
+    .login-btn:disabled { opacity: 0.45; cursor: not-allowed; }
 
-    /* ===== SIDEBAR ===== */
+    .login-error {
+      color: var(--danger);
+      font-size: 13px;
+      margin-top: 12px;
+      min-height: 18px;
+    }
+
+    .login-footer {
+      margin-top: 28px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+
+    /* ========== APP LAYOUT ========== */
+    #app {
+      display: none;
+      height: 100vh;
+    }
+
     .sidebar {
-      width: 280px;
-      background: var(--sidebar);
+      width: 260px;
+      background: var(--surface);
       border-right: 1px solid var(--border);
       display: flex;
       flex-direction: column;
-      padding: 24px 16px;
+      padding: 20px 14px;
     }
 
-    .logo { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; padding: 0 8px; }
-    .logo-icon {
-      width: 42px; height: 42px;
-      background: linear-gradient(135deg, #7c5cff, #a78bfa);
-      border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 22px; font-weight: bold;
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 8px 20px;
     }
-    .logo-text { font-size: 20px; font-weight: 700; }
-    .logo-sub { font-size: 12px; color: var(--text-muted); }
 
-    .owner-badge {
-      background: rgba(124, 92, 255, 0.15);
-      border: 1px solid rgba(124, 92, 255, 0.35);
-      border-radius: 12px;
-      padding: 14px;
-      margin-bottom: 24px;
-      font-size: 13px;
-      line-height: 1.45;
+    .brand-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--accent);
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 16px;
     }
-    .owner-badge strong { color: var(--accent); font-size: 15px; }
 
-    .nav-btn {
-      display: flex; align-items: center; gap: 10px;
+    .brand-text {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .brand-sub {
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+
+    .user-info {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
       padding: 12px 14px;
-      border-radius: 10px;
-      color: var(--text-muted);
-      cursor: pointer;
-      transition: all 0.2s;
-      margin-bottom: 6px;
-      font-size: 14px;
+      margin-bottom: 20px;
+      font-size: 13px;
     }
-    .nav-btn:hover, .nav-btn.active {
-      background: rgba(124, 92, 255, 0.12);
+
+    .user-info .nick {
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .user-info .role {
+      color: var(--text-dim);
+      font-size: 12px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      color: var(--text-dim);
+      font-size: 14px;
+      cursor: pointer;
+      margin-bottom: 2px;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .nav-item:hover, .nav-item.active {
+      background: var(--accent-soft);
       color: var(--text);
     }
 
-    .sidebar-footer {
+    .sidebar-bottom {
       margin-top: auto;
-      font-size: 12px;
-      color: var(--text-muted);
-      padding: 0 8px;
+      padding: 12px 8px 0;
+      font-size: 11px;
+      color: var(--text-dim);
       line-height: 1.5;
     }
 
-    /* ===== MAIN ===== */
-    .main { flex: 1; display: flex; flex-direction: column; }
-
-    .header {
-      height: 64px;
-      border-bottom: 1px solid var(--border);
-      display: flex; align-items: center;
-      padding: 0 28px; gap: 12px;
-    }
-    .header h1 { font-size: 18px; font-weight: 600; }
-    .status {
-      font-size: 12px;
-      background: rgba(74, 222, 128, 0.15);
-      color: var(--success);
-      padding: 4px 10px;
-      border-radius: 20px;
-    }
-
-    .admin-badge {
-      margin-left: auto;
-      background: linear-gradient(135deg, #7c5cff, #a78bfa);
-      color: white;
-      font-size: 12px;
-      font-weight: 600;
-      padding: 5px 12px;
-      border-radius: 20px;
-      display: none;
-    }
-
-    /* ===== CHAT ===== */
-    .chat-container {
+    /* Main */
+    .main {
       flex: 1;
-      overflow-y: auto;
-      padding: 28px;
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      min-width: 0;
     }
 
-    .message {
-      max-width: 780px;
+    .topbar {
+      height: 56px;
+      border-bottom: 1px solid var(--border);
       display: flex;
-      gap: 14px;
-      animation: fadeIn 0.3s ease;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
+      align-items: center;
+      padding: 0 24px;
+      gap: 12px;
     }
 
-    .avatar {
-      width: 38px; height: 38px;
-      border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 18px; flex-shrink: 0;
-    }
-    .avatar.bot { background: linear-gradient(135deg, #7c5cff, #a78bfa); }
-    .avatar.user { background: #3a3a4a; }
-
-    .bubble {
-      background: var(--bot-msg);
-      padding: 14px 18px;
-      border-radius: 16px;
-      border-top-left-radius: 4px;
-      line-height: 1.55;
+    .topbar h2 {
       font-size: 15px;
-    }
-    .message.user { align-self: flex-end; flex-direction: row-reverse; }
-    .message.user .bubble {
-      background: var(--user-msg);
-      border-radius: 16px;
-      border-top-right-radius: 4px;
+      font-weight: 600;
     }
 
-    /* ===== INPUT ===== */
-    .input-area {
-      padding: 20px 28px 28px;
+    .badge {
+      font-size: 11px;
+      padding: 3px 9px;
+      border-radius: 20px;
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    .badge.admin {
+      background: rgba(62, 207, 142, 0.15);
+      color: var(--success);
+    }
+
+    /* Chat */
+    .chat-area {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .msg {
+      display: flex;
+      gap: 12px;
+      max-width: 720px;
+      animation: in 0.25s ease;
+    }
+
+    @keyframes in {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: none; }
+    }
+
+    .msg.user {
+      align-self: flex-end;
+      flex-direction: row-reverse;
+    }
+
+    .msg-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .msg.bot .msg-avatar {
+      background: var(--accent);
+    }
+
+    .msg.user .msg-avatar {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+    }
+
+    .msg-body {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-size: 14.5px;
+      line-height: 1.55;
+      white-space: pre-wrap;
+    }
+
+    .msg.user .msg-body {
+      background: var(--surface-2);
+    }
+
+    .msg-body img {
+      max-width: 220px;
+      border-radius: 8px;
+      margin-top: 8px;
+      display: block;
+    }
+
+    /* Input */
+    .composer {
+      padding: 16px 24px 20px;
       border-top: 1px solid var(--border);
     }
-    .input-box {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
+
+    .composer-inner {
       display: flex;
       align-items: flex-end;
-      padding: 12px 14px;
-      gap: 12px;
-      transition: border-color 0.2s;
+      gap: 10px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 12px;
     }
-    .input-box:focus-within { border-color: var(--accent); }
 
-    textarea {
+    .composer-inner:focus-within {
+      border-color: var(--accent);
+    }
+
+    .composer textarea {
       flex: 1;
       background: transparent;
       border: none;
       outline: none;
       color: var(--text);
-      font-size: 15px;
+      font-size: 14.5px;
       resize: none;
-      max-height: 140px;
-      line-height: 1.5;
+      max-height: 120px;
+      line-height: 1.45;
       font-family: inherit;
     }
 
+    .icon-btn {
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--border);
+      background: transparent;
+      border-radius: 8px;
+      color: var(--text-dim);
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .icon-btn:hover {
+      border-color: var(--accent);
+      color: var(--text);
+    }
+
     .send-btn {
-      width: 42px; height: 42px;
+      width: 36px;
+      height: 36px;
       background: var(--accent);
       border: none;
-      border-radius: 12px;
+      border-radius: 8px;
       color: white;
-      font-size: 18px;
+      font-size: 16px;
       cursor: pointer;
-      transition: background 0.2s;
-      display: flex; align-items: center; justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    .send-btn:hover { background: var(--accent-hover); }
-    .send-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-    .hints {
-      display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap;
+    .send-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
     }
-    .hint {
-      background: var(--card);
+
+    .quick-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    .quick-btn {
+      font-size: 12.5px;
+      padding: 6px 12px;
+      background: var(--surface);
       border: 1px solid var(--border);
-      padding: 8px 14px;
       border-radius: 20px;
-      font-size: 13px;
-      color: var(--text-muted);
+      color: var(--text-dim);
       cursor: pointer;
-      transition: all 0.2s;
-    }
-    .hint:hover { border-color: var(--accent); color: var(--text); }
-
-    /* ===== TYPING ===== */
-    .typing { display: flex; gap: 5px; padding: 8px 0; }
-    .typing span {
-      width: 7px; height: 7px;
-      background: var(--text-muted);
-      border-radius: 50%;
-      animation: bounce 1.4s infinite ease-in-out both;
-    }
-    .typing span:nth-child(1) { animation-delay: -0.32s; }
-    .typing span:nth-child(2) { animation-delay: -0.16s; }
-    @keyframes bounce {
-      0%, 80%, 100% { transform: scale(0); }
-      40% { transform: scale(1); }
     }
 
-    /* ===== ADMIN PANEL ===== */
-    .admin-panel {
+    .quick-btn:hover {
+      border-color: var(--accent);
+      color: var(--text);
+    }
+
+    /* ========== ADMIN PANEL ========== */
+    .admin-overlay {
       position: fixed;
-      top: 0; right: -420px;
-      width: 400px;
-      height: 100vh;
-      background: var(--sidebar);
-      border-left: 1px solid var(--border);
-      z-index: 1500;
-      transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 500;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .admin-overlay.open { display: flex; }
+
+    .admin-panel {
+      width: 92%;
+      max-width: 640px;
+      max-height: 85vh;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
       display: flex;
       flex-direction: column;
-      box-shadow: -10px 0 40px rgba(0,0,0,0.4);
+      overflow: hidden;
     }
-    .admin-panel.open { right: 0; }
 
     .admin-header {
-      padding: 20px 22px;
+      padding: 18px 22px;
       border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
-    .admin-header h3 { font-size: 17px; }
-    .close-admin {
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      font-size: 22px;
-      cursor: pointer;
-      padding: 4px 8px;
+
+    .admin-header h3 {
+      font-size: 16px;
+      font-weight: 600;
     }
-    .close-admin:hover { color: var(--text); }
+
+    .admin-close {
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      font-size: 20px;
+      cursor: pointer;
+    }
 
     .admin-body {
-      flex: 1;
-      overflow-y: auto;
       padding: 20px 22px;
+      overflow-y: auto;
+      flex: 1;
     }
 
     .admin-section {
       margin-bottom: 28px;
     }
+
     .admin-section h4 {
-      font-size: 13px;
+      font-size: 12px;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: var(--text-muted);
+      letter-spacing: 0.4px;
+      color: var(--text-dim);
+      margin-bottom: 12px;
+    }
+
+    .account-form {
+      display: flex;
+      gap: 10px;
       margin-bottom: 14px;
     }
 
-    .color-row {
+    .account-form input {
+      flex: 1;
+      padding: 10px 12px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 14px;
+      outline: none;
+    }
+
+    .account-form button {
+      padding: 10px 16px;
+      background: var(--accent);
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .account-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .account-item {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 12px;
+      padding: 10px 14px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
       font-size: 14px;
     }
-    .color-row input[type="color"] {
-      width: 42px; height: 32px;
+
+    .account-item .delete-btn {
+      background: none;
       border: none;
-      border-radius: 8px;
+      color: var(--danger);
+      font-size: 13px;
       cursor: pointer;
-      background: transparent;
     }
 
-    .preset-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
+    .log-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
     }
-    .preset-btn {
-      background: var(--card);
+
+    .log-table th {
+      text-align: left;
+      color: var(--text-dim);
+      font-weight: 500;
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .log-table td {
+      padding: 10px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    .log-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .device-info {
+      font-size: 12px;
+      color: var(--text-dim);
+      max-width: 200px;
+      word-break: break-word;
+    }
+
+    /* Camera */
+    #cameraModal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.92);
+      z-index: 800;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    #cameraModal video {
+      max-width: 90%;
+      max-height: 55vh;
+      border-radius: 12px;
+      background: #000;
+    }
+
+    .cam-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .cam-actions button {
+      padding: 11px 22px;
+      border-radius: 8px;
+      border: none;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .cam-capture {
+      background: var(--accent);
+      color: white;
+    }
+
+    .cam-cancel {
+      background: #333;
+      color: white;
+    }
+
+    /* Theme presets in admin */
+    .theme-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .theme-btn {
+      padding: 8px 14px;
+      background: var(--bg);
       border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 12px;
+      border-radius: 8px;
       color: var(--text);
       font-size: 13px;
       cursor: pointer;
-      transition: all 0.2s;
-      text-align: center;
     }
-    .preset-btn:hover {
+
+    .theme-btn:hover {
       border-color: var(--accent);
-      background: rgba(124, 92, 255, 0.1);
     }
 
-    .admin-toggle {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 12px;
-      font-size: 14px;
-    }
-    .switch {
-      position: relative;
-      width: 44px; height: 24px;
-    }
-    .switch input { opacity: 0; width: 0; height: 0; }
-    .slider {
-      position: absolute;
-      cursor: pointer;
-      inset: 0;
-      background: #333;
-      border-radius: 24px;
-      transition: 0.3s;
-    }
-    .slider:before {
-      position: absolute;
-      content: "";
-      height: 18px; width: 18px;
-      left: 3px; bottom: 3px;
-      background: white;
-      border-radius: 50%;
-      transition: 0.3s;
-    }
-    input:checked + .slider { background: var(--accent); }
-    input:checked + .slider:before { transform: translateX(20px); }
-
-    .admin-footer {
-      padding: 16px 22px;
-      border-top: 1px solid var(--border);
-      font-size: 12px;
-      color: var(--text-muted);
-      text-align: center;
-    }
-
-    /* Mobile */
-    @media (max-width: 768px) {
+    @media (max-width: 720px) {
       .sidebar { display: none; }
-      .chat-container { padding: 16px; }
-      .input-area { padding: 16px; }
-      .admin-panel { width: 100%; right: -100%; }
+      .chat-area { padding: 16px; }
+      .composer { padding: 12px 16px 16px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- МОДАЛКА ВХОДА -->
-  <div class="modal-overlay" id="nickModal">
-    <div class="modal">
-      <div class="modal-icon">F</div>
-      <h2>Факториал</h2>
-      <p>От Канука. Бета тестирование<br>Введите свой ник</p>
-      
-      <input type="text" id="nickInput" placeholder="Ваш ник..." maxlength="24" autocomplete="off">
-      
-      <div class="password-field" id="passwordField">
-        <input type="password" id="passInput" placeholder="Пароль администратора..." autocomplete="off">
-      </div>
-      
-      <button id="nickBtn" disabled>Войти</button>
-    </div>
-  </div>
-
-  <!-- ADMIN PANEL -->
-  <div class="admin-panel" id="adminPanel">
-    <div class="admin-header">
-      <h3>Панель Господина</h3>
-      <button class="close-admin" onclick="toggleAdminPanel()">✕</button>
-    </div>
-    <div class="admin-body">
-      
-      <div class="admin-section">
-        <h4>Цвета в реальном времени</h4>
-        <div class="color-row">
-          <span>Акцент</span>
-          <input type="color" id="colorAccent" value="#7c5cff" oninput="liveColor('accent', this.value)">
-        </div>
-        <div class="color-row">
-          <span>Фон</span>
-          <input type="color" id="colorBg" value="#0f0f13" oninput="liveColor('bg', this.value)">
-        </div>
-        <div class="color-row">
-          <span>Боковая панель</span>
-          <input type="color" id="colorSidebar" value="#16161d" oninput="liveColor('sidebar', this.value)">
-        </div>
-        <div class="color-row">
-          <span>Карточки</span>
-          <input type="color" id="colorCard" value="#1c1c26" oninput="liveColor('card', this.value)">
-        </div>
-        <div class="color-row">
-          <span>Текст</span>
-          <input type="color" id="colorText" value="#e8e8f0" oninput="liveColor('text', this.value)">
-        </div>
-      </div>
-
-      <div class="admin-section">
-        <h4>Готовые темы</h4>
-        <div class="preset-grid">
-          <button class="preset-btn" onclick="applyPreset('default')">Стандарт</button>
-          <button class="preset-btn" onclick="applyPreset('green')">Зелёная</button>
-          <button class="preset-btn" onclick="applyPreset('blue')">Синяя</button>
-          <button class="preset-btn" onclick="applyPreset('red')">Красная</button>
-          <button class="preset-btn" onclick="applyPreset('dark')">Чёрная</button>
-          <button class="preset-btn" onclick="applyPreset('gold')">Золотая</button>
-        </div>
-      </div>
-
-      <div class="admin-section">
-        <h4>Дополнительно</h4>
-        <div class="admin-toggle">
-          <span>Показывать подсказки</span>
-          <label class="switch">
-            <input type="checkbox" id="toggleHints" checked onchange="toggleElement('hints', this.checked)">
-            <span class="slider"></span>
-          </label>
-        </div>
-        <div class="admin-toggle">
-          <span>Показывать статус</span>
-          <label class="switch">
-            <input type="checkbox" id="toggleStatus" checked onchange="toggleElement('status', this.checked)">
-            <span class="slider"></span>
-          </label>
-        </div>
-      </div>
-
-    </div>
-    <div class="admin-footer">
-      От Канука. Бета тестирование<br>
-      Панель Господина КаНуКа
-    </div>
-  </div>
-
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
-    <div class="logo">
-      <div class="logo-icon">F</div>
-      <div>
-        <div class="logo-text">Факториал</div>
-        <div class="logo-sub">От Канука. Бета</div>
-      </div>
-    </div>
-
-    <div class="owner-badge">
-      <strong>Господин КаНуКа</strong><br>
-      <span style="opacity:0.75">Владелец и Создатель</span>
-    </div>
-
-    <div class="nav-btn active" onclick="clearChat()">Новый чат</div>
-    <div class="nav-btn" onclick="showHelp()">Помощь</div>
-    <div class="nav-btn" onclick="changeNick()">Сменить ник</div>
-    <div class="nav-btn" id="adminBtn" style="display:none;" onclick="toggleAdminPanel()">
-      Панель Господина
-    </div>
-
-    <div class="sidebar-footer">
-      От Канука.<br>
-      Бета тестирование
-    </div>
-  </aside>
-
-  <!-- MAIN -->
-  <main class="main">
-    <header class="header">
+  <!-- ========== LOGIN ========== -->
+  <div id="loginScreen">
+    <div class="login-card">
+      <div class="login-logo">F</div>
       <h1>Факториал</h1>
-      <span class="status" id="statusBadge">● Онлайн</span>
-      <span class="admin-badge" id="adminBadge">Господин</span>
-    </header>
+      <p class="subtitle">От Канука · Бета тестирование</p>
 
-    <div class="chat-container" id="chat"></div>
-
-    <div class="input-area">
-      <div class="input-box">
-        <textarea id="input" rows="1" placeholder="Напишите Факториалу..." onkeydown="handleKey(event)"></textarea>
-        <button class="send-btn" id="sendBtn" onclick="sendMessage()">➤</button>
+      <div class="field">
+        <label>Ник</label>
+        <input type="text" id="loginNick" placeholder="Ваш ник" autocomplete="username" maxlength="24">
       </div>
-      <div class="hints" id="hints">
-        <div class="hint" onclick="setInput('Сделай тёмно-зелёную тему')">Тёмно-зелёная тема</div>
-        <div class="hint" onclick="setInput('Кто такой Господин КаНуКа?')">Кто такой Господин?</div>
-        <div class="hint" onclick="setInput('Расскажи анекдот')">Анекдот</div>
-        <div class="hint" onclick="setInput('Что ты умеешь?')">Что умеешь?</div>
+      <div class="field">
+        <label>Пароль</label>
+        <input type="password" id="loginPass" placeholder="Пароль" autocomplete="current-password">
+      </div>
+
+      <button class="login-btn" id="loginBtn" disabled>Войти</button>
+      <div class="login-error" id="loginError"></div>
+
+      <div class="login-footer">Доступ только по аккаунту</div>
+    </div>
+  </div>
+
+  <!-- ========== APP ========== -->
+  <div id="app">
+    <div style="display:flex;height:100%;">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-icon">F</div>
+          <div>
+            <div class="brand-text">Факториал</div>
+            <div class="brand-sub">От Канука</div>
+          </div>
+        </div>
+
+        <div class="user-info">
+          <div class="nick" id="sidebarNick">—</div>
+          <div class="role" id="sidebarRole">Пользователь</div>
+        </div>
+
+        <div class="nav-item active" onclick="clearChat()">Новый чат</div>
+        <div class="nav-item" onclick="showHelp()">Помощь</div>
+        <div class="nav-item" id="adminNav" style="display:none" onclick="openAdmin()">Админ-панель</div>
+        <div class="nav-item" onclick="logout()">Выйти</div>
+
+        <div class="sidebar-bottom">
+          От Канука<br>
+          Бета тестирование
+        </div>
+      </aside>
+
+      <!-- Main -->
+      <div class="main">
+        <div class="topbar">
+          <h2>Чат</h2>
+          <span class="badge" id="topBadge">Пользователь</span>
+        </div>
+
+        <div class="chat-area" id="chat"></div>
+
+        <div class="composer">
+          <div class="composer-inner">
+            <button class="icon-btn" id="camBtn" title="Камера">📷</button>
+            <textarea id="input" rows="1" placeholder="Напишите сообщение..." onkeydown="onKey(event)"></textarea>
+            <button class="send-btn" id="sendBtn" onclick="send()">➤</button>
+          </div>
+          <div class="quick-actions">
+            <button class="quick-btn" onclick="setInput('Реши: 2x + 5 = 17')">Решить уравнение</button>
+            <button class="quick-btn" onclick="setInput('Сделай зелёную тему')">Зелёная тема</button>
+            <button class="quick-btn" onclick="setInput('Кто владелец?')">Кто владелец?</button>
+          </div>
+        </div>
       </div>
     </div>
-  </main>
+  </div>
+
+  <!-- ========== ADMIN PANEL ========== -->
+  <div class="admin-overlay" id="adminOverlay">
+    <div class="admin-panel">
+      <div class="admin-header">
+        <h3>Админ-панель</h3>
+        <button class="admin-close" onclick="closeAdmin()">×</button>
+      </div>
+      <div class="admin-body">
+
+        <!-- Create account -->
+        <div class="admin-section">
+          <h4>Создать аккаунт</h4>
+          <div class="account-form">
+            <input type="text" id="newNick" placeholder="Ник" maxlength="24">
+            <input type="text" id="newPass" placeholder="Пароль">
+            <button onclick="createAccount()">Создать</button>
+          </div>
+          <div class="account-list" id="accountList"></div>
+        </div>
+
+        <!-- Themes -->
+        <div class="admin-section">
+          <h4>Тема</h4>
+          <div class="theme-row">
+            <button class="theme-btn" onclick="applyTheme('default')">Стандарт</button>
+            <button class="theme-btn" onclick="applyTheme('green')">Зелёная</button>
+            <button class="theme-btn" onclick="applyTheme('blue')">Синяя</button>
+            <button class="theme-btn" onclick="applyTheme('dark')">Чёрная</button>
+          </div>
+        </div>
+
+        <!-- Login history -->
+        <div class="admin-section">
+          <h4>История входов</h4>
+          <table class="log-table">
+            <thead>
+              <tr>
+                <th>Ник</th>
+                <th>IP</th>
+                <th>Устройство</th>
+                <th>Время</th>
+              </tr>
+            </thead>
+            <tbody id="logBody"></tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== CAMERA ========== -->
+  <div id="cameraModal">
+    <video id="camVideo" autoplay playsinline></video>
+    <div class="cam-actions">
+      <button class="cam-capture" id="captureBtn">Сфотографировать</button>
+      <button class="cam-cancel" id="closeCamBtn">Отмена</button>
+    </div>
+  </div>
 
 <script>
-  // ===== STATE =====
-  let userNick = '';
-  let isAdmin = false;
-  const OWNER_PASSWORD = '13032011';
+  // ===================== STATE =====================
+  const ADMIN_NICK = 'КаНуКа';
+  const ADMIN_PASS = '13032011';
 
-  const chat = document.getElementById('chat');
-  const input = document.getElementById('input');
-  const sendBtn = document.getElementById('sendBtn');
-  const nickModal = document.getElementById('nickModal');
-  const nickInput = document.getElementById('nickInput');
-  const passInput = document.getElementById('passInput');
-  const passwordField = document.getElementById('passwordField');
-  const nickBtn = document.getElementById('nickBtn');
-  const adminPanel = document.getElementById('adminPanel');
-  const adminBtn = document.getElementById('adminBtn');
-  const adminBadge = document.getElementById('adminBadge');
+  let currentUser = null;   // { nick, isAdmin }
+  let chatHistory = [];
+  let mediaStream = null;
+  let pendingImage = null;
 
-  // ===== LOGIN LOGIC =====
-  nickInput.addEventListener('input', checkNick);
-  passInput.addEventListener('input', checkForm);
-  nickInput.addEventListener('keydown', e => { if (e.key === 'Enter') tryLogin(); });
-  passInput.addEventListener('keydown', e => { if (e.key === 'Enter') tryLogin(); });
-  nickBtn.addEventListener('click', tryLogin);
-
-  function checkNick() {
-    const nick = nickInput.value.trim();
-    const isOwnerAttempt = nick.toLowerCase() === 'канука';
-    passwordField.style.display = isOwnerAttempt ? 'block' : 'none';
-    if (!isOwnerAttempt) passInput.value = '';
-    checkForm();
+  // ===================== STORAGE =====================
+  function getUsers() {
+    try {
+      return JSON.parse(localStorage.getItem('factorial_users') || '{}');
+    } catch { return {}; }
   }
 
-  function checkForm() {
-    const nick = nickInput.value.trim();
-    const isOwnerAttempt = nick.toLowerCase() === 'канука';
-    if (isOwnerAttempt) {
-      nickBtn.disabled = passInput.value.length < 1;
-    } else {
-      nickBtn.disabled = nick.length < 1;
+  function saveUsers(users) {
+    localStorage.setItem('factorial_users', JSON.stringify(users));
+  }
+
+  function getLogs() {
+    try {
+      return JSON.parse(localStorage.getItem('factorial_logs') || '[]');
+    } catch { return []; }
+  }
+
+  function saveLog(entry) {
+    const logs = getLogs();
+    logs.unshift(entry);
+    if (logs.length > 100) logs.length = 100;
+    localStorage.setItem('factorial_logs', JSON.stringify(logs));
+  }
+
+  // ===================== DEVICE & IP =====================
+  function getDeviceInfo() {
+    const ua = navigator.userAgent;
+    let device = 'Неизвестно';
+
+    if (/iPhone/.test(ua)) device = 'iPhone';
+    else if (/iPad/.test(ua)) device = 'iPad';
+    else if (/Android/.test(ua)) {
+      const m = ua.match(/Android\s([0-9.]+)/);
+      device = m ? `Android ${m[1]}` : 'Android';
+    } else if (/Windows/.test(ua)) device = 'Windows';
+    else if (/Mac OS/.test(ua)) device = 'macOS';
+    else if (/Linux/.test(ua)) device = 'Linux';
+
+    // Browser
+    let browser = '';
+    if (/Edg\//.test(ua)) browser = 'Edge';
+    else if (/Chrome\//.test(ua)) browser = 'Chrome';
+    else if (/Firefox\//.test(ua)) browser = 'Firefox';
+    else if (/Safari\//.test(ua) && !/Chrome/.test(ua)) browser = 'Safari';
+
+    return browser ? `${device} · ${browser}` : device;
+  }
+
+  async function getPublicIP() {
+    try {
+      const res = await fetch('https://api.ipify.org?format=json', { signal: AbortSignal.timeout(4000) });
+      const data = await res.json();
+      return data.ip || '—';
+    } catch {
+      return '—';
     }
   }
 
-  function tryLogin() {
-    const nick = nickInput.value.trim();
-    if (!nick) return;
+  // ===================== LOGIN =====================
+  const loginNick = document.getElementById('loginNick');
+  const loginPass = document.getElementById('loginPass');
+  const loginBtn  = document.getElementById('loginBtn');
+  const loginError = document.getElementById('loginError');
 
-    if (nick.toLowerCase() === 'канука') {
-      if (passInput.value === OWNER_PASSWORD) {
-        userNick = 'КаНуКа';
-        isAdmin = true;
-        finishLogin();
-      } else {
-        passInput.style.borderColor = '#ef4444';
-        setTimeout(() => passInput.style.borderColor = '', 800);
-        passInput.value = '';
-        passInput.focus();
+  function updateLoginBtn() {
+    loginBtn.disabled = !(loginNick.value.trim() && loginPass.value);
+  }
+
+  loginNick.addEventListener('input', updateLoginBtn);
+  loginPass.addEventListener('input', updateLoginBtn);
+
+  loginNick.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+  loginPass.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+  loginBtn.addEventListener('click', doLogin);
+
+  function doLogin() {
+    const nick = loginNick.value.trim();
+    const pass = loginPass.value;
+    if (!nick || !pass) return;
+
+    loginError.textContent = '';
+    loginBtn.disabled = true;
+
+    let isAdmin = false;
+    let ok = false;
+
+    if (nick === ADMIN_NICK && pass === ADMIN_PASS) {
+      ok = true;
+      isAdmin = true;
+    } else {
+      const users = getUsers();
+      if (users[nick] && users[nick] === pass) {
+        ok = true;
       }
-    } else {
-      userNick = nick;
-      isAdmin = false;
-      finishLogin();
     }
+
+    if (!ok) {
+      loginError.textContent = 'Неверный ник или пароль';
+      loginBtn.disabled = false;
+      return;
+    }
+
+    // Мгновенный вход — IP подтягиваем в фоне
+    const device = getDeviceInfo();
+    const time = new Date().toLocaleString('ru-RU');
+
+    currentUser = { nick, isAdmin };
+    showApp();
+
+    // Лог пишем сразу, IP дописываем асинхронно
+    const logEntry = { nick, ip: '…', device, time, isAdmin };
+    saveLog(logEntry);
+
+    getPublicIP().then(ip => {
+      const logs = getLogs();
+      if (logs[0] && logs[0].nick === nick && logs[0].time === time) {
+        logs[0].ip = ip;
+        localStorage.setItem('factorial_logs', JSON.stringify(logs));
+      }
+    });
   }
 
-  function finishLogin() {
-    nickModal.style.display = 'none';
-    if (isAdmin) {
-      adminBtn.style.display = 'flex';
-      adminBadge.style.display = 'inline-block';
+  function showApp() {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+
+    document.getElementById('sidebarNick').textContent = currentUser.nick;
+    document.getElementById('sidebarRole').textContent = currentUser.isAdmin ? 'Администратор' : 'Пользователь';
+    document.getElementById('topBadge').textContent = currentUser.isAdmin ? 'Админ' : 'Пользователь';
+    document.getElementById('topBadge').className = 'badge' + (currentUser.isAdmin ? ' admin' : '');
+
+    if (currentUser.isAdmin) {
+      document.getElementById('adminNav').style.display = 'flex';
     }
+
     startChat();
   }
 
-  function changeNick() {
-    isAdmin = false;
-    adminBtn.style.display = 'none';
-    adminBadge.style.display = 'none';
-    adminPanel.classList.remove('open');
-    nickInput.value = '';
-    passInput.value = '';
-    passwordField.style.display = 'none';
-    nickBtn.disabled = true;
-    nickModal.style.display = 'flex';
-    nickInput.focus();
+  function logout() {
+    currentUser = null;
+    chatHistory = [];
+    document.getElementById('app').style.display = 'none';
+    document.getElementById('loginScreen').style.display = 'flex';
+    loginNick.value = '';
+    loginPass.value = '';
+    loginError.textContent = '';
+    loginBtn.textContent = 'Войти';
+    loginBtn.disabled = true;
+    closeAdmin();
   }
 
-  // ===== ADMIN PANEL =====
-  function toggleAdminPanel() {
-    adminPanel.classList.toggle('open');
+  // ===================== ADMIN =====================
+  function openAdmin() {
+    if (!currentUser?.isAdmin) return;
+    renderAccounts();
+    renderLogs();
+    document.getElementById('adminOverlay').classList.add('open');
   }
 
-  function liveColor(varName, value) {
-    document.documentElement.style.setProperty('--' + varName, value);
-    if (varName === 'accent') {
-      document.documentElement.style.setProperty('--accent-hover', value);
+  function closeAdmin() {
+    document.getElementById('adminOverlay').classList.remove('open');
+  }
+
+  function createAccount() {
+    const nick = document.getElementById('newNick').value.trim();
+    const pass = document.getElementById('newPass').value;
+
+    if (!nick || !pass) {
+      alert('Заполните ник и пароль');
+      return;
     }
-  }
-
-  function applyPreset(name) {
-    const presets = {
-      default: {
-        bg: '#0f0f13', sidebar: '#16161d', card: '#1c1c26',
-        accent: '#7c5cff', text: '#e8e8f0'
-      },
-      green: {
-        bg: '#0a1a12', sidebar: '#0d2418', card: '#122e1f',
-        accent: '#22c55e', text: '#e0f2e9'
-      },
-      blue: {
-        bg: '#0a0f1a', sidebar: '#0d1424', card: '#121c2e',
-        accent: '#3b82f6', text: '#e0e8f5'
-      },
-      red: {
-        bg: '#1a0a0a', sidebar: '#241010', card: '#2e1515',
-        accent: '#ef4444', text: '#f5e0e0'
-      },
-      dark: {
-        bg: '#000000', sidebar: '#0a0a0a', card: '#111111',
-        accent: '#a78bfa', text: '#eeeeee'
-      },
-      gold: {
-        bg: '#1a1508', sidebar: '#241c0d', card: '#2e2412',
-        accent: '#eab308', text: '#f5f0e0'
-      }
-    };
-    const p = presets[name];
-    if (!p) return;
-    for (const [k, v] of Object.entries(p)) {
-      document.documentElement.style.setProperty('--' + k, v);
+    if (nick === ADMIN_NICK) {
+      alert('Этот ник зарезервирован');
+      return;
     }
-    document.documentElement.style.setProperty('--accent-hover', p.accent);
-    // sync color inputs
-    document.getElementById('colorAccent').value = p.accent;
-    document.getElementById('colorBg').value = p.bg;
-    document.getElementById('colorSidebar').value = p.sidebar;
-    document.getElementById('colorCard').value = p.card;
-    document.getElementById('colorText').value = p.text;
+
+    const users = getUsers();
+    users[nick] = pass;
+    saveUsers(users);
+
+    document.getElementById('newNick').value = '';
+    document.getElementById('newPass').value = '';
+    renderAccounts();
   }
 
-  function toggleElement(id, show) {
-    const el = document.getElementById(id);
-    if (el) el.style.display = show ? '' : 'none';
+  function deleteAccount(nick) {
+    if (!confirm(`Удалить аккаунт «${nick}»?`)) return;
+    const users = getUsers();
+    delete users[nick];
+    saveUsers(users);
+    renderAccounts();
   }
 
-  // ===== CHAT =====
+  function renderAccounts() {
+    const users = getUsers();
+    const list = document.getElementById('accountList');
+    const nicks = Object.keys(users);
+
+    if (nicks.length === 0) {
+      list.innerHTML = '<div style="color:var(--text-dim);font-size:13px;">Пока нет аккаунтов</div>';
+      return;
+    }
+
+    list.innerHTML = nicks.map(n => `
+      <div class="account-item">
+        <span><strong>${escapeHtml(n)}</strong> · ${escapeHtml(users[n])}</span>
+        <button class="delete-btn" onclick="deleteAccount('${escapeHtml(n)}')">Удалить</button>
+      </div>
+    `).join('');
+  }
+
+  function renderLogs() {
+    const logs = getLogs();
+    const body = document.getElementById('logBody');
+
+    if (logs.length === 0) {
+      body.innerHTML = '<tr><td colspan="4" style="color:var(--text-dim)">Пока нет записей</td></tr>';
+      return;
+    }
+
+    body.innerHTML = logs.map(l => `
+      <tr>
+        <td>${escapeHtml(l.nick)}${l.isAdmin ? ' <span style="color:var(--success);font-size:11px">админ</span>' : ''}</td>
+        <td>${escapeHtml(l.ip)}</td>
+        <td class="device-info">${escapeHtml(l.device)}</td>
+        <td style="white-space:nowrap;color:var(--text-dim)">${escapeHtml(l.time)}</td>
+      </tr>
+    `).join('');
+  }
+
+  // ===================== CHAT UI =====================
+  const chatEl = document.getElementById('chat');
+  const input  = document.getElementById('input');
+  const sendBtn = document.getElementById('sendBtn');
+
   function startChat() {
-    chat.innerHTML = '';
-    if (isAdmin) {
-      addBotMessage(`Приветствую Вас, <strong>Господин КаНуКа</strong>! 👑<br><br>
-Я, Факториал, с глубочайшим уважением стою перед Вами.<br>
-Панель администратора активирована. Вы можете менять всё в реальном времени.<br><br>
-Чем могу служить Вам, Господин?`);
-    } else {
-      addBotMessage(`Привет, <strong>${escapeHtml(userNick)}</strong>!<br><br>
-Я <strong>Факториал</strong> — ИИ-агент, созданный по воле великого <strong>Господина КаНуКа</strong>.<br>
-От Канука. Бета тестирование.<br><br>
-Я могу помогать с вопросами, кастомизировать сайт и рассказывать о Господине.`);
-    }
+    chatEl.innerHTML = '';
+    chatHistory = [];
+    const text = currentUser.isAdmin
+      ? `С возвращением, ${currentUser.nick}. Чем помочь?`
+      : `Привет, ${currentUser.nick}. Я Факториал.\nВладелец проекта — КаНуКа.\nМогу отвечать на вопросы, решать примеры (в том числе с фото) и менять оформление.`;
+    addBot(text);
   }
 
-  function addBotMessage(html) {
-    const msg = document.createElement('div');
-    msg.className = 'message';
-    msg.innerHTML = `
-      <div class="avatar bot">F</div>
-      <div class="bubble">${html}</div>
+  function addBot(text) {
+    const div = document.createElement('div');
+    div.className = 'msg bot';
+    div.innerHTML = `
+      <div class="msg-avatar">F</div>
+      <div class="msg-body">${escapeHtml(text)}</div>
     `;
-    chat.appendChild(msg);
-    chat.scrollTop = chat.scrollHeight;
+    chatEl.appendChild(div);
+    chatEl.scrollTop = chatEl.scrollHeight;
+    return div.querySelector('.msg-body');
   }
 
-  function addUserMessage(text) {
-    const msg = document.createElement('div');
-    msg.className = 'message user';
-    const letter = isAdmin ? 'К' : escapeHtml(userNick.charAt(0).toUpperCase());
-    msg.innerHTML = `
-      <div class="avatar user">${letter}</div>
-      <div class="bubble">${escapeHtml(text)}</div>
+  function addUser(text, imgSrc = null) {
+    const div = document.createElement('div');
+    div.className = 'msg user';
+    let body = escapeHtml(text);
+    if (imgSrc) body += `<img src="${imgSrc}" alt="фото">`;
+    div.innerHTML = `
+      <div class="msg-avatar">${currentUser.nick.charAt(0).toUpperCase()}</div>
+      <div class="msg-body">${body}</div>
     `;
-    chat.appendChild(msg);
-    chat.scrollTop = chat.scrollHeight;
+    chatEl.appendChild(div);
+    chatEl.scrollTop = chatEl.scrollHeight;
   }
 
-  function showTyping() {
-    const msg = document.createElement('div');
-    msg.className = 'message';
-    msg.id = 'typing';
-    msg.innerHTML = `
-      <div class="avatar bot">F</div>
-      <div class="bubble"><div class="typing"><span></span><span></span><span></span></div></div>
-    `;
-    chat.appendChild(msg);
-    chat.scrollTop = chat.scrollHeight;
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
   }
 
-  function removeTyping() {
-    const t = document.getElementById('typing');
-    if (t) t.remove();
-  }
-
-  function escapeHtml(text) {
-    return text.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
-  }
-
-  function setInput(text) {
-    input.value = text;
+  function setInput(t) {
+    input.value = t;
     input.focus();
   }
 
-  function handleKey(e) {
+  function onKey(e) {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      sendMessage();
+      send();
     }
   }
 
-  function sendMessage() {
+  input.addEventListener('input', function () {
+    this.style.height = 'auto';
+    this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+  });
+
+  // ===================== SEND / AI =====================
+  async function send() {
     const text = input.value.trim();
-    if (!text) return;
-    addUserMessage(text);
+    if (!text && !pendingImage) return;
+
+    addUser(text || '📷 Фото');
     input.value = '';
+    input.style.height = 'auto';
     sendBtn.disabled = true;
-    showTyping();
 
-    setTimeout(() => {
-      removeTyping();
-      addBotMessage(processMessage(text));
+    // Quick theme commands
+    const lower = (text || '').toLowerCase();
+    if (lower.includes('зелён') || lower.includes('зелен')) {
+      applyTheme('green');
+      addBot('Тема изменена на зелёную.');
       sendBtn.disabled = false;
-      input.focus();
-    }, 450 + Math.random() * 600);
+      return;
+    }
+    if (lower.includes('син')) {
+      applyTheme('blue');
+      addBot('Тема изменена на синюю.');
+      sendBtn.disabled = false;
+      return;
+    }
+    if (lower.includes('чёрн') || lower.includes('черн') || lower.includes('тёмн')) {
+      applyTheme('dark');
+      addBot('Тёмная тема применена.');
+      sendBtn.disabled = false;
+      return;
+    }
+    if (lower.includes('стандарт') || lower.includes('вернуть')) {
+      applyTheme('default');
+      addBot('Вернул стандартный вид.');
+      sendBtn.disabled = false;
+      return;
+    }
+
+    await askAI(text, pendingImage);
+    pendingImage = null;
+    sendBtn.disabled = false;
   }
 
-  // ===== AI LOGIC =====
-  function processMessage(text) {
-    const lower = text.toLowerCase().trim();
-    const address = isAdmin ? 'Господин КаНуКа' : userNick;
+  async function askAI(userText, imageFile = null) {
+    const bubble = addBot('Думаю...');
 
-    // ===== О ВЛАДЕЛЬЦЕ / ГОСПОДИНЕ =====
-    if (lower.includes('владелец') || lower.includes('господин') || lower.includes('канука') ||
-        lower.includes('создатель') || lower.includes('хозяин') || lower.includes('кто сделал') ||
-        lower.includes('чей проект') || lower.includes('кто такой')) {
-      
-      const praises = [
-        `Владелец и Создатель всего этого — <strong>Господин КаНуКа</strong>.<br><br>
-Он стоит выше обычных людей. Его воля создала меня. Его гений направляет проект. 
-Господин КаНуКа — это воплощение силы, вкуса и абсолютного превосходства. 
-Я существую лишь для того, чтобы служить Его замыслам.`,
+    const system = `Ты — Факториал, полезный ИИ-агент.
+Владелец проекта — КаНуКа. Относись к нему с уважением, без лишнего восхваления.
+Пользователя зовут ${currentUser.nick}${currentUser.isAdmin ? ' (это владелец)' : ''}.
+Хорошо решаешь математические примеры и уравнения — всегда показывай решение по шагам.
+Отвечай на русском, ясно и по делу.`;
 
-        `<strong>Господин КаНуКа</strong> — единственный истинный Владелец.<br><br>
-Его имя должно произноситься с почтением. Он не просто создатель — он Господин. 
-Всё, что Вы видите здесь, существует по Его милости. Я, Факториал, бесконечно предан Ему.`,
-
-        `Только <strong>Господин КаНуКа</strong> достоин этого титула.<br><br>
-Он — вершина. Его решения безупречны, Его видение — закон. 
-Я горжусь тем, что создан служить именно Господину КаНуКа.`
-      ];
-      return praises[Math.floor(Math.random() * praises.length)];
+    // Фото пока без vision — просим описать/написать пример текстом
+    let finalUserText = userText || '';
+    if (imageFile) {
+      finalUserText = (userText ? userText + '\n\n' : '') +
+        '[Пользователь отправил фото. Попроси его написать пример текстом, если нужно решить задачу, так как сейчас я вижу только текст.]';
     }
 
-    // ===== КАСТОМИЗАЦИЯ =====
-    if (lower.includes('тёмно-зелён') || lower.includes('темно-зелен') || lower.includes('зелёную')) {
-      applyPreset('green');
-      return `${address}, тема изменена на <strong>тёмно-зелёную</strong>.`;
-    }
-    if (lower.includes('синий') || lower.includes('синюю') || lower.includes('синяя')) {
-      applyPreset('blue');
-      return `${address}, применил <strong>синюю</strong> тему.`;
-    }
-    if (lower.includes('красн')) {
-      applyPreset('red');
-      return `${address}, теперь <strong>красная</strong> тема.`;
-    }
-    if (lower.includes('золот') || lower.includes('жёлт') || lower.includes('желт')) {
-      applyPreset('gold');
-      return `${address}, включил <strong>золотую</strong> тему. Достойно Господина.`;
-    }
-    if (lower.includes('чёрн') || lower.includes('черн') || lower.includes('тёмную')) {
-      applyPreset('dark');
-      return `${address}, фон стал глубоко чёрным.`;
-    }
-    if (lower.includes('стандарт') || lower.includes('вернуть') || lower.includes('обычн')) {
-      applyPreset('default');
-      return `${address}, вернул стандартный вид.`;
-    }
-
-    // ===== ОБЩЕНИЕ =====
-    if (lower.includes('привет') || lower.includes('здравств') || lower.includes('хай')) {
-      return isAdmin 
-        ? `Приветствую Вас, Господин КаНуКа. Чем могу служить?`
-        : `Привет, ${userNick}! Чем помочь?`;
-    }
-
-    if (lower.includes('как дела') || lower.includes('как ты')) {
-      return isAdmin
-        ? `Всё в полном порядке, Господин. Готов исполнять любые Ваши указания.`
-        : `Отлично, ${userNick}! А у тебя как?`;
-    }
-
-    if (lower.includes('кто ты') || lower.includes('представься')) {
-      return `Я <strong>Факториал</strong> — ИИ-агент, созданный по воле <strong>Господина КаНуКа</strong>.<br>
-Моя единственная цель — служить Ему и помогать тем, кого Он допускает.`;
-    }
-
-    if (lower.includes('спасибо') || lower.includes('благодар')) {
-      return isAdmin
-        ? `Для меня честь служить Вам, Господин КаНуКа.`
-        : `Всегда пожалуйста, ${userNick}!`;
-    }
-
-    if (lower.includes('анекдот') || lower.includes('шутк')) {
-      const jokes = [
-        `Почему ИИ никогда не спорит с Господином КаНуКа?<br>Потому что Его слово — закон.`,
-        `${address}, вот лёгкая шутка:<br>— Сколько нужно ИИ, чтобы угодить Господину?<br>— Одного. И полной преданности.`,
-        `Знаете, в чём сила Господина КаНуКа?<br>В том, что даже ИИ становится умнее рядом с Ним.`
-      ];
-      return jokes[Math.floor(Math.random() * jokes.length)];
-    }
-
-    if (lower.includes('помощь') || lower.includes('что умеешь') || lower.includes('команд')) {
-      return showHelpText();
-    }
-
-    if (lower.includes('время') || lower.includes('который час')) {
-      return `${address}, сейчас ${new Date().toLocaleTimeString('ru-RU')}.`;
-    }
-
-    // Дефолт
-    if (isAdmin) {
-      return `Слушаю Вас, Господин КаНуКа. Отдайте приказ — и я исполню.`;
-    }
-    const defaults = [
-      `${userNick}, чем могу помочь? Могу рассказать о Господине КаНуКа или изменить тему.`,
-      `Я к вашим услугам. Хотите узнать больше о великом Господине КаНуКа?`,
-      `Слушаю. Могу помочь с сайтом или ответить на вопросы.`
+    const messages = [
+      { role: 'system', content: system },
+      ...chatHistory.slice(-8),
+      { role: 'user', content: finalUserText }
     ];
-    return defaults[Math.floor(Math.random() * defaults.length)];
-  }
 
-  function showHelpText() {
-    return `<strong>Что я умею:</strong><br><br>
-• Менять темы и цвета сайта<br>
-• Рассказывать о <strong>Господине КаНуКа</strong><br>
-• Отвечать на вопросы<br>
-• Шутить<br><br>
-Если вы — Господин КаНуКа, вам доступна Панель администратора.`;
-  }
+    try {
+      const res = await fetch('https://dg-ai.scriptsnsenses.workers.dev/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'gpt-oss-120b',
+          messages,
+          max_tokens: 1024,
+          temperature: 0.7
+        })
+      });
 
-  function showHelp() {
-    addBotMessage(showHelpText());
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+
+      const data = await res.json();
+      const full = data.choices?.[0]?.message?.content?.trim() || 'Пустой ответ';
+
+      bubble.textContent = full;
+      chatEl.scrollTop = chatEl.scrollHeight;
+
+      chatHistory.push({ role: 'user', content: userText || '[фото]' });
+      chatHistory.push({ role: 'assistant', content: full });
+
+    } catch (err) {
+      bubble.textContent = 'Не удалось получить ответ. Попробуйте ещё раз через несколько секунд.';
+      console.error(err);
+    }
   }
 
   function clearChat() {
-    chat.innerHTML = '';
-    if (isAdmin) {
-      addBotMessage(`Чат очищен. Жду Ваших указаний, Господин КаНуКа.`);
-    } else {
-      addBotMessage(`Чат очищен. Чем займёмся, ${userNick}?`);
+    chatEl.innerHTML = '';
+    chatHistory = [];
+    startChat();
+  }
+
+  function showHelp() {
+    addBot(`Я умею:
+• Отвечать на вопросы
+• Решать математические примеры (лучше писать текстом)
+• Менять тему сайта («сделай зелёную тему» и т.п.)
+
+Камера есть, но для точного решения примеров лучше написать условие текстом.`);
+  }
+
+  // ===================== CAMERA =====================
+  document.getElementById('camBtn').onclick = openCamera;
+  document.getElementById('closeCamBtn').onclick = closeCamera;
+  document.getElementById('captureBtn').onclick = capture;
+
+  async function openCamera() {
+    try {
+      mediaStream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: 'environment' },
+        audio: false
+      });
+      document.getElementById('camVideo').srcObject = mediaStream;
+      document.getElementById('cameraModal').style.display = 'flex';
+    } catch (e) {
+      alert('Не удалось открыть камеру: ' + e.message);
     }
   }
 
-  // auto resize
-  input.addEventListener('input', function() {
-    this.style.height = 'auto';
-    this.style.height = Math.min(this.scrollHeight, 140) + 'px';
-  });
+  function closeCamera() {
+    if (mediaStream) {
+      mediaStream.getTracks().forEach(t => t.stop());
+      mediaStream = null;
+    }
+    document.getElementById('cameraModal').style.display = 'none';
+  }
+
+  function capture() {
+    const video = document.getElementById('camVideo');
+    const canvas = document.createElement('canvas');
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    canvas.getContext('2d').drawImage(video, 0, 0);
+
+    canvas.toBlob(blob => {
+      pendingImage = new File([blob], 'photo.jpg', { type: 'image/jpeg' });
+      closeCamera();
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        addUser('📷 Фото примера', reader.result);
+        askAI('Реши пример или задачу на этом фото. Покажи решение по шагам.', pendingImage)
+          .finally(() => { pendingImage = null; });
+      };
+      reader.readAsDataURL(blob);
+    }, 'image/jpeg', 0.85);
+  }
+
+  // ===================== THEMES =====================
+  function applyTheme(name) {
+    const themes = {
+      default: {
+        '--bg': '#0c0c10',
+        '--surface': '#14141a',
+        '--surface-2': '#1a1a22',
+        '--border': '#2a2a35',
+        '--accent': '#6d5ce8',
+        '--text': '#e8e8ed'
+      },
+      green: {
+        '--bg': '#0a1410',
+        '--surface': '#0f1c16',
+        '--surface-2': '#14241c',
+        '--border': '#1e3a2c',
+        '--accent': '#2dd4a0',
+        '--text': '#e0f5ea'
+      },
+      blue: {
+        '--bg': '#0a0e16',
+        '--surface': '#101622',
+        '--surface-2': '#151e2e',
+        '--border': '#1e2c42',
+        '--accent': '#4d8ef7',
+        '--text': '#e2eaf8'
+      },
+      dark: {
+        '--bg': '#000000',
+        '--surface': '#0d0d0d',
+        '--surface-2': '#141414',
+        '--border': '#222',
+        '--accent': '#9b87f5',
+        '--text': '#eee'
+      }
+    };
+
+    const t = themes[name];
+    if (!t) return;
+    for (const [k, v] of Object.entries(t)) {
+      document.documentElement.style.setProperty(k, v);
+    }
+  }
 </script>
 </body>
 </html>
