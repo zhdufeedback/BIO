@@ -208,6 +208,16 @@
       color: #ccc;
     }
 
+    .clover-link {
+      color: #555;
+      transition: color 0.3s ease, transform 0.3s ease;
+    }
+
+    .clover-link:hover {
+      color: #8fbc8f;
+      transform: scale(1.12);
+    }
+
     /* Music controls */
     .music-panel {
       position: fixed;
@@ -410,8 +420,19 @@
       </a>
     </div>
 
-    <footer>
-      Перед тем, как писать — <a href="https://neprivet.com/" target="_blank" rel="noopener">прочитай это</a>
+            <footer>
+      <div style="margin-bottom: 10px;">
+        Перед тем, как писать — <a href="https://neprivet.com/" target="_blank" rel="noopener">прочитай это</a>
+      </div>
+      <div class="clover-link" style="display:inline-flex;color:#555;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+          <ellipse cx="12" cy="7" rx="4.2" ry="5" />
+          <ellipse cx="12" cy="17" rx="4.2" ry="5" />
+          <ellipse cx="7" cy="12" rx="5" ry="4.2" />
+          <ellipse cx="17" cy="12" rx="5" ry="4.2" />
+          <path d="M12 14 L11.2 21 Q12 20.5 12.8 21 Z" />
+        </svg>
+      </div>
     </footer>
   </div>
 
